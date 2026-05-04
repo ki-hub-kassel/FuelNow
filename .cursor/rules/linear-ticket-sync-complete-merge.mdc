@@ -1,0 +1,27 @@
+---
+description: After finishing ticket work and after merging to main, update the linked Linear issue and close it when merged.
+alwaysApply: true
+---
+
+# Linear-Issue: Abschluss der Arbeit und Merge nach `main`
+
+Gilt für TankRadar-Arbeit, die einem **Linear-Ticket** (z. B. `TAN-XX`) zugeordnet ist — Tooling: Linear MCP (`save_issue`, `save_comment`, ggf. `create_attachment`).
+
+## Nach fertiger Umsetzung (vor oder mit PR)
+
+- Das **Issue aktualisieren**: Beschreibung wo sinnvoll (Akzeptanzkriterien / DoD-Checkboxen), **Kommentar** mit Kurzfassung (was umgesetzt, welche Dateien/Tests, Branch-Name).
+- **Visueller Nachweis** und Ablage unter `.linear-evidence/` wie in der Branch-/Ticket-Workflow-Regel — nicht nur „Code fertig“, sondern Ticket nachvollziehbar halten.
+
+## Sobald der Code in `main` ist
+
+- Das zugehörige Issue **`save_issue`** mit **`state`: `Done`** setzen, wenn es noch nicht abgeschlossen ist (Linear-Status „Done“ / completed).
+- **Abschlusskommentar** mit PR-Link und/oder Merge-Commit-Referenz.
+- **Checkboxen** in der Issue-Beschreibung an den Realzustand anpassen (z. B. „Gemerged auf `main`“, Dokumentation/PR).
+
+## Zuordnung Branch ↔ Ticket
+
+- Bei Branch `feature/TAN-XX-kurz-slug` ist **`TAN-XX`** die Issue-ID, wenn der Nutzer keine andere ID nennt.
+
+## Pflichtgrad
+
+- **Kein Merge ohne Ticket-Nachziehen**, wenn explizit ein Ticket kontextualisiert war — Ausnahme nur nach **ausdrücklicher** Nutzeranweisung (z. B. „Linear erst später“).
