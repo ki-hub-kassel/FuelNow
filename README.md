@@ -14,6 +14,13 @@
 
 **Datenlizenz:** Tankerkönig / MTS-K — Metadaten in API-Antworten unter **CC BY 4.0**; Details und Attribution: [creativecommons.tankerkoenig.de](https://creativecommons.tankerkoenig.de/?page=info).
 
+## StoreKit Testing (TankRadar Plus, TAN-43)
+
+- Konfiguration: **`TankRadarPlus.storekit`** (Jahresabo `com.vibecoding.TankRadar.subscription.year`, Gruppe „TankRadar Plus“). Produkt-ID gehört auch zu **`SubscriptionConstants`** im Target.
+- Scheme **TankRadar** nutzt diese Datei beim **Run** (lokale Transaktionen ohne Sandbox-Account).
+- In Xcode: **Debug → StoreKit → Manage Transactions…** bzw. Transaction Inspector nutzen, um Kauf, Renewal und Ablauf zu simulieren.
+- App Store Connect ([TAN-42](https://linear.app/tankradar-app/issue/TAN-42)): dieselbe Product-ID anlegen und mit der `.storekit`-Datei abgleichen.
+
 ## Simulator-UI: [AXe CLI](https://www.axe-cli.com/)
 
 Lokale UI-Automation (Taps, Screenshots, Batches) über die Accessibility-API — nützlich für schnelle Smokes und Agent-Workflows.

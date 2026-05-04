@@ -52,6 +52,8 @@
 		F60810000000000000000004 /* StationAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60800000000000000000004 /* StationAnnotationView.swift */; };
 		F60810000000000000000005 /* LocateMeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60800000000000000000005 /* LocateMeButton.swift */; };
 		F60810000000000000000006 /* LocationDeniedCallout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60800000000000000000006 /* LocationDeniedCallout.swift */; };
+		F64110000000000000000001 /* SubscriptionConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F64000000000000000000002 /* SubscriptionConstants.swift */; };
+		F64110000000000000000002 /* SubscriptionConstantsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F64000000000000000000003 /* SubscriptionConstantsTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -120,6 +122,9 @@
 		F62A00000000000000000001 /* mock-stations.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "mock-stations.json"; sourceTree = "<group>"; };
 		F62B00000000000000000001 /* BundledMockStationFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundledMockStationFetcher.swift; sourceTree = "<group>"; };
 		F62C00000000000000000001 /* StationStoreFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationStoreFactory.swift; sourceTree = "<group>"; };
+		F64000000000000000000001 /* TankRadarPlus.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = TankRadarPlus.storekit; sourceTree = "<group>"; };
+		F64000000000000000000002 /* SubscriptionConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionConstants.swift; sourceTree = "<group>"; };
+		F64000000000000000000003 /* SubscriptionConstantsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionConstantsTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -150,6 +155,7 @@
 		600000000000000000000001 = {
 			isa = PBXGroup;
 			children = (
+				F64000000000000000000001 /* TankRadarPlus.storekit */,
 				600000000000000000000003 /* TankRadar */,
 				600000000000000000000004 /* TankRadarTests */,
 				600000000000000000000005 /* TankRadarUITests */,
@@ -195,6 +201,7 @@
 				F52000000000000000000001 /* StationStoreTests.swift */,
 				F52400000000000000000001 /* AppSettingsTests.swift */,
 				F52400000000000000000002 /* StationVoiceOverCopyTests.swift */,
+				F64000000000000000000003 /* SubscriptionConstantsTests.swift */,
 				F51300000000000000000001 /* Fixtures */,
 			);
 			path = TankRadarTests;
@@ -214,6 +221,7 @@
 				F10000000000000000000001 /* APIKeys.example.swift */,
 				F52300000000000000000001 /* AppSettings.swift */,
 				F52300000000000000000002 /* StationVoiceOverCopy.swift */,
+				F64000000000000000000002 /* SubscriptionConstants.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -444,6 +452,7 @@
 				F20000000000000000000001 /* APIKeys.example.swift in Sources */,
 				F52310000000000000000001 /* AppSettings.swift in Sources */,
 				F52330000000000000000001 /* StationVoiceOverCopy.swift in Sources */,
+				F64110000000000000000001 /* SubscriptionConstants.swift in Sources */,
 				F50200000000000000000001 /* FuelType.swift in Sources */,
 				F50200000000000000000002 /* Station.swift in Sources */,
 				F60200000000000000000001 /* LocationService.swift in Sources */,
@@ -484,6 +493,7 @@
 				F52100000000000000000001 /* StationStoreTests.swift in Sources */,
 				F52410000000000000000001 /* AppSettingsTests.swift in Sources */,
 				F52430000000000000000001 /* StationVoiceOverCopyTests.swift in Sources */,
+				F64110000000000000000002 /* SubscriptionConstantsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
