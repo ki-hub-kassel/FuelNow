@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+# Baut TankRadar für den iOS-Simulator, installiert die App auf dem gewählten Simulator und startet sie.
+# Überlappende Aufrufe (z. B. viele Saves) serialisieren sich per flock.
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT"
+
+SCHEME="${SCHEME:-TankRadar}"
+SIMULATOR_NAME="${SIMULATOR_NAME:-iPhone 17}"
+BUNDLE_ID="${BUNDLE_ID:-com.vibecoding.TankRadar}"
+DERIVED="${DERIVED_DATA_PATH:-$ROOT/.derived-data-ios}"
+
+mkdir -p "$DERIVED"
+LOCK_DIR="$DERIVED/.build-run-lock-dir"
+wait_for_build_lock() {
+  local attempts=0
+  while ! mkdir "$LOCK_DIR" 2>/dev/null; do
+    sleep 0.25
+    attempts=$((attempts + 1))
+    if [[ $attempts -gt 600 ]]; then
+      echo "TankRadar: Build-Warteschlange-Timeout." >&2
+      exit 1
+    fi
+  done
+  trap 'rmdir "$LOCK_DIR" 2>/dev/null || true' EXIT
+}
+wait_for_build_lock
+
+resolve_udid() {
+  xcrun simctl list devices available 2>/dev/null \
+    | grep "${SIMULATOR_NAME} (" \
+    | head -1 \
+    | grep -oE '[A-F0-9]{8}-([A-F0-9]{4}-){3}[A-F0-9]{12}' \
+    | head -1
+}
+
+UDID="$(resolve_udid)"
+if [[ -z "${UDID}" ]]; then
+  echo "TankRadar: Kein Simulator „${SIMULATOR_NAME}“ gefunden. SIMULATOR_NAME anpassen oder Gerät in Xcode installieren." >&2
+  exit 1
+fi
+
+if ! xcrun simctl list devices booted 2>/dev/null | grep -q "${UDID}"; then
+  xcrun simctl boot "${UDID}" 2>/dev/null || true
+fi
+open -a Simulator 2>/dev/null || true
+
+echo "TankRadar: Build (${SCHEME}) → Simulator ${SIMULATOR_NAME} (${UDID}) …"
+
+xcodebuild \
+  -scheme "${SCHEME}" \
+  -destination "platform=iOS Simulator,id=${UDID}" \
+  -derivedDataPath "${DERIVED}" \
+  -quiet \
+  build
+
+APP="${DERIVED}/Build/Products/Debug-iphonesimulator/TankRadar.app"
+if [[ ! -d "${APP}" ]]; then
+  echo "TankRadar: Build-Produkt fehlt: ${APP}" >&2
+  exit 1
+fi
+
+xcrun simctl install "${UDID}" "${APP}"
+xcrun simctl launch "${UDID}" "${BUNDLE_ID}"
+
+echo "TankRadar: Installiert und gestartet."

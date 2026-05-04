@@ -1,6 +1,7 @@
 import CoreLocation
 import MapKit
 import SwiftUI
+import UIKit
 
 /// Hauptkarte: Standort, Tankstellen-Pins und Verkabelung zu `LocationService` / `StationStore`.
 struct MapScreen: View {
@@ -27,7 +28,6 @@ struct MapScreen: View {
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
             Map(position: $cameraPosition) {
-                UserAnnotation()
                 ForEach(stationStore.stations) { station in
                     Annotation(station.name, coordinate: station.coordinate) {
                         StationAnnotationView(station: station, preferredFuel: preferredFuel)
@@ -35,6 +35,14 @@ struct MapScreen: View {
                                 selectedStation = station
                             }
                     }
+                }
+                // Explizit aus LocationService — zuverlässiger als UserAnnotation() bei gebundenem MapCamera & vielen Pins.
+                if let userLocation = locationService.currentLocation {
+                    Annotation("", coordinate: userLocation.coordinate) {
+                        UserLocationMapMarker()
+                    }
+                    .annotationTitles(.hidden)
+                    .annotationSubtitles(.hidden)
                 }
             }
             .mapStyle(.standard)
@@ -128,6 +136,22 @@ struct MapScreen: View {
 }
 
 // MARK: - Previews
+
+/// Blauer Punkt wie „Mein Standort“ in Apple Maps (SwiftUI-Annotation, nicht MapKit-`UserAnnotation`).
+private struct UserLocationMapMarker: View {
+    var body: some View {
+        ZStack {
+            Circle()
+                .fill(Color(uiColor: .systemBlue))
+                .frame(width: 18, height: 18)
+            Circle()
+                .strokeBorder(Color.white, lineWidth: 3)
+                .frame(width: 18, height: 18)
+        }
+        .shadow(color: .black.opacity(0.22), radius: 2, y: 1)
+        .accessibilityLabel("Mein Standort")
+    }
+}
 
 private struct StationListEnvelope: Decodable {
     let stations: [Station]

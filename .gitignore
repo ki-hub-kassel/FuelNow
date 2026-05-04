@@ -10,6 +10,8 @@ xcuserdata/
 timeline.xctimeline
 playground.xcworkspace
 .build/
+# Lokaler DerivedData-Pfad für scripts/build-and-run-simulator.sh
+.derived-data-ios/
 APIKeys.swift
 .cursor/hooks/state/
 

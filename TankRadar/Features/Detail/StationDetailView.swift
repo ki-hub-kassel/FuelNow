@@ -1,7 +1,8 @@
+import CoreLocation
 import MapKit
 import SwiftUI
 
-/// Detail-Sheet für eine Tankstelle: Stammdaten, alle Spritpreise, Status, Entfernung und Navigation in Apple Maps.
+/// Detail-Sheet für eine Tankstelle: Stammdaten, alle Spritpreise, Status, Entfernung und Start der Apple-Maps-Navigation (Autoroute).
 struct StationDetailView: View {
     let station: Station
     let preferredFuel: FuelType
@@ -35,12 +36,21 @@ struct StationDetailView: View {
                     }
 
                     StationDetailSectionCard(title: "Status") {
-                        Label(
-                            station.isOpen ? "Geöffnet" : "Geschlossen",
-                            systemImage: station.isOpen ? "fuelpump.fill" : "moon.zzz.fill"
-                        )
-                        .font(TRTypography.callout())
-                        .foregroundStyle(TRColors.labelPrimary)
+                        HStack(spacing: TRSpacing.s) {
+                            Circle()
+                                .fill(station.isOpen ? TRColors.success : TRColors.danger)
+                                .frame(width: 12, height: 12)
+                                .overlay {
+                                    Circle()
+                                        .strokeBorder(TRColors.labelPrimary.opacity(0.12), lineWidth: 1)
+                                }
+                                .accessibilityHidden(true)
+                            Text(station.isOpen ? "Geöffnet" : "Geschlossen")
+                                .font(TRTypography.callout())
+                                .foregroundStyle(station.isOpen ? TRColors.success : TRColors.danger)
+                        }
+                        .accessibilityElement(children: .combine)
+                        .accessibilityLabel(station.isOpen ? "Geöffnet" : "Geschlossen")
                     }
 
                     StationDetailSectionCard(title: "Entfernung") {
@@ -49,12 +59,12 @@ struct StationDetailView: View {
                             .foregroundStyle(TRColors.labelPrimary)
                     }
 
-                    Button(action: openInAppleMaps) {
-                        Label("In Apple Maps öffnen", systemImage: "map.fill")
+                    Button(action: startAppleMapsDrivingNavigation) {
+                        Label("Navigation in Apple Maps", systemImage: "location.north.line.fill")
                             .frame(maxWidth: .infinity)
                     }
                     .buttonStyle(.trPrimaryGlass)
-                    .accessibilityHint("Startet Apple Maps mit Routenführung zur Tankstelle.")
+                    .accessibilityHint("Startet die Autoroute von deinem Standort zur Tankstelle in Apple Maps.")
                 }
                 .padding(TRSpacing.m)
                 .padding(.bottom, TRSpacing.l)
@@ -62,11 +72,17 @@ struct StationDetailView: View {
             .navigationTitle(station.name)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Schließen") {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button {
                         dismiss()
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.title3)
+                            .symbolRenderingMode(.palette)
+                            .foregroundStyle(TRColors.labelSecondary, TRColors.labelTertiary.opacity(0.35))
                     }
-                    .accessibilityLabel("Detail schließen")
+                    .accessibilityLabel("Schließen")
+                    .accessibilityHint("Schließt die Tankstellendetails.")
                 }
             }
         }
@@ -95,9 +111,6 @@ struct StationDetailView: View {
                     Text(StationDetailFormatting.priceString(euros: euros))
                         .font(TRTypography.bodyBold())
                         .foregroundStyle(TRColors.accent)
-                    Text("€/l")
-                        .font(TRTypography.caption())
-                        .foregroundStyle(TRColors.labelSecondary)
                 } else {
                     Text("—")
                         .font(TRTypography.bodyBold())
@@ -109,13 +122,16 @@ struct StationDetailView: View {
         .accessibilityElement(children: .combine)
     }
 
-    private func openInAppleMaps() {
-        let placemark = MKPlacemark(coordinate: station.coordinate)
-        let item = MKMapItem(placemark: placemark)
-        item.name = station.name
-        item.openInMaps(launchOptions: [
-            MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving,
-        ])
+    private func startAppleMapsDrivingNavigation() {
+        let destinationLocation = CLLocation(latitude: station.latitude, longitude: station.longitude)
+        let destination = MKMapItem(location: destinationLocation, address: nil)
+        destination.name = station.name
+
+        let current = MKMapItem.forCurrentLocation()
+        MKMapItem.openMaps(
+            with: [current, destination],
+            launchOptions: [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving]
+        )
     }
 }
 
@@ -145,7 +161,7 @@ private enum StationDetailFormatting {
         formatter.numberStyle = .currency
         formatter.currencyCode = "EUR"
         formatter.locale = Locale(identifier: "de_DE")
-        formatter.maximumFractionDigits = 3
+        formatter.maximumFractionDigits = 2
         formatter.minimumFractionDigits = 2
         return formatter
     }()
@@ -160,7 +176,7 @@ private enum StationDetailFormatting {
     }()
 
     static func priceString(euros: Double) -> String {
-        eurosFormatter.string(from: NSNumber(value: euros)) ?? String(format: "%.3f €", euros)
+        eurosFormatter.string(from: NSNumber(value: euros)) ?? String(format: "%.2f €", euros)
     }
 
     static func distanceString(kilometers: Double?) -> String {

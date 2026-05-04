@@ -1,0 +1,11 @@
+{
+  "emeraldwalk.runonsave": {
+    "commands": [
+      {
+        "match": "TankRadar/.*\\.(swift|json)$|TankRadar\\.xcodeproj/.*|TankRadar\\.xcworkspace/.*",
+        "cmd": "\"${workspaceFolder}/scripts/build-and-run-simulator.sh\"",
+        "isAsync": true
+      }
+    ]
+  }
+}

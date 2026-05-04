@@ -1,12 +1,11 @@
 import SwiftUI
 
-/// Tankstellen-Pin mit TR-Glas-Pille, Preis für die gewählte Sorte und Öffnungsstatus (Farbe + Symbol).
+/// Tankstellen-Pin mit TR-Glas-Pille, Preis für die gewählte Sorte und Öffnungsstatus (grüner bzw. roter Punkt).
 struct StationAnnotationView: View {
     let station: Station
     let preferredFuel: FuelType
 
-    @ScaledMetric(relativeTo: .body) private var statusDotDiameter: CGFloat = 10
-    @ScaledMetric(relativeTo: .body) private var statusSymbolPointSize: CGFloat = 9
+    @ScaledMetric(relativeTo: .body) private var statusDotDiameter: CGFloat = 12
 
     private var priceText: String {
         StationAnnotationFormatting.priceString(euros: station.price(for: preferredFuel))
@@ -39,20 +38,14 @@ struct StationAnnotationView: View {
     }
 
     private var statusBadge: some View {
-        ZStack {
-            Circle()
-                .fill(station.isOpen ? TRColors.success : TRColors.danger)
-                .frame(width: statusDotDiameter, height: statusDotDiameter)
-                .overlay {
-                    Circle()
-                        .strokeBorder(TRColors.background.opacity(0.55), lineWidth: 1)
-                }
-            Image(systemName: station.isOpen ? "fuelpump.fill" : "moon.zzz.fill")
-                .font(.system(size: statusSymbolPointSize, weight: .bold))
-                .foregroundStyle(.white.opacity(0.95))
-                .accessibilityHidden(true)
-        }
-        .accessibilityHidden(true)
+        Circle()
+            .fill(station.isOpen ? TRColors.success : TRColors.danger)
+            .frame(width: statusDotDiameter, height: statusDotDiameter)
+            .overlay {
+                Circle()
+                    .strokeBorder(TRColors.background.opacity(0.55), lineWidth: 1)
+            }
+            .accessibilityHidden(true)
     }
 }
 
@@ -62,7 +55,7 @@ private enum StationAnnotationFormatting {
         formatter.numberStyle = .currency
         formatter.currencyCode = "EUR"
         formatter.locale = Locale(identifier: "de_DE")
-        formatter.maximumFractionDigits = 3
+        formatter.maximumFractionDigits = 2
         formatter.minimumFractionDigits = 2
         return formatter
     }()
@@ -71,7 +64,7 @@ private enum StationAnnotationFormatting {
         guard let euros else {
             return "—"
         }
-        return eurosFormatter.string(from: NSNumber(value: euros)) ?? String(format: "%.3f €", euros)
+        return eurosFormatter.string(from: NSNumber(value: euros)) ?? String(format: "%.2f €", euros)
     }
 }
 
