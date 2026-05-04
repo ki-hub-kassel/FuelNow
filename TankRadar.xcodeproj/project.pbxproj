@@ -22,6 +22,15 @@
 		F50400000000000000000002 /* station-price-false-sample.json in Resources */ = {isa = PBXBuildFile; fileRef = F51200000000000000000002 /* station-price-false-sample.json */; };
 		F60200000000000000000001 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60100000000000000000001 /* LocationService.swift */; };
 		F60300000000000000000001 /* LocationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61100000000000000000001 /* LocationServiceTests.swift */; };
+		F37600000000000000000001 /* TRSpacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37500000000000000000001 /* TRSpacing.swift */; };
+		F37600000000000000000002 /* TRRadius.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37500000000000000000002 /* TRRadius.swift */; };
+		F37600000000000000000003 /* TRTypography.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37500000000000000000003 /* TRTypography.swift */; };
+		F37600000000000000000004 /* TRColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37500000000000000000004 /* TRColors.swift */; };
+		F37600000000000000000005 /* TRPaletteHex.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37500000000000000000005 /* TRPaletteHex.swift */; };
+		F37600000000000000000006 /* TRButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37500000000000000000006 /* TRButtonStyles.swift */; };
+		F37600000000000000000007 /* TRCardBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37500000000000000000007 /* TRCardBackground.swift */; };
+		F37600000000000000000008 /* TRGlassPill.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37500000000000000000008 /* TRGlassPill.swift */; };
+		F51600000000000000000001 /* TRDesignTokenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F51500000000000000000001 /* TRDesignTokenTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +69,15 @@
 		F51200000000000000000002 /* station-price-false-sample.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "station-price-false-sample.json"; sourceTree = "<group>"; };
 		F60100000000000000000001 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		F61100000000000000000001 /* LocationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationServiceTests.swift; sourceTree = "<group>"; };
+		F37500000000000000000001 /* TRSpacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRSpacing.swift; sourceTree = "<group>"; };
+		F37500000000000000000002 /* TRRadius.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRRadius.swift; sourceTree = "<group>"; };
+		F37500000000000000000003 /* TRTypography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRTypography.swift; sourceTree = "<group>"; };
+		F37500000000000000000004 /* TRColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRColors.swift; sourceTree = "<group>"; };
+		F37500000000000000000005 /* TRPaletteHex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRPaletteHex.swift; sourceTree = "<group>"; };
+		F37500000000000000000006 /* TRButtonStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRButtonStyles.swift; sourceTree = "<group>"; };
+		F37500000000000000000007 /* TRCardBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRCardBackground.swift; sourceTree = "<group>"; };
+		F37500000000000000000008 /* TRGlassPill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRGlassPill.swift; sourceTree = "<group>"; };
+		F51500000000000000000001 /* TRDesignTokenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRDesignTokenTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +147,7 @@
 				F51100000000000000000001 /* FuelTypeTests.swift */,
 				F51100000000000000000002 /* StationTests.swift */,
 				F61100000000000000000001 /* LocationServiceTests.swift */,
+				F51500000000000000000001 /* TRDesignTokenTests.swift */,
 				F51300000000000000000001 /* Fixtures */,
 			);
 			path = TankRadarTests;
@@ -201,6 +220,14 @@
 		F37000000000000000000001 /* Design */ = {
 			isa = PBXGroup;
 			children = (
+				F37500000000000000000004 /* TRColors.swift */,
+				F37500000000000000000005 /* TRPaletteHex.swift */,
+				F37500000000000000000002 /* TRRadius.swift */,
+				F37500000000000000000001 /* TRSpacing.swift */,
+				F37500000000000000000006 /* TRButtonStyles.swift */,
+				F37500000000000000000007 /* TRCardBackground.swift */,
+				F37500000000000000000008 /* TRGlassPill.swift */,
+				F37500000000000000000003 /* TRTypography.swift */,
 				F37100000000000000000001 /* TRDesignAssets.xcassets */,
 				F37200000000000000000001 /* TRDesignPaletteNotes.swift */,
 			);
@@ -346,6 +373,14 @@
 				F50200000000000000000002 /* Station.swift in Sources */,
 				F60200000000000000000001 /* LocationService.swift in Sources */,
 				F37400000000000000000001 /* TRDesignPaletteNotes.swift in Sources */,
+				F37600000000000000000001 /* TRSpacing.swift in Sources */,
+				F37600000000000000000002 /* TRRadius.swift in Sources */,
+				F37600000000000000000003 /* TRTypography.swift in Sources */,
+				F37600000000000000000004 /* TRColors.swift in Sources */,
+				F37600000000000000000005 /* TRPaletteHex.swift in Sources */,
+				F37600000000000000000006 /* TRButtonStyles.swift in Sources */,
+				F37600000000000000000007 /* TRCardBackground.swift in Sources */,
+				F37600000000000000000008 /* TRGlassPill.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -356,6 +391,7 @@
 				F50300000000000000000001 /* FuelTypeTests.swift in Sources */,
 				F50300000000000000000002 /* StationTests.swift in Sources */,
 				F60300000000000000000001 /* LocationServiceTests.swift in Sources */,
+				F51600000000000000000001 /* TRDesignTokenTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
