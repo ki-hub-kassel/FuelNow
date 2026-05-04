@@ -1,0 +1,6 @@
+{"timestamp":1777923230974,"message":"stream_event","sessionId":"64047b","hypothesisId":"H3","location":"LocationService.swift:apply","data":{"lng":"nil","resolved":"false","hAcc":"-1.0","lat":"nil","authRaw":"4"}}
+{"location":"LocationService.swift:apply","message":"stream_event","data":{"resolved":"true","hAcc":"5.0","authRaw":"4","lat":"52.5219","lng":"13.4133"},"timestamp":1777923230985,"sessionId":"64047b","hypothesisId":"H3"}
+{"data":{"lng":"13.4133","lat":"52.5219"},"sessionId":"64047b","location":"MapScreen.swift:onChange(location)","message":"handle_location_update","hypothesisId":"H3","timestamp":1777923231056}
+{"sessionId":"64047b","data":{"lat":"52.5219","radiusKm":"5.0","lng":"13.4133"},"timestamp":1777923231057,"hypothesisId":"H4","location":"StationStore.swift:scheduleFetch","message":"fetch_start"}
+{"location":"BundledMockStationFetcher.swift:loadFromBundle","hypothesisId":"H2","timestamp":1777923231078,"sessionId":"64047b","data":{"count":"6"},"message":"mock_bundle_loaded"}
+{"hypothesisId":"H4","data":{"count":"4"},"sessionId":"64047b","message":"stations_loaded","location":"StationStore.swift:applySuccess","timestamp":1777923231089}

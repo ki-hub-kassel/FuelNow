@@ -8,6 +8,7 @@
 - Linear issues should include explicit acceptance criteria so completion can be verified objectively.
 - Linear issues should include a concise opening statement of the ticket’s goal and intended outcome.
 - Expectations include strong Swift and SwiftUI quality, automated tests where appropriate, and alignment with current Apple Human Interface Guidelines alongside Liquid Glass styling.
+- When ticket work is finished (merged or otherwise complete), update the relevant Linear issue and delete or prune feature branches that are fully merged and no longer needed.
 
 ## Learned Workspace Facts
 
@@ -15,4 +16,6 @@
 - Planned capabilities include Siri-driven queries for nearest or cheapest nearby stations, a CarPlay map-centric experience, and a subscription gate where CarPlay is enabled only for subscribers (initial placeholder pricing discussed at €6 per year).
 - Planning and architecture references German station data via Tankerkönig and backend/services direction involving Appwrite (Swift SDK).
 - Primary Git remote for the project is https://github.com/mpdesigncode27/TankRadar-App.git.
+- Xcode **`PRODUCT_BUNDLE_IDENTIFIER`** for the app is **`com.vibecoding.TankRadar`** (tests use matching `…Tests` / `…UITests` IDs).
+- For Simulator **DEBUG** runs, a Tankerkönig key can live in **`~/.tankradar/tankerkoenig-api-key`** on the Mac (read via **`SIMULATOR_HOST_HOME`**); details are in **`README.md`** and **`TankRadar/Support/APIKeys.example.swift`** — never commit the key file.
 - **Linear backlog order (TankRadar App):** Prefer completing **remaining Phase 1** (`TAN-5` children) before picking up later phase work: **`TAN-73`** is Done; **`TAN-72`** (Tankerkönig API-Key, operational) parallel; design-system chain **`TAN-74` → `TAN-75` → `TAN-76`** under **`TAN-71`**. Then **Phase 2** (`TAN-6`): **`TAN-14`** → **`TAN-15`**. *Re-assess when Linear statuses change.*
