@@ -1,7 +1,7 @@
 import Foundation
 
 enum APIKeys {
-    private static let placeholder = "15d034ae-e9bc-016b-ad9e-ca5a87e4cc5a"
+    private static let placeholder = ""
 
     /// Tankerkönig-UUID. **Nie** echten Key committen.
     ///
