@@ -47,6 +47,19 @@ struct LocationServiceTests {
     }
 
     @Test @MainActor
+    func refreshAuthorizationStatusReadsProviderAgain() {
+        var status: CLAuthorizationStatus = .denied
+        let service = LocationService(
+            streamProvider: MockLocationStreamProvider(events: []),
+            authorizationProvider: { status }
+        )
+        #expect(service.authorizationStatus == .denied)
+        status = .authorizedWhenInUse
+        service.refreshAuthorizationStatus()
+        #expect(service.authorizationStatus == .authorizedWhenInUse)
+    }
+
+    @Test @MainActor
     func recordsStreamErrors() async throws {
         struct FakeError: Error {}
         let mock = MockLocationStreamProvider(events: [], throwsError: FakeError())

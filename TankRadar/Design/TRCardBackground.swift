@@ -1,8 +1,8 @@
 import SwiftUI
 
 extension View {
-    /// Standard-Kartenfläche mit Liquid Glass und abgerundeten Ecken.
+    /// Standard-Kartenfläche mit Liquid Glass und abgerundeten Ecken; Material-Fallback bei „Transparenz reduzieren“.
     func trCardBackground(cornerRadius: CGFloat = TRRadius.lg) -> some View {
-        glassEffect(Glass.regular, in: .rect(cornerRadius: cornerRadius))
+        modifier(TRAdaptiveGlassSurfaceModifier(surface: .card(cornerRadius: cornerRadius)))
     }
 }

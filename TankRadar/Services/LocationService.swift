@@ -113,6 +113,11 @@ final class LocationService {
         updatesTask = nil
     }
 
+    /// Aktualisiert den Berechtigungsstatus vom System (z. B. nach Rückkehr aus den iOS-Einstellungen).
+    func refreshAuthorizationStatus() {
+        authorizationStatus = authorizationProvider()
+    }
+
     private func apply(_ event: LocationStreamEvent) {
         if let location = event.makeLocation() {
             currentLocation = location
