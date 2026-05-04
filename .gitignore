@@ -1,0 +1,14 @@
+.DS_Store
+DerivedData/
+*.xcuserstate
+xcuserdata/
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+timeline.xctimeline
+playground.xcworkspace
+.build/
+APIKeys.swift
+.cursor/hooks/state/
