@@ -26,6 +26,7 @@
 		F37600000000000000000007 /* TRCardBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37500000000000000000007 /* TRCardBackground.swift */; };
 		F37600000000000000000008 /* TRGlassPill.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37500000000000000000008 /* TRGlassPill.swift */; };
 		F37600000000000000000009 /* TRDesignSystemPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37500000000000000000009 /* TRDesignSystemPreview.swift */; };
+		F37600000000000000000011 /* TRAdaptiveGlass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37500000000000000000011 /* TRAdaptiveGlass.swift */; };
 		F50200000000000000000001 /* FuelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F50100000000000000000001 /* FuelType.swift */; };
 		F50200000000000000000002 /* Station.swift in Sources */ = {isa = PBXBuildFile; fileRef = F50100000000000000000002 /* Station.swift */; };
 		F50300000000000000000001 /* FuelTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F51100000000000000000001 /* FuelTypeTests.swift */; };
@@ -50,6 +51,7 @@
 		F60810000000000000000003 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60800000000000000000003 /* SettingsView.swift */; };
 		F60810000000000000000004 /* StationAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60800000000000000000004 /* StationAnnotationView.swift */; };
 		F60810000000000000000005 /* LocateMeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60800000000000000000005 /* LocateMeButton.swift */; };
+		F60810000000000000000006 /* LocationDeniedCallout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60800000000000000000006 /* LocationDeniedCallout.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,6 +93,7 @@
 		F37500000000000000000007 /* TRCardBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRCardBackground.swift; sourceTree = "<group>"; };
 		F37500000000000000000008 /* TRGlassPill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRGlassPill.swift; sourceTree = "<group>"; };
 		F37500000000000000000009 /* TRDesignSystemPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRDesignSystemPreview.swift; sourceTree = "<group>"; };
+		F37500000000000000000011 /* TRAdaptiveGlass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRAdaptiveGlass.swift; sourceTree = "<group>"; };
 		F50100000000000000000001 /* FuelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelType.swift; sourceTree = "<group>"; };
 		F50100000000000000000002 /* Station.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Station.swift; sourceTree = "<group>"; };
 		F51100000000000000000001 /* FuelTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelTypeTests.swift; sourceTree = "<group>"; };
@@ -112,6 +115,7 @@
 		F60800000000000000000003 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		F60800000000000000000004 /* StationAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationAnnotationView.swift; sourceTree = "<group>"; };
 		F60800000000000000000005 /* LocateMeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocateMeButton.swift; sourceTree = "<group>"; };
+		F60800000000000000000006 /* LocationDeniedCallout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDeniedCallout.swift; sourceTree = "<group>"; };
 		F61100000000000000000001 /* LocationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationServiceTests.swift; sourceTree = "<group>"; };
 		F62A00000000000000000001 /* mock-stations.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "mock-stations.json"; sourceTree = "<group>"; };
 		F62B00000000000000000001 /* BundledMockStationFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundledMockStationFetcher.swift; sourceTree = "<group>"; };
@@ -230,6 +234,7 @@
 				F60800000000000000000001 /* MapScreen.swift */,
 				F60800000000000000000004 /* StationAnnotationView.swift */,
 				F60800000000000000000005 /* LocateMeButton.swift */,
+				F60800000000000000000006 /* LocationDeniedCallout.swift */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -290,6 +295,7 @@
 				F37500000000000000000006 /* TRButtonStyles.swift */,
 				F37500000000000000000007 /* TRCardBackground.swift */,
 				F37500000000000000000008 /* TRGlassPill.swift */,
+				F37500000000000000000011 /* TRAdaptiveGlass.swift */,
 				F37500000000000000000003 /* TRTypography.swift */,
 				F37100000000000000000001 /* TRDesignAssets.xcassets */,
 				F37200000000000000000001 /* TRDesignPaletteNotes.swift */,
@@ -449,6 +455,7 @@
 				F60810000000000000000001 /* MapScreen.swift in Sources */,
 				F60810000000000000000004 /* StationAnnotationView.swift in Sources */,
 				F60810000000000000000005 /* LocateMeButton.swift in Sources */,
+				F60810000000000000000006 /* LocationDeniedCallout.swift in Sources */,
 				F60810000000000000000002 /* StationDetailView.swift in Sources */,
 				F60810000000000000000003 /* SettingsView.swift in Sources */,
 				F37400000000000000000001 /* TRDesignPaletteNotes.swift in Sources */,
@@ -461,6 +468,7 @@
 				F37600000000000000000007 /* TRCardBackground.swift in Sources */,
 				F37600000000000000000008 /* TRGlassPill.swift in Sources */,
 				F37600000000000000000009 /* TRDesignSystemPreview.swift in Sources */,
+				F37600000000000000000011 /* TRAdaptiveGlass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,9 +1,8 @@
 import SwiftUI
 
 extension View {
-    /// Kompakte Glas-Pille (z. B. Badges, Chips).
+    /// Kompakte Glas-Pille (z. B. Badges, Chips); bei „Transparenz reduzieren“ Material statt Glas.
     func trGlassPill(interactive: Bool = false) -> some View {
-        let style = interactive ? Glass.regular.interactive() : Glass.regular
-        return glassEffect(style, in: .capsule)
+        modifier(TRAdaptiveGlassSurfaceModifier(surface: .pill(interactive: interactive)))
     }
 }

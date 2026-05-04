@@ -7,6 +7,8 @@ import UIKit
 struct MapScreen: View {
     @Environment(LocationService.self) private var locationService
     @Environment(StationStore.self) private var stationStore
+    @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     @AppStorage(AppSettings.UserDefaultsKey.searchRadiusKm) private var searchRadiusKm = AppSettings.SearchRadius.defaultKm
     @AppStorage(AppSettings.UserDefaultsKey.preferredFuelType) private var preferredFuelRaw = FuelType.e10.rawValue
@@ -23,6 +25,15 @@ struct MapScreen: View {
 
     private var preferredFuel: FuelType {
         FuelType(rawValue: preferredFuelRaw) ?? .e10
+    }
+
+    private var isLocationAccessDenied: Bool {
+        switch locationService.authorizationStatus {
+        case .denied, .restricted:
+            true
+        default:
+            false
+        }
     }
 
     var body: some View {
@@ -83,8 +94,22 @@ struct MapScreen: View {
         .overlay(alignment: .top) {
             loadStateBanner
         }
+        .overlay {
+            if isLocationAccessDenied {
+                LocationDeniedCallout {
+                    showSettings = true
+                }
+                .transition(.opacity)
+            }
+        }
+        .animation(reduceMotion ? nil : .default, value: isLocationAccessDenied)
         .task {
             locationService.start()
+        }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active {
+                locationService.refreshAuthorizationStatus()
+            }
         }
         .onChange(of: locationService.currentLocation) { _, newValue in
             guard let location = newValue else { return }
