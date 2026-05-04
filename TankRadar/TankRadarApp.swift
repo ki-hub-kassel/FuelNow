@@ -4,7 +4,7 @@ import SwiftUI
 @main
 struct TankRadarApp: App {
     @State private var locationService = LocationService()
-    @State private var stationStore = StationStore()
+    @State private var stationStore = StationStoreFactory.makeDefault()
 
     var body: some Scene {
         WindowGroup {

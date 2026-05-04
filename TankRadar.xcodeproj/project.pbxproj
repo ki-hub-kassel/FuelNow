@@ -13,6 +13,7 @@
 		800000000000000000000005 /* TankRadarUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500000000000000000000001 /* TankRadarUITests.swift */; };
 		F20000000000000000000001 /* APIKeys.example.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000001 /* APIKeys.example.swift */; };
 		F37300000000000000000001 /* TRDesignAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F37100000000000000000001 /* TRDesignAssets.xcassets */; };
+		F62A10000000000000000001 /* mock-stations.json in Resources */ = {isa = PBXBuildFile; fileRef = F62A00000000000000000001 /* mock-stations.json */; };
 		F37400000000000000000001 /* TRDesignPaletteNotes.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37200000000000000000001 /* TRDesignPaletteNotes.swift */; };
 		F37600000000000000000001 /* TRSpacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37500000000000000000001 /* TRSpacing.swift */; };
 		F37600000000000000000002 /* TRRadius.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37500000000000000000002 /* TRRadius.swift */; };
@@ -38,6 +39,8 @@
 		F60600000000000000000002 /* TankerkoenigClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60500000000000000000001 /* TankerkoenigClient.swift */; };
 		F60710000000000000000001 /* StationFetching.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60700000000000000000001 /* StationFetching.swift */; };
 		F60710000000000000000002 /* StationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60700000000000000000002 /* StationStore.swift */; };
+		F62B10000000000000000001 /* BundledMockStationFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = F62B00000000000000000001 /* BundledMockStationFetcher.swift */; };
+		F62C10000000000000000001 /* StationStoreFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F62C00000000000000000001 /* StationStoreFactory.swift */; };
 		F60810000000000000000001 /* MapScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60800000000000000000001 /* MapScreen.swift */; };
 		F60810000000000000000002 /* StationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60800000000000000000002 /* StationDetailView.swift */; };
 		F60810000000000000000003 /* SettingsPlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60800000000000000000003 /* SettingsPlaceholderView.swift */; };
@@ -102,6 +105,9 @@
 		F60800000000000000000004 /* StationAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationAnnotationView.swift; sourceTree = "<group>"; };
 		F60800000000000000000005 /* LocateMeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocateMeButton.swift; sourceTree = "<group>"; };
 		F61100000000000000000001 /* LocationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationServiceTests.swift; sourceTree = "<group>"; };
+		F62A00000000000000000001 /* mock-stations.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "mock-stations.json"; sourceTree = "<group>"; };
+		F62B00000000000000000001 /* BundledMockStationFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundledMockStationFetcher.swift; sourceTree = "<group>"; };
+		F62C00000000000000000001 /* StationStoreFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationStoreFactory.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,6 +167,7 @@
 				F37000000000000000000001 /* Design */,
 				F38000000000000000000001 /* Intents */,
 				F30000000000000000000001 /* Support */,
+				F62D00000000000000000001 /* MockData */,
 			);
 			path = TankRadar;
 			sourceTree = "<group>";
@@ -238,8 +245,18 @@
 				F60500000000000000000001 /* TankerkoenigClient.swift */,
 				F60700000000000000000001 /* StationFetching.swift */,
 				F60700000000000000000002 /* StationStore.swift */,
+				F62B00000000000000000001 /* BundledMockStationFetcher.swift */,
+				F62C00000000000000000001 /* StationStoreFactory.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		F62D00000000000000000001 /* MockData */ = {
+			isa = PBXGroup;
+			children = (
+				F62A00000000000000000001 /* mock-stations.json */,
+			);
+			path = MockData;
 			sourceTree = "<group>";
 		};
 		F36000000000000000000001 /* Models */ = {
@@ -383,6 +400,7 @@
 			files = (
 				800000000000000000000003 /* Assets.xcassets in Resources */,
 				F37300000000000000000001 /* TRDesignAssets.xcassets in Resources */,
+				F62A10000000000000000001 /* mock-stations.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -412,6 +430,8 @@
 				F60600000000000000000002 /* TankerkoenigClient.swift in Sources */,
 				F60710000000000000000001 /* StationFetching.swift in Sources */,
 				F60710000000000000000002 /* StationStore.swift in Sources */,
+				F62B10000000000000000001 /* BundledMockStationFetcher.swift in Sources */,
+				F62C10000000000000000001 /* StationStoreFactory.swift in Sources */,
 				F60810000000000000000001 /* MapScreen.swift in Sources */,
 				F60810000000000000000004 /* StationAnnotationView.swift in Sources */,
 				F60810000000000000000005 /* LocateMeButton.swift in Sources */,

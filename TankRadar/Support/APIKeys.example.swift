@@ -71,7 +71,7 @@ enum APIKeys {
     static func warnIfPlaceholderActive() {
         guard tankerkoenig == placeholder else { return }
         print(
-            "⚠️ TankRadar: Kein Tankerkönig-API-Key — lege ~/.tankradar/tankerkoenig-api-key an, oder setze TANKERKOENIG_API_KEY / TANKERKOENIG_API_KEY_FILE (siehe APIKeys.example.swift). Linear TAN-72."
+            "⚠️ TankRadar: Kein Tankerkönig-API-Key — im DEBUG-Build werden Mock-Tankstellen aus dem Bundle genutzt. Für Live-Daten: Key wie in diesem File beschrieben setzen, oder `TANKRADAR_USE_LIVE_STATIONS=1` zum Testen der Fehler-UI. Linear TAN-72."
         )
     }
     #endif
