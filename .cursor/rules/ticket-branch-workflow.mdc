@@ -15,10 +15,11 @@ alwaysApply: true
 
 ## Visueller Nachweis — konkret (FuelNow)
 
-1. **Ablage:** Screenshots/Videos **lokal beliebig** (Desktop, Downloads, `/tmp`, …) erzeugen — **nie** ins Git committen.
+1. **Ablage:** Screenshots/Videos **nie** ins Git committen. **Empfohlen:** Projektordner **`.linear-evidence/`** (steht in `.gitignore`); sonst Desktop/Downloads/`/tmp` ist möglich.
 2. **Dateiname (empfohlen):** Schema **`TAN-XX-kurz-slug`** + Kontext, z. B. `TAN-16-mapscreen-simulator.png`, `TAN-13-tests-passing.png`, kurzes `.mov` vom Simulator.
 3. **Was aufnehmen:**
    - **Mit UI:** Simulator oder Gerät — Screen(s), auf denen die Ticket-Änderung **erkennbar** ist (Annotation, Text, Flow-Ende).
    - **Ohne / wenig UI:** Xcode **Test**- oder **Report**-Ansicht mit **grünen** Tests für dieses Feature; oder App einmal gestartet im Simulator + ein Satz im Kommentar („noch kein Map-Screen — nur Service wiring“).
 4. **An Linear anhängen:** Linear-UI (**Issue → Add attachment**) oder MCP **`create_attachment`** mit `base64Content` der Datei (macOS z. B. `base64 -i /Pfad/zum/Screenshot.png`).
-5. **Beispiel TAN-13 (LocationService):** Kurzes Video „Simulator läuft, App geöffnet“ **oder** Screenshot Xcode mit **`LocationServiceTests`** grün — im Kommentar kurz beschreiben.
+5. **AXe (Simulator, reproduzierbar):** Für UI-Nachweise **bevorzugt** das Repo-Skript `./scripts/build-run-and-axe.sh` nutzen und den Abschluss-Screenshot steuern, z. B. `AXE_SCREENSHOT_PATH=".linear-evidence/TAN-XX-kurz-slug.png"`. Vor manuellen `axe`-Kommandos das Agent-Skill **`~/.agents/skills/axe/SKILL.md`** lesen (u. a. `--udid`, Batch-Workflow, Verifikation). Details und Trigger: **`AGENTS.md`** unter „AXe-Skill & Workflow“.
+6. **Beispiel TAN-13 (LocationService):** Kurzes Video „Simulator läuft, App geöffnet“ **oder** Screenshot Xcode mit **`LocationServiceTests`** grün — im Kommentar kurz beschreiben.
