@@ -5,6 +5,7 @@ import SwiftUI
 struct FuelNowApp: App {
     @State private var locationService = LocationService(snapshotStore: UserDefaultsLocationSnapshotStore())
     @State private var stationStore = StationStoreFactory.makeDefault()
+    @State private var entitlementManager = EntitlementManager()
     @AppStorage(AppSettings.UserDefaultsKey.appearancePreference) private var appearanceRaw = AppSettings.AppearancePreference.system.rawValue
 
     private var appearancePreference: AppSettings.AppearancePreference {
@@ -17,6 +18,7 @@ struct FuelNowApp: App {
                 .preferredColorScheme(appearancePreference.preferredSwiftUIColorScheme)
                 .environment(locationService)
                 .environment(stationStore)
+                .environment(entitlementManager)
                 .environment(MapDeepLinkStore.shared)
                 .onOpenURL { url in
                     Task { @MainActor in
@@ -30,6 +32,7 @@ struct FuelNowApp: App {
                     }
                 }
                 .task {
+                    await entitlementManager.start()
                     await requestLocationAuthorizationIfNeeded()
                     #if DEBUG
                     APIKeys.warnIfPlaceholderActive()

@@ -76,6 +76,8 @@
 		F65710000000000000000004 /* OpenMapIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65700000000000000000004 /* OpenMapIntents.swift */; };
 		F65710000000000000000005 /* FuelNowAppShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65700000000000000000005 /* FuelNowAppShortcuts.swift */; };
 		F65710000000000000000006 /* FuelNowDeepLinkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65700000000000000000006 /* FuelNowDeepLinkTests.swift */; };
+		F65810000000000000000001 /* EntitlementManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65800000000000000000001 /* EntitlementManager.swift */; };
+		F65810000000000000000002 /* EntitlementManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65800000000000000000002 /* EntitlementManagerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -169,6 +171,8 @@
 		F65700000000000000000004 /* OpenMapIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMapIntents.swift; sourceTree = "<group>"; };
 		F65700000000000000000005 /* FuelNowAppShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelNowAppShortcuts.swift; sourceTree = "<group>"; };
 		F65700000000000000000006 /* FuelNowDeepLinkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelNowDeepLinkTests.swift; sourceTree = "<group>"; };
+		F65800000000000000000001 /* EntitlementManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntitlementManager.swift; sourceTree = "<group>"; };
+		F65800000000000000000002 /* EntitlementManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntitlementManagerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -253,6 +257,7 @@
 				F65100000000000000000001 /* StationIntentTests.swift */,
 				F65600000000000000000004 /* SiriStationLookupTests.swift */,
 				F65700000000000000000006 /* FuelNowDeepLinkTests.swift */,
+				F65800000000000000000002 /* EntitlementManagerTests.swift */,
 				F51300000000000000000001 /* Fixtures */,
 			);
 			path = FuelNowTests;
@@ -327,6 +332,7 @@
 				F60700000000000000000002 /* StationStore.swift */,
 				F62B00000000000000000001 /* BundledMockStationFetcher.swift */,
 				F62C00000000000000000001 /* StationStoreFactory.swift */,
+				F65800000000000000000001 /* EntitlementManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -569,6 +575,7 @@
 				F65610000000000000000003 /* StationSearchIntents.swift in Sources */,
 				F65710000000000000000004 /* OpenMapIntents.swift in Sources */,
 				F65710000000000000000005 /* FuelNowAppShortcuts.swift in Sources */,
+				F65810000000000000000001 /* EntitlementManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -590,6 +597,7 @@
 				F65110000000000000000001 /* StationIntentTests.swift in Sources */,
 				F65610000000000000000004 /* SiriStationLookupTests.swift in Sources */,
 				F65710000000000000000006 /* FuelNowDeepLinkTests.swift in Sources */,
+				F65810000000000000000002 /* EntitlementManagerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
