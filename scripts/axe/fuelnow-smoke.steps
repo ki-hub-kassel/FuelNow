@@ -8,7 +8,7 @@
 
 sleep 2
 
-# Toolbar „Einstellungen“ → Sheet öffnen → „Schließen“ (Accessibility-Labels)
+# Toolbar „Einstellungen“ → Sheet öffnen → „Fertig“ (Accessibility-Labels)
 tap --label "Einstellungen" --wait-timeout 25
 sleep 1.5
-tap --label "Schließen" --wait-timeout 15
+tap --label "Fertig" --wait-timeout 15
