@@ -1,7 +1,10 @@
 import StoreKit
 import SwiftUI
 
-/// Einstellungen: Präferenzen-Layout (Sektionslabels, Karten-Auswahl, gruppierte Glas-Karte) — weiterhin als Sheet.
+/// Einstellungen als nutzerzentrierte `Form` mit Sections — Liquid Glass nur auf primären Aktionen.
+///
+/// Reihenfolge: **Kraftstoff & Suche** → **Erscheinungsbild** → **FuelNow Plus** → kleiner Datenquellen-Footer.
+/// Werte greifen über `@AppStorage` direkt; Schließen über Toolbar `Fertig` oder Sheet-Swipe.
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.openURL) private var openURL
@@ -18,6 +21,13 @@ struct SettingsView: View {
         )
     }
 
+    private var fuelBinding: Binding<FuelType> {
+        Binding(
+            get: { FuelType(rawValue: preferredFuelRaw) ?? .e10 },
+            set: { preferredFuelRaw = $0.rawValue }
+        )
+    }
+
     @State private var isPurchasing = false
     @State private var isRestoring = false
     @State private var storeAlertMessage: String?
@@ -30,38 +40,23 @@ struct SettingsView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: TRSpacing.l) {
-                    heroHeader
-
-                    fuelSection
-
-                    displayAndRadiusSection
-
-                    favoritesPlaceholderSection
-
-                    plusSection
-
-                    dataSourceSection
-                }
-                .padding(.horizontal, TRSpacing.m)
-                .padding(.top, TRSpacing.s)
-                .padding(.bottom, TRSpacing.xxl)
+            Form {
+                fuelAndSearchSection
+                appearanceSection
+                plusSection
+                dataSourceFooterSection
             }
-            .safeAreaInset(edge: .bottom, spacing: 0) {
-                saveBar
-            }
+            .navigationTitle(Text("settings.title"))
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button {
                         dismiss()
                     } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .font(.title3)
-                            .symbolRenderingMode(.palette)
-                            .foregroundStyle(TRColors.labelSecondary, TRColors.labelTertiary.opacity(0.35))
+                        Text("settings.done.close")
+                            .fontWeight(.semibold)
                     }
-                    .accessibilityLabel("Schließen")
+                    .accessibilityLabel(Text("settings.done.close"))
                     .accessibilityHint("Schließt die Einstellungen.")
                 }
             }
@@ -88,249 +83,155 @@ struct SettingsView: View {
         }
     }
 
-    private var heroHeader: some View {
-        VStack(alignment: .leading, spacing: TRSpacing.xs) {
-            Text("settings.hero.title")
-                .font(TRTypography.preferencesHeroTitle())
-                .foregroundStyle(TRColors.labelPrimary)
-                .fixedSize(horizontal: false, vertical: true)
+    // MARK: - Sections
 
-            Text("settings.hero.subtitle")
-                .font(TRTypography.callout())
-                .foregroundStyle(TRColors.labelSecondary)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .accessibilityElement(children: .combine)
-    }
-
-    private var fuelSection: some View {
-        VStack(alignment: .leading, spacing: TRSpacing.s) {
-            TRSettingsSectionHeader("settings.section.fuelType")
-
-            VStack(spacing: TRSpacing.s) {
+    private var fuelAndSearchSection: some View {
+        Section {
+            Picker(selection: fuelBinding) {
                 ForEach(FuelType.allCases) { fuel in
-                    FuelGlassOptionRow(
-                        fuel: fuel,
-                        isSelected: preferredFuelRaw == fuel.rawValue
-                    ) {
-                        preferredFuelRaw = fuel.rawValue
-                    }
+                    Text(fuel.displayName).tag(fuel)
                 }
+            } label: {
+                Text("settings.fuel.row.title")
             }
+            .pickerStyle(.menu)
+            .accessibilityHint(Text("Bestimmt, welche Sorte auf der Karte für Preise verwendet wird."))
 
-            Text("settings.fuel.footer")
-                .font(TRTypography.caption())
-                .foregroundStyle(TRColors.labelSecondary)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-    }
-
-    private var displayAndRadiusSection: some View {
-        VStack(alignment: .leading, spacing: TRSpacing.s) {
-            TRSettingsSectionHeader("settings.section.displayAndRadius")
-
-            TRGroupedGlassCard {
-                VStack(alignment: .leading, spacing: TRSpacing.m) {
-                    VStack(alignment: .leading, spacing: TRSpacing.xs) {
-                        Text("settings.appearance.header")
-                            .font(TRTypography.bodyBold())
-                            .foregroundStyle(TRColors.labelPrimary)
-
-                        Picker("", selection: appearanceBinding) {
-                            ForEach(AppSettings.AppearancePreference.allCases) { mode in
-                                Text(mode.localizedTitle).tag(mode)
-                            }
-                        }
-                        .labelsHidden()
-                        .pickerStyle(.segmented)
-                        .accessibilityLabel(Text("settings.appearance.header"))
-                        .accessibilityHint(Text("settings.appearance.a11yHint"))
-                    }
-
-                    Divider()
-                        .foregroundStyle(TRColors.separator)
-
-                    VStack(alignment: .leading, spacing: TRSpacing.xs) {
-                        HStack {
-                            Text("settings.row.radiusTitle")
-                                .font(TRTypography.bodyBold())
-                                .foregroundStyle(TRColors.labelPrimary)
-                            Spacer()
-                            Text("\(searchRadiusKm) km")
-                                .font(TRTypography.callout())
-                                .foregroundStyle(TRColors.labelSecondary)
-                        }
-                        .accessibilityElement(children: .ignore)
-
-                        Slider(
-                            value: Binding(
-                                get: { Double(searchRadiusKm) },
-                                set: { searchRadiusKm = AppSettings.SearchRadius.clampedKm(sliderValue: $0) }
-                            ),
-                            in: Double(AppSettings.SearchRadius.minKm)...Double(AppSettings.SearchRadius.maxKm),
-                            step: 1
-                        )
-                        .tint(TRColors.accent)
-                        .accessibilityLabel("Suchradius")
-                        .accessibilityValue("\(searchRadiusKm) Kilometer")
-                    }
+            VStack(alignment: .leading, spacing: TRSpacing.xxs) {
+                HStack {
+                    Text("settings.row.radiusTitle")
+                    Spacer()
+                    Text("\(searchRadiusKm) km")
+                        .foregroundStyle(.secondary)
+                        .monospacedDigit()
                 }
+                .accessibilityElement(children: .ignore)
+
+                Slider(
+                    value: Binding(
+                        get: { Double(searchRadiusKm) },
+                        set: { searchRadiusKm = AppSettings.SearchRadius.clampedKm(sliderValue: $0) }
+                    ),
+                    in: Double(AppSettings.SearchRadius.minKm)...Double(AppSettings.SearchRadius.maxKm),
+                    step: 1
+                )
+                .tint(TRColors.accent)
+                .accessibilityLabel(Text("settings.row.radiusTitle"))
+                .accessibilityValue("\(searchRadiusKm) Kilometer")
             }
-
-            Text("settings.appearance.footer")
-                .font(TRTypography.caption())
-                .foregroundStyle(TRColors.labelSecondary)
-                .fixedSize(horizontal: false, vertical: true)
-
+            .padding(.vertical, TRSpacing.xxs)
+        } header: {
+            Text("settings.section.fuelType")
+        } footer: {
             Text("settings.radius.footer")
-                .font(TRTypography.caption())
-                .foregroundStyle(TRColors.labelSecondary)
-                .fixedSize(horizontal: false, vertical: true)
         }
     }
 
-    private var favoritesPlaceholderSection: some View {
-        VStack(alignment: .leading, spacing: TRSpacing.s) {
-            TRSettingsSectionHeader("settings.section.favorites")
-
-            HStack(alignment: .top, spacing: TRSpacing.m) {
-                Image(systemName: "fuelpump.fill")
-                    .font(.title2)
-                    .foregroundStyle(TRColors.accent)
-                    .frame(width: 44, height: 44)
-                    .background {
-                        RoundedRectangle(cornerRadius: TRRadius.md)
-                            .fill(TRColors.backgroundSecondary.opacity(0.6))
-                    }
-
-                VStack(alignment: .leading, spacing: TRSpacing.xxs) {
-                    Text("settings.favorites.empty.title")
-                        .font(TRTypography.bodyBold())
-                        .foregroundStyle(TRColors.labelPrimary)
-                    Text("settings.favorites.empty.body")
-                        .font(TRTypography.caption())
-                        .foregroundStyle(TRColors.labelSecondary)
-                        .fixedSize(horizontal: false, vertical: true)
+    private var appearanceSection: some View {
+        Section {
+            Picker(selection: appearanceBinding) {
+                ForEach(AppSettings.AppearancePreference.allCases) { mode in
+                    Text(mode.localizedTitle).tag(mode)
                 }
-                Spacer(minLength: 0)
+            } label: {
+                Text("settings.appearance.header")
             }
-            .padding(TRSpacing.m)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .trCardBackground()
+            .pickerStyle(.menu)
+            .accessibilityHint(Text("settings.appearance.a11yHint"))
+        } header: {
+            Text("settings.section.displayAndRadius")
+        } footer: {
+            Text("settings.appearance.footer")
         }
     }
 
     private var plusSection: some View {
-        VStack(alignment: .leading, spacing: TRSpacing.s) {
-            TRSettingsSectionHeader("settings.section.plus", accent: true)
-
-            VStack(alignment: .leading, spacing: TRSpacing.m) {
-                Text("settings.plus.intro")
-                    .font(TRTypography.callout())
-                    .foregroundStyle(TRColors.labelSecondary)
-                    .fixedSize(horizontal: false, vertical: true)
-
-                if entitlementManager.isPlusSubscriber {
+        Section {
+            if entitlementManager.isPlusSubscriber {
+                Label {
                     Text("settings.plus.status.active")
-                        .font(TRTypography.body())
-                } else if let product = plusYearlyProduct {
-                    HStack(alignment: .firstTextBaseline, spacing: TRSpacing.xs) {
-                        Text(product.displayPrice)
-                            .font(TRTypography.title2())
-                            .foregroundStyle(TRColors.labelPrimary)
-                        Text("settings.plus.perYear")
-                            .font(TRTypography.callout())
-                            .foregroundStyle(TRColors.labelSecondary)
-                    }
-                    .accessibilityElement(children: .combine)
-
-                    Button {
-                        Task { await subscribePlusYearly() }
-                    } label: {
-                        Text("settings.plus.subscribe")
-                            .frame(maxWidth: .infinity)
-                    }
-                    .buttonStyle(.trPrimaryGlass)
-                    .disabled(isStoreBusy)
-                    .accessibilityHint("Startet den Jahresabo-Kauf über den App Store.")
-                } else {
-                    Text("settings.plus.priceLoading")
-                        .font(TRTypography.callout())
-                        .foregroundStyle(TRColors.labelSecondary)
+                } icon: {
+                    Image(systemName: "checkmark.seal.fill")
+                        .foregroundStyle(TRColors.accent)
                 }
+            } else if let product = plusYearlyProduct {
+                HStack(alignment: .firstTextBaseline) {
+                    Text(product.displayPrice)
+                        .font(TRTypography.bodyBold())
+                    Text("settings.plus.perYear")
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                }
+                .accessibilityElement(children: .combine)
 
                 Button {
-                    openURL(Self.manageSubscriptionsURL)
+                    Task { await subscribePlusYearly() }
                 } label: {
-                    Label("settings.plus.manage", systemImage: "creditcard")
+                    Text("settings.plus.subscribe")
                         .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(.trSoft)
-                .accessibilityHint("Öffnet die Abonnementverwaltung deines Apple-ID-Kontos im Browser oder in den Systemeinstellungen.")
-
-                Button {
-                    Task { await restorePurchases() }
-                } label: {
-                    Text("settings.plus.restore")
-                        .frame(maxWidth: .infinity)
-                }
-                .buttonStyle(.trOutline)
+                .buttonStyle(.trPrimaryGlass)
+                .listRowSeparator(.hidden)
+                .listRowBackground(Color.clear)
                 .disabled(isStoreBusy)
-                .accessibilityHint("Synchronisiert Käufe mit deinem Apple-ID-Konto.")
+                .accessibilityHint("Startet den Jahresabo-Kauf über den App Store.")
+            } else {
+                HStack {
+                    ProgressView()
+                    Text("settings.plus.priceLoading")
+                        .foregroundStyle(.secondary)
+                }
+            }
 
-                Text("settings.plus.footer")
+            Button {
+                openURL(Self.manageSubscriptionsURL)
+            } label: {
+                Label("settings.plus.manage", systemImage: "creditcard")
+            }
+            .accessibilityHint("Öffnet die Abonnementverwaltung deines Apple-ID-Kontos.")
+
+            Button {
+                Task { await restorePurchases() }
+            } label: {
+                Label("settings.plus.restore", systemImage: "arrow.clockwise")
+            }
+            .disabled(isStoreBusy)
+            .accessibilityHint("Synchronisiert Käufe mit deinem Apple-ID-Konto.")
+        } header: {
+            Text("settings.section.plus")
+        } footer: {
+            Text("settings.plus.footer")
+        }
+    }
+
+    /// Datenquellen-Hinweis am Listenende — bewusst klein und ohne eigene Glas-Karte.
+    private var dataSourceFooterSection: some View {
+        Section {
+            EmptyView()
+        } footer: {
+            VStack(alignment: .leading, spacing: TRSpacing.xxs) {
+                let attribution = AttributedString(
+                    String(
+                        format: String(localized: "settings.dataSource.inline"),
+                        String(localized: "settings.dataSource.linkLabel")
+                    )
+                )
+                Text(attribution)
                     .font(TRTypography.caption())
                     .foregroundStyle(TRColors.labelSecondary)
                     .fixedSize(horizontal: false, vertical: true)
-            }
-            .padding(TRSpacing.m)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .trCardBackground()
-        }
-    }
-
-    private var dataSourceSection: some View {
-        VStack(alignment: .leading, spacing: TRSpacing.s) {
-            TRSettingsSectionHeader("settings.section.dataSource")
-
-            TRGroupedGlassCard {
-                VStack(alignment: .leading, spacing: TRSpacing.s) {
-                    Button {
-                        openURL(AppSettings.TankerkoenigAttribution.infoURL)
-                    } label: {
-                        Label("Tankerkönig / MTS-K (CC BY 4.0)", systemImage: "link")
-                            .frame(maxWidth: .infinity)
-                    }
-                    .buttonStyle(.trSoft)
                     .accessibilityLabel("Tankerkönig und MTS-K, Lizenz CC BY 4.0")
-                    .accessibilityHint("Öffnet die Tankerkönig-Website mit Lizenzinformationen.")
-
-                    Text("settings.dataSource.footer")
-                        .font(TRTypography.caption())
-                        .foregroundStyle(TRColors.labelSecondary)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
+                    .accessibilityHint("Doppeltippen, um die Lizenzinformationen zu öffnen.")
+                    .onTapGesture {
+                        openURL(AppSettings.TankerkoenigAttribution.infoURL)
+                    }
             }
+            .padding(.top, TRSpacing.xs)
         }
+        .accessibilityElement(children: .combine)
     }
 
-    private var saveBar: some View {
-        VStack(spacing: 0) {
-            Divider()
-                .foregroundStyle(TRColors.separator)
-            Button {
-                dismiss()
-            } label: {
-                Text("settings.done.save")
-                    .frame(maxWidth: .infinity)
-            }
-            .buttonStyle(.trPrimaryGlass)
-            .padding(TRSpacing.m)
-            .accessibilityHint("Schließt die Einstellungen und übernimmt die Auswahl.")
-        }
-        .background(.bar)
-    }
+    // MARK: - Store actions
 
     @MainActor
     private func subscribePlusYearly() async {
@@ -400,74 +301,5 @@ private extension AppSettings.AppearancePreference {
         case .dark:
             "settings.appearance.dark"
         }
-    }
-}
-
-// MARK: - Fuel option row
-
-private struct FuelGlassOptionRow: View {
-    let fuel: FuelType
-    let isSelected: Bool
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            HStack(alignment: .center, spacing: TRSpacing.m) {
-                radioView
-
-                VStack(alignment: .leading, spacing: TRSpacing.xxs) {
-                    Text(fuel.displayName)
-                        .font(TRTypography.bodyBold())
-                        .foregroundStyle(TRColors.labelPrimary)
-
-                    if fuel == .e10 {
-                        Text("settings.fuel.badge.recommended")
-                            .font(TRTypography.captionSmall())
-                            .fontWeight(.semibold)
-                            .foregroundStyle(TRColors.accent)
-                            .padding(.horizontal, TRSpacing.xs)
-                            .padding(.vertical, TRSpacing.xxs)
-                            .trGlassPill()
-                    }
-                }
-
-                Spacer(minLength: 0)
-
-                if isSelected {
-                    Image(systemName: "checkmark.circle.fill")
-                        .font(.title3)
-                        .foregroundStyle(TRColors.accent)
-                        .accessibilityHidden(true)
-                }
-            }
-            .padding(TRSpacing.m)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .trCardBackground()
-            .overlay {
-                RoundedRectangle(cornerRadius: TRRadius.lg)
-                    .strokeBorder(
-                        isSelected ? TRColors.accent : TRColors.separator.opacity(0.65),
-                        lineWidth: isSelected ? 2 : 1
-                    )
-            }
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel(Text(fuel.displayName))
-        .accessibilityAddTraits(isSelected ? [.isSelected] : [])
-        .accessibilityHint(Text("settings.fuel.selectHint"))
-    }
-
-    private var radioView: some View {
-        ZStack {
-            Circle()
-                .strokeBorder(TRColors.labelSecondary, lineWidth: 1.5)
-                .frame(width: 22, height: 22)
-            if isSelected {
-                Circle()
-                    .fill(TRColors.accent)
-                    .frame(width: 11, height: 11)
-            }
-        }
-        .accessibilityHidden(true)
     }
 }
