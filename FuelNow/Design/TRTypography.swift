@@ -6,6 +6,11 @@ enum TRTypography {
         .largeTitle.weight(.bold)
     }
 
+    /// Serif-Hero für Präferenzen-Einstieg (Dynamic Type).
+    static func preferencesHeroTitle() -> Font {
+        .system(.largeTitle, design: .serif).weight(.bold)
+    }
+
     static func title() -> Font {
         .title.weight(.bold)
     }

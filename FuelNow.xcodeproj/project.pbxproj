@@ -25,6 +25,7 @@
 		F37600000000000000000009 /* TRDesignSystemPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37500000000000000000009 /* TRDesignSystemPreview.swift */; };
 		F37600000000000000000011 /* TRAdaptiveGlass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37500000000000000000011 /* TRAdaptiveGlass.swift */; };
 		F37600000000000000000012 /* TRSectionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37500000000000000000012 /* TRSectionCard.swift */; };
+		F37600000000000000000013 /* TRSettingsChrome.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37500000000000000000013 /* TRSettingsChrome.swift */; };
 		F50200000000000000000001 /* FuelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F50100000000000000000001 /* FuelType.swift */; };
 		F50200000000000000000002 /* Station.swift in Sources */ = {isa = PBXBuildFile; fileRef = F50100000000000000000002 /* Station.swift */; };
 		F50300000000000000000001 /* FuelTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F51100000000000000000001 /* FuelTypeTests.swift */; };
@@ -120,6 +121,7 @@
 		F37500000000000000000009 /* TRDesignSystemPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRDesignSystemPreview.swift; sourceTree = "<group>"; };
 		F37500000000000000000011 /* TRAdaptiveGlass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRAdaptiveGlass.swift; sourceTree = "<group>"; };
 		F37500000000000000000012 /* TRSectionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRSectionCard.swift; sourceTree = "<group>"; };
+		F37500000000000000000013 /* TRSettingsChrome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRSettingsChrome.swift; sourceTree = "<group>"; };
 		F50100000000000000000001 /* FuelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelType.swift; sourceTree = "<group>"; };
 		F50100000000000000000002 /* Station.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Station.swift; sourceTree = "<group>"; };
 		F51100000000000000000001 /* FuelTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelTypeTests.swift; sourceTree = "<group>"; };
@@ -360,6 +362,7 @@
 				F37500000000000000000008 /* TRGlassPill.swift */,
 				F37500000000000000000011 /* TRAdaptiveGlass.swift */,
 				F37500000000000000000012 /* TRSectionCard.swift */,
+				F37500000000000000000013 /* TRSettingsChrome.swift */,
 				F37500000000000000000003 /* TRTypography.swift */,
 				F37100000000000000000001 /* TRDesignAssets.xcassets */,
 				F37200000000000000000001 /* TRDesignPaletteNotes.swift */,
@@ -569,6 +572,7 @@
 				F37600000000000000000009 /* TRDesignSystemPreview.swift in Sources */,
 				F37600000000000000000011 /* TRAdaptiveGlass.swift in Sources */,
 				F37600000000000000000012 /* TRSectionCard.swift in Sources */,
+				F37600000000000000000013 /* TRSettingsChrome.swift in Sources */,
 				F65010000000000000000001 /* FuelType+AppEnum.swift in Sources */,
 				F65010000000000000000002 /* StationIntentResolving.swift in Sources */,
 				F65010000000000000000003 /* StationIntentResolution.swift in Sources */,
