@@ -11,6 +11,14 @@ alwaysApply: true
 - **Merge:** Änderungen über **Pull Request** in `main` (oder den Integrations-Branch des Teams) bringen; im PR Link zum Ticket und Checkliste aus der Issue-Description, wenn vorhanden.
 - **Nach dem Merge:** Den **Ticket-Branch löschen** — lokal (`git branch -d …`) und auf dem Remote (`git push origin --delete …`), sobald der PR in `main` ist und nichts Offenes auf dem Branch hängt.
 - **Vor „Done“ / beim Abschluss:** Am Linear-Ticket mindestens ein **visueller Nachweis** anhängen — **Screenshot** oder **kurzes Video** der Umsetzung (Simulator oder Gerät), damit die Review-Nachvollziehbarkeit gegeben ist. Upload z. B. über Linear-Anhänge (MCP: `create_attachment` mit Base64) oder vergleichbaren Upload; kurz im Abschlusskommentar beschreiben, was zu sehen ist. **Ausnahme:** Rein nicht-visuelle Arbeit (z. B. nur Modelle ohne UI) — dann z. B. Screenshot eines relevanten Testlaufs im Xcode-Report oder kurzer Clip der abgedeckten Flows; wenn selbst das nicht passt, im Ticket kommentieren und Alternativnachweis vereinbaren.
+
+### Checkliste vor Linear „Done“ (UI-relevant)
+
+1. **`FuelNowTests`** (oder passende Ziel-Tests) **grün**.
+2. **Simulator:** App gebaut/gestartet; Änderung **sichtbar** im Flow, den du dokumentierst.
+3. **Nachweis erzeugen:** z. B. `./scripts/capture-linear-evidence.sh TAN-XX-kurz` oder bei Settings-UI `./scripts/capture-linear-evidence.sh TAN-XX-kurz --settings-sheet` — Ausgabe unter `.linear-evidence/` (nicht committen).
+4. **Linear:** Screenshot/Video **anhängen**, im Abschlusskommentar **in einem Satz** beschreiben, was zu sehen ist.
+
 - **Ausnahme:** Nur ausdrücklich besprochene Hotfixes dürfen von dieser Regel abweichen.
 
 ## Visueller Nachweis — konkret (FuelNow)
@@ -21,5 +29,5 @@ alwaysApply: true
    - **Mit UI:** Simulator oder Gerät — Screen(s), auf denen die Ticket-Änderung **erkennbar** ist (Annotation, Text, Flow-Ende).
    - **Ohne / wenig UI:** Xcode **Test**- oder **Report**-Ansicht mit **grünen** Tests für dieses Feature; oder App einmal gestartet im Simulator + ein Satz im Kommentar („noch kein Map-Screen — nur Service wiring“).
 4. **An Linear anhängen:** Linear-UI (**Issue → Add attachment**) oder MCP **`create_attachment`** mit `base64Content` der Datei (macOS z. B. `base64 -i /Pfad/zum/Screenshot.png`).
-5. **AXe (Simulator, reproduzierbar):** Für UI-Nachweise **bevorzugt** das Repo-Skript `./scripts/build-run-and-axe.sh` nutzen und den Abschluss-Screenshot steuern, z. B. `AXE_SCREENSHOT_PATH=".linear-evidence/TAN-XX-kurz-slug.png"`. Vor manuellen `axe`-Kommandos das Agent-Skill **`~/.agents/skills/axe/SKILL.md`** lesen (u. a. `--udid`, Batch-Workflow, Verifikation). Details und Trigger: **`AGENTS.md`** unter „AXe-Skill & Workflow“.
+5. **AXe (Simulator, reproduzierbar):** `./scripts/capture-linear-evidence.sh TAN-XX-kurz` (oder `--settings-sheet`) **oder** `./scripts/build-run-and-axe.sh` mit `AXE_SCREENSHOT_PATH=".linear-evidence/TAN-XX-kurz-slug.png"`. Vor manuellen `axe`-Kommandos das Agent-Skill **`~/.agents/skills/axe/SKILL.md`** lesen (u. a. `--udid`, Batch-Workflow, Verifikation). Details und Trigger: **`AGENTS.md`** unter „AXe-Skill & Workflow“.
 6. **Beispiel TAN-13 (LocationService):** Kurzes Video „Simulator läuft, App geöffnet“ **oder** Screenshot Xcode mit **`LocationServiceTests`** grün — im Kommentar kurz beschreiben.

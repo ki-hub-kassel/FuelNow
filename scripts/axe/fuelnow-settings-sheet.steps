@@ -1,0 +1,9 @@
+# FuelNow — AXe: Settings-Sheet für Linear-Screenshots offen lassen
+# Nutzung: AXE_STEPS_FILE=scripts/axe/fuelnow-settings-sheet.steps ./scripts/build-run-and-axe.sh
+# oder: ./scripts/capture-linear-evidence.sh TAN-XX-kurz --settings-sheet
+#
+# Abschluss-Screenshot zeigt die Präferenzen/Oberfläche des Settings-Sheets.
+
+sleep 2
+tap --label "Einstellungen" --wait-timeout 25
+sleep 2
