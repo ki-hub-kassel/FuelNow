@@ -424,6 +424,214 @@
           }
         }
       }
+    },
+    "settings.plus.alert.ok" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        }
+      }
+    },
+    "settings.plus.alert.title" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Store"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Store"
+          }
+        }
+      }
+    },
+    "settings.plus.footer" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abrechnung über dein Apple-ID-Konto. Abonnements verwaltest oder kündigst du in den Kontoeinstellungen bei Apple. Mit FuelNow Plus sind CarPlay-Funktionen freigeschaltet, sobald sie in der App verfügbar sind."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Billing goes through your Apple ID. Manage or cancel subscriptions in your Apple account settings. FuelNow Plus unlocks CarPlay features once they ship in the app."
+          }
+        }
+      }
+    },
+    "settings.plus.header" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FuelNow Plus"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FuelNow Plus"
+          }
+        }
+      }
+    },
+    "settings.plus.intro" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unterstütze FuelNow und schalte Plus-Funktionen frei — darunter CarPlay, sobald verfügbar."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Support FuelNow and unlock Plus features — including CarPlay when available."
+          }
+        }
+      }
+    },
+    "settings.plus.manage" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abonnement verwalten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manage subscription"
+          }
+        }
+      }
+    },
+    "settings.plus.perYear" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "pro Jahr"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "per year"
+          }
+        }
+      }
+    },
+    "settings.plus.priceLoading" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preis wird geladen …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading price…"
+          }
+        }
+      }
+    },
+    "settings.plus.restore" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Käufe wiederherstellen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restore purchases"
+          }
+        }
+      }
+    },
+    "settings.plus.status.active" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FuelNow Plus ist aktiv."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FuelNow Plus is active."
+          }
+        }
+      }
+    },
+    "settings.plus.subscribe" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abonnieren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Subscribe"
+          }
+        }
+      }
+    },
+    "settings.plus.error.generic" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Store-Vorgang konnte nicht abgeschlossen werden. Versuche es später erneut oder nutze „Abonnement verwalten“."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The App Store couldn’t complete this. Try again later or use Manage Subscription."
+          }
+        }
+      }
+    },
+    "settings.plus.error.pending" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Kauf wird noch geprüft. Sobald Apple ihn freigibt, wird Plus automatisch aktiv."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This purchase is still pending approval. Plus activates automatically once Apple completes it."
+          }
+        }
+      }
     }
   },
   "version" : "1.1"
