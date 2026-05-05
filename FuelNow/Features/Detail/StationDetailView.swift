@@ -20,14 +20,14 @@ struct StationDetailView: View {
                             .accessibilityAddTraits(.isHeader)
                     }
 
-                    StationDetailSectionCard(title: "Adresse") {
+                    TRSectionCard(title: "Adresse") {
                         Text(station.fullAddress)
                             .font(TRTypography.body())
                             .foregroundStyle(TRColors.labelPrimary)
                             .fixedSize(horizontal: false, vertical: true)
                     }
 
-                    StationDetailSectionCard(title: "Preise") {
+                    TRSectionCard(title: "Preise") {
                         VStack(alignment: .leading, spacing: TRSpacing.s) {
                             ForEach(FuelType.allCases) { fuel in
                                 priceRow(fuel: fuel, isPreferred: fuel == preferredFuel)
@@ -35,7 +35,7 @@ struct StationDetailView: View {
                         }
                     }
 
-                    StationDetailSectionCard(title: "Status") {
+                    TRSectionCard(title: "Status") {
                         HStack(spacing: TRSpacing.s) {
                             Circle()
                                 .fill(station.isOpen ? TRColors.success : TRColors.danger)
@@ -53,7 +53,7 @@ struct StationDetailView: View {
                         .accessibilityLabel(station.isOpen ? "Geöffnet" : "Geschlossen")
                     }
 
-                    StationDetailSectionCard(title: "Entfernung") {
+                    TRSectionCard(title: "Entfernung") {
                         Text(distanceLabel)
                             .font(TRTypography.body())
                             .foregroundStyle(TRColors.labelPrimary)
@@ -151,26 +151,6 @@ struct StationDetailView: View {
             with: [current, destination],
             launchOptions: [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving]
         )
-    }
-}
-
-// MARK: - Section card (TR „Feature“-Karte)
-
-private struct StationDetailSectionCard<Content: View>: View {
-    let title: String
-    @ViewBuilder var content: () -> Content
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: TRSpacing.xs) {
-            Text(title)
-                .font(TRTypography.caption())
-                .foregroundStyle(TRColors.labelSecondary)
-                .accessibilityAddTraits(.isHeader)
-            content()
-                .frame(maxWidth: .infinity, alignment: .leading)
-        }
-        .padding(TRSpacing.m)
-        .trCardBackground()
     }
 }
 

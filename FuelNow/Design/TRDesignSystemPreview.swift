@@ -195,6 +195,12 @@ struct TRDesignSystemPreview: View {
                 .padding(TRSpacing.m)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .trCardBackground()
+
+                TRSectionCard(title: "Section card") {
+                    Text("`TRSectionCard` — gleiches Muster wie Einstellungen und Tankstellen-Detail.")
+                        .font(TRTypography.callout())
+                        .foregroundStyle(TRColors.labelSecondary)
+                }
             }
         }
     }

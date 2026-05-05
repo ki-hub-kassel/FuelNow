@@ -1,9 +1,10 @@
 import StoreKit
 import SwiftUI
 
-/// Einstellungen: Spritart, Suchradius (`@AppStorage`) und Pflichtattribution Tankerkönig (CC BY).
+/// Einstellungen: Spritart, Suchradius (`@AppStorage`), FuelNow Plus und Pflichtattribution — im TR-Kartenlayout wie das Tankstellen-Detail.
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.openURL) private var openURL
     @Environment(EntitlementManager.self) private var entitlementManager
 
     @AppStorage(AppSettings.UserDefaultsKey.preferredFuelType) private var preferredFuelRaw = FuelType.e10.rawValue
@@ -29,128 +30,156 @@ struct SettingsView: View {
 
     var body: some View {
         NavigationStack {
-            Form {
-                Section {
-                    Picker("", selection: $preferredFuelRaw) {
-                        ForEach(FuelType.allCases) { fuel in
-                            Text(fuel.displayName).tag(fuel.rawValue)
+            ScrollView {
+                VStack(alignment: .leading, spacing: TRSpacing.m) {
+                    TRSectionCard(title: "Spritart") {
+                        VStack(alignment: .leading, spacing: TRSpacing.s) {
+                            Picker("", selection: $preferredFuelRaw) {
+                                ForEach(FuelType.allCases) { fuel in
+                                    Text(fuel.displayName).tag(fuel.rawValue)
+                                }
+                            }
+                            .labelsHidden()
+                            .pickerStyle(.segmented)
+                            .accessibilityLabel("Spritart")
+                            .accessibilityHint("Bestimmt, welche Sorte auf der Karte für Preise verwendet wird.")
+
+                            Text("Auf der Karte wird der Preis für die gewählte Sorte angezeigt.")
+                                .font(TRTypography.caption())
+                                .foregroundStyle(TRColors.labelSecondary)
+                                .fixedSize(horizontal: false, vertical: true)
                         }
                     }
-                    .labelsHidden()
-                    .pickerStyle(.segmented)
-                    .accessibilityLabel("Spritart")
-                    .accessibilityHint("Bestimmt, welche Sorte auf der Karte für Preise verwendet wird.")
-                } header: {
-                    Text("Spritart")
-                } footer: {
-                    Text("Auf der Karte wird der Preis für die gewählte Sorte angezeigt.")
-                }
 
-                Section {
-                    VStack(alignment: .leading, spacing: TRSpacing.s) {
-                        HStack {
-                            Text("Suchradius")
-                                .font(TRTypography.body())
-                            Spacer()
-                            Text("\(searchRadiusKm) km")
+                    TRSectionCard(title: "Suchradius") {
+                        VStack(alignment: .leading, spacing: TRSpacing.s) {
+                            HStack {
+                                Text("\(searchRadiusKm) km")
+                                    .font(TRTypography.bodyBold())
+                                    .foregroundStyle(TRColors.labelPrimary)
+                                Spacer()
+                            }
+                            .accessibilityElement(children: .ignore)
+                            Slider(
+                                value: Binding(
+                                    get: { Double(searchRadiusKm) },
+                                    set: { searchRadiusKm = AppSettings.SearchRadius.clampedKm(sliderValue: $0) }
+                                ),
+                                in: Double(AppSettings.SearchRadius.minKm)...Double(AppSettings.SearchRadius.maxKm),
+                                step: 1
+                            )
+                            .tint(TRColors.accent)
+                            .accessibilityLabel("Suchradius")
+                            .accessibilityValue("\(searchRadiusKm) Kilometer")
+
+                            Text("Tankstellen werden bis zu diesem Radius geladen (max. 25 km, entsprechend Tankerkönig).")
+                                .font(TRTypography.caption())
+                                .foregroundStyle(TRColors.labelSecondary)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                    }
+
+                    TRSectionCard(title: String(localized: "settings.appearance.header")) {
+                        VStack(alignment: .leading, spacing: TRSpacing.s) {
+                            Picker("", selection: appearanceBinding) {
+                                ForEach(AppSettings.AppearancePreference.allCases) { mode in
+                                    Text(mode.localizedTitle).tag(mode)
+                                }
+                            }
+                            .pickerStyle(.segmented)
+                            .accessibilityLabel(Text("settings.appearance.header"))
+                            .accessibilityHint(Text("settings.appearance.a11yHint"))
+
+                            Text("settings.appearance.footer")
+                                .font(TRTypography.caption())
+                                .foregroundStyle(TRColors.labelSecondary)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                    }
+
+                    TRSectionCard(title: String(localized: "settings.plus.header"), accentTitle: true) {
+                        VStack(alignment: .leading, spacing: TRSpacing.m) {
+                            Text("settings.plus.intro")
                                 .font(TRTypography.callout())
                                 .foregroundStyle(TRColors.labelSecondary)
-                                .accessibilityHidden(true)
-                        }
-                        Slider(
-                            value: Binding(
-                                get: { Double(searchRadiusKm) },
-                                set: { searchRadiusKm = AppSettings.SearchRadius.clampedKm(sliderValue: $0) }
-                            ),
-                            in: Double(AppSettings.SearchRadius.minKm)...Double(AppSettings.SearchRadius.maxKm),
-                            step: 1
-                        )
-                        .tint(TRColors.accent)
-                        .accessibilityLabel("Suchradius")
-                        .accessibilityValue("\(searchRadiusKm) Kilometer")
-                    }
-                } footer: {
-                    Text("Tankstellen werden bis zu diesem Radius geladen (max. 25 km, entsprechend Tankerkönig).")
-                }
+                                .fixedSize(horizontal: false, vertical: true)
 
-                Section {
-                    Picker("", selection: appearanceBinding) {
-                        ForEach(AppSettings.AppearancePreference.allCases) { mode in
-                            Text(mode.localizedTitle).tag(mode)
-                        }
-                    }
-                    .pickerStyle(.segmented)
-                    .accessibilityLabel(Text("settings.appearance.header"))
-                    .accessibilityHint(Text("settings.appearance.a11yHint"))
-                } header: {
-                    Text("settings.appearance.header")
-                } footer: {
-                    Text("settings.appearance.footer")
-                }
+                            if entitlementManager.isPlusSubscriber {
+                                Text("settings.plus.status.active")
+                                    .font(TRTypography.body())
+                            } else if let product = plusYearlyProduct {
+                                HStack(alignment: .firstTextBaseline, spacing: TRSpacing.xs) {
+                                    Text(product.displayPrice)
+                                        .font(TRTypography.title2())
+                                        .foregroundStyle(TRColors.labelPrimary)
+                                    Text("settings.plus.perYear")
+                                        .font(TRTypography.callout())
+                                        .foregroundStyle(TRColors.labelSecondary)
+                                }
+                                .accessibilityElement(children: .combine)
 
-                Section {
-                    Text("settings.plus.intro")
-                        .font(TRTypography.callout())
-                        .foregroundStyle(TRColors.labelSecondary)
+                                Button {
+                                    Task { await subscribePlusYearly() }
+                                } label: {
+                                    Text("settings.plus.subscribe")
+                                        .frame(maxWidth: .infinity)
+                                }
+                                .buttonStyle(.trPrimaryGlass)
+                                .disabled(isStoreBusy)
+                                .accessibilityHint("Startet den Jahresabo-Kauf über den App Store.")
+                            } else {
+                                Text("settings.plus.priceLoading")
+                                    .font(TRTypography.callout())
+                                    .foregroundStyle(TRColors.labelSecondary)
+                            }
 
-                    if entitlementManager.isPlusSubscriber {
-                        Text("settings.plus.status.active")
-                            .font(TRTypography.body())
-                    } else if let product = plusYearlyProduct {
-                        HStack(alignment: .firstTextBaseline, spacing: TRSpacing.xs) {
-                            Text(product.displayPrice)
-                                .font(TRTypography.bodyBold())
-                            Text("settings.plus.perYear")
-                                .font(TRTypography.callout())
+                            Button {
+                                openURL(Self.manageSubscriptionsURL)
+                            } label: {
+                                Label("settings.plus.manage", systemImage: "creditcard")
+                                    .frame(maxWidth: .infinity)
+                            }
+                            .buttonStyle(.trSoft)
+                            .accessibilityHint("Öffnet die Abonnementverwaltung deines Apple-ID-Kontos im Browser oder in den Systemeinstellungen.")
+
+                            Button {
+                                Task { await restorePurchases() }
+                            } label: {
+                                Text("settings.plus.restore")
+                                    .frame(maxWidth: .infinity)
+                            }
+                            .buttonStyle(.trOutline)
+                            .disabled(isStoreBusy)
+                            .accessibilityHint("Synchronisiert Käufe mit deinem Apple-ID-Konto.")
+
+                            Text("settings.plus.footer")
+                                .font(TRTypography.caption())
                                 .foregroundStyle(TRColors.labelSecondary)
+                                .fixedSize(horizontal: false, vertical: true)
                         }
-                        .accessibilityElement(children: .combine)
+                    }
 
-                        Button {
-                            Task { await subscribePlusYearly() }
-                        } label: {
-                            Text("settings.plus.subscribe")
-                                .frame(maxWidth: .infinity)
+                    TRSectionCard(title: "Datenquelle") {
+                        VStack(alignment: .leading, spacing: TRSpacing.s) {
+                            Button {
+                                openURL(AppSettings.TankerkoenigAttribution.infoURL)
+                            } label: {
+                                Label("Tankerkönig / MTS-K (CC BY 4.0)", systemImage: "link")
+                                    .frame(maxWidth: .infinity)
+                            }
+                            .buttonStyle(.trSoft)
+                            .accessibilityLabel("Tankerkönig und MTS-K, Lizenz CC BY 4.0")
+                            .accessibilityHint("Öffnet die Tankerkönig-Website mit Lizenzinformationen.")
+
+                            Text("Datenquelle und Pflichtattribution für die Nutzung der Tankerkönig-API.")
+                                .font(TRTypography.caption())
+                                .foregroundStyle(TRColors.labelSecondary)
+                                .fixedSize(horizontal: false, vertical: true)
                         }
-                        .buttonStyle(.borderedProminent)
-                        .tint(TRColors.accent)
-                        .disabled(isStoreBusy)
-                        .accessibilityHint("Startet den Jahresabo-Kauf über den App Store.")
-                    } else {
-                        Text("settings.plus.priceLoading")
-                            .font(TRTypography.callout())
-                            .foregroundStyle(TRColors.labelSecondary)
                     }
-
-                    Link(destination: Self.manageSubscriptionsURL) {
-                        Label("settings.plus.manage", systemImage: "creditcard")
-                    }
-                    .accessibilityHint("Öffnet die Abonnementverwaltung deines Apple-ID-Kontos im Browser oder in den Systemeinstellungen.")
-
-                    Button {
-                        Task { await restorePurchases() }
-                    } label: {
-                        Text("settings.plus.restore")
-                            .frame(maxWidth: .infinity)
-                    }
-                    .buttonStyle(.bordered)
-                    .disabled(isStoreBusy)
-                    .accessibilityHint("Synchronisiert Käufe mit deinem Apple-ID-Konto.")
-                } header: {
-                    Text("settings.plus.header")
-                } footer: {
-                    Text("settings.plus.footer")
                 }
-
-                Section {
-                    Link(destination: AppSettings.TankerkoenigAttribution.infoURL) {
-                        Label("Tankerkönig / MTS-K (CC BY 4.0)", systemImage: "link")
-                    }
-                    .accessibilityLabel("Tankerkönig und MTS-K, Lizenz CC BY 4.0")
-                    .accessibilityHint("Öffnet die Tankerkönig-Website mit Lizenzinformationen.")
-                } footer: {
-                    Text("Datenquelle und Pflichtattribution für die Nutzung der Tankerkönig-API.")
-                }
+                .padding(TRSpacing.m)
+                .padding(.bottom, TRSpacing.l)
             }
             .navigationTitle("Einstellungen")
             .navigationBarTitleDisplayMode(.inline)
