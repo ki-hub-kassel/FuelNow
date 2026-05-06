@@ -152,6 +152,29 @@ struct TankerkoenigClientTests {
         }
     }
 
+    @Test func fetchStationsProxyModeOmitsApiKeyAndPreservesQuery() async throws {
+        let body = Data(#"{"ok":true,"stations":[]}"#.utf8)
+        defer { MockURLProtocol.handler = nil }
+        MockURLProtocol.handler = { request in
+            let url = try #require(request.url)
+            #expect(url.host == "proxy.example.com")
+            let components = try #require(URLComponents(url: url, resolvingAgainstBaseURL: false))
+            let names = try #require(components.queryItems?.map(\.name))
+            #expect(names.contains("lat"))
+            #expect(names.contains("lng"))
+            #expect(names.contains("rad"))
+            #expect(names.contains("type"))
+            #expect(names.contains("sort"))
+            #expect(names.contains("apikey") == false)
+            let response = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)!
+            return (response, body)
+        }
+
+        let base = try #require(URL(string: "https://proxy.example.com"))
+        let client = TankerkoenigClient(configuration: .proxy(baseURL: base), session: mockSession())
+        _ = try await client.fetchStations(latitude: 52.5, longitude: 13.4, radiusKm: 10)
+    }
+
     @Test func radiusIsClampedToAPIUpperBound() async throws {
         defer { MockURLProtocol.handler = nil }
         MockURLProtocol.handler = { request in

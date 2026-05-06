@@ -13,6 +13,9 @@ import Foundation
 /// (Region-Bucket-TTL: TAN-83) und einen Stammdaten-Cache (TAN-84).
 /// Wer hier einen periodischen Server-Poller einbauen möchte, muss zuerst
 /// die ADR revidieren.
+///
+/// **API-Key:** Im direkten Modus steckt der Key in der Anfrage (nicht „geheim“ im Binary).
+/// Für Produktion ohne sichtbaren Key: ``TankerkoenigAPIConfiguration`` / Proxy — siehe `TankerkoenigAPIConfiguration.swift`.
 actor TankerkoenigClient {
     enum Failure: Swift.Error, LocalizedError, Sendable {
         case missingAPIKey
@@ -26,7 +29,7 @@ actor TankerkoenigClient {
         var errorDescription: String? {
             switch self {
             case .missingAPIKey:
-                "Tankerkönig API-Key fehlt oder ist noch der Platzhalter — siehe TAN-72 / APIKeys.swift."
+                "Tankerkönig API-Key fehlt oder ist noch der Platzhalter — TAN-72 / APIKeys, oder einen Proxy setzen (TankerkoenigProxyBaseURL / TANKERKOENIG_PROXY_BASE_URL)."
             case .invalidURL:
                 "Ungültige Anfrage-URL für Tankerkönig list.php."
             case let .network(err):
@@ -49,39 +52,40 @@ actor TankerkoenigClient {
         let message: String?
     }
 
-    private let apiKey: String
+    private let configuration: TankerkoenigAPIConfiguration
     private let session: URLSession
 
-    init(apiKey: String = APIKeys.tankerkoenig, session: URLSession = .shared) {
-        self.apiKey = apiKey
+    /// Standard: Proxy falls konfiguriert, sonst direkt mit ``APIKeys``.
+    init(session: URLSession = .shared) {
+        self.init(configuration: .resolved(), session: session)
+    }
+
+    /// Direkter Modus mit festem Key (Tests, Tools).
+    init(apiKey: String, session: URLSession = .shared) {
+        self.init(configuration: .direct(apiKey: apiKey), session: session)
+    }
+
+    init(configuration: TankerkoenigAPIConfiguration, session: URLSession = .shared) {
+        self.configuration = configuration
         self.session = session
     }
 
     /// Lädt Tankstellen im Radius um einen Punkt (`list.php`).
     /// - Parameter radiusKm: wird auf **1…25 km** begrenzt (API-Maximum).
     func fetchStations(latitude: Double, longitude: Double, radiusKm: Double) async throws -> [Station] {
-        let trimmedKey = apiKey.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard APIKeys.isConfiguredTankerkoenigKey(trimmedKey) else {
-            throw Failure.missingAPIKey
-        }
-
         let rad = min(max(radiusKm, 1), 25)
 
-        var components = URLComponents()
-        components.scheme = "https"
-        components.host = "creativecommons.tankerkoenig.de"
-        components.path = "/json/list.php"
-        components.queryItems = [
-            URLQueryItem(name: "lat", value: formatCoordinate(latitude)),
-            URLQueryItem(name: "lng", value: formatCoordinate(longitude)),
-            URLQueryItem(name: "rad", value: formatCoordinate(rad)),
-            URLQueryItem(name: "type", value: "all"),
-            URLQueryItem(name: "sort", value: "dist"),
-            URLQueryItem(name: "apikey", value: trimmedKey),
-        ]
-
-        guard let url = components.url else {
-            throw Failure.invalidURL
+        let url: URL
+        switch configuration {
+        case .direct(let apiKey):
+            let trimmedKey = apiKey.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard APIKeys.isConfiguredTankerkoenigKey(trimmedKey) else {
+                throw Failure.missingAPIKey
+            }
+            url = try Self.makeListURL(host: "creativecommons.tankerkoenig.de", apiKey: trimmedKey, latitude: latitude, longitude: longitude, radKm: rad)
+        case .proxy(let baseURL):
+            let pathURL = baseURL.appendingPathComponent("json").appendingPathComponent("list.php")
+            url = try Self.makeListURL(hostFromAbsoluteURL: pathURL, apiKey: nil, latitude: latitude, longitude: longitude, radKm: rad)
         }
 
         var request = URLRequest(url: url)
@@ -133,7 +137,62 @@ actor TankerkoenigClient {
         return decoded.stations ?? []
     }
 
-    nonisolated private func formatCoordinate(_ value: Double) -> String {
+    nonisolated private static func makeListURL(
+        host: String,
+        apiKey: String?,
+        latitude: Double,
+        longitude: Double,
+        radKm: Double
+    ) throws -> URL {
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = host
+        components.path = "/json/list.php"
+        components.queryItems = listQueryItems(latitude: latitude, longitude: longitude, radKm: radKm, apiKey: apiKey)
+        guard let url = components.url else {
+            throw Failure.invalidURL
+        }
+        return url
+    }
+
+    /// Baut eine URL aus einer bereits absoluten Basis (Proxy), inkl. Pfad `…/json/list.php`.
+    nonisolated private static func makeListURL(
+        hostFromAbsoluteURL absolute: URL,
+        apiKey: String?,
+        latitude: Double,
+        longitude: Double,
+        radKm: Double
+    ) throws -> URL {
+        guard var components = URLComponents(url: absolute, resolvingAgainstBaseURL: false) else {
+            throw Failure.invalidURL
+        }
+        components.queryItems = listQueryItems(latitude: latitude, longitude: longitude, radKm: radKm, apiKey: apiKey)
+        guard let url = components.url else {
+            throw Failure.invalidURL
+        }
+        return url
+    }
+
+    nonisolated private static func listQueryItems(
+        latitude: Double,
+        longitude: Double,
+        radKm: Double,
+        apiKey: String?
+    ) -> [URLQueryItem] {
+        var items: [URLQueryItem] = [
+            URLQueryItem(name: "lat", value: formatCoordinate(latitude)),
+            URLQueryItem(name: "lng", value: formatCoordinate(longitude)),
+            URLQueryItem(name: "rad", value: formatCoordinate(radKm)),
+            URLQueryItem(name: "type", value: "all"),
+            URLQueryItem(name: "sort", value: "dist"),
+        ]
+        if let apiKey {
+            items.append(URLQueryItem(name: "apikey", value: apiKey))
+        }
+        return items
+    }
+
+    nonisolated private static func formatCoordinate(_ value: Double) -> String {
         String(format: "%.6f", value)
     }
 

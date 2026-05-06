@@ -45,6 +45,7 @@
 		F60200000000000000000001 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60100000000000000000001 /* LocationService.swift */; };
 		F60300000000000000000001 /* LocationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61100000000000000000001 /* LocationServiceTests.swift */; };
 		F60600000000000000000002 /* TankerkoenigClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60500000000000000000001 /* TankerkoenigClient.swift */; };
+		F60600000000000000000003 /* TankerkoenigAPIConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60500000000000000000002 /* TankerkoenigAPIConfiguration.swift */; };
 		F60710000000000000000001 /* StationFetching.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60700000000000000000001 /* StationFetching.swift */; };
 		F60710000000000000000002 /* StationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60700000000000000000002 /* StationStore.swift */; };
 		F60810000000000000000001 /* MapScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60800000000000000000001 /* MapScreen.swift */; };
@@ -166,6 +167,7 @@
 		F52400000000000000000002 /* StationVoiceOverCopyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationVoiceOverCopyTests.swift; sourceTree = "<group>"; };
 		F60100000000000000000001 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		F60500000000000000000001 /* TankerkoenigClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TankerkoenigClient.swift; sourceTree = "<group>"; };
+		F60500000000000000000002 /* TankerkoenigAPIConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TankerkoenigAPIConfiguration.swift; sourceTree = "<group>"; };
 		F60700000000000000000001 /* StationFetching.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationFetching.swift; sourceTree = "<group>"; };
 		F60700000000000000000002 /* StationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationStore.swift; sourceTree = "<group>"; };
 		F60800000000000000000001 /* MapScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapScreen.swift; sourceTree = "<group>"; };
@@ -425,6 +427,7 @@
 				F65500000000000000000003 /* OneShotLocationFetcher.swift */,
 				F65400000000000000000001 /* QueryService.swift */,
 				F60500000000000000000001 /* TankerkoenigClient.swift */,
+				F60500000000000000000002 /* TankerkoenigAPIConfiguration.swift */,
 				F60700000000000000000001 /* StationFetching.swift */,
 				F60700000000000000000002 /* StationStore.swift */,
 				F62B00000000000000000001 /* BundledMockStationFetcher.swift */,
@@ -643,6 +646,7 @@
 				F65510000000000000000002 /* LocationSnapshot.swift in Sources */,
 				F65510000000000000000003 /* OneShotLocationFetcher.swift in Sources */,
 				F60600000000000000000002 /* TankerkoenigClient.swift in Sources */,
+				F60600000000000000000003 /* TankerkoenigAPIConfiguration.swift in Sources */,
 				F60710000000000000000001 /* StationFetching.swift in Sources */,
 				F60710000000000000000002 /* StationStore.swift in Sources */,
 				F65410000000000000000001 /* QueryService.swift in Sources */,

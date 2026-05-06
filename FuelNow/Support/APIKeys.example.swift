@@ -8,6 +8,10 @@ enum APIKeys {
 
     /// Tankerkönig-UUID. **Nie** echten Key committen.
     ///
+    /// **Ohne Key in der App (Produktion):** HTTPS-Proxy konfigurieren — siehe ``TankerkoenigAPIConfiguration``
+    /// (`TankerkoenigProxyBaseURL` in Info.plist oder Umgebungsvariable `TANKERKOENIG_PROXY_BASE_URL`).
+    /// Der Proxy setzt `apikey` nur serverseitig beim Weiterleiten an Tankerkönig.
+    ///
     /// **Lokal testen (bleibt bei Git nicht „weg“):**
     /// 1. **Simulator (empfohlen):** Auf dem Mac `mkdir -p ~/.fuelnow` und eine Zeile Key in
     ///    `~/.fuelnow/tankerkoenig-api-key` speichern. Im Simulator wird über
@@ -83,9 +87,9 @@ enum APIKeys {
 
     #if DEBUG
     static func warnIfPlaceholderActive() {
-        guard !isTankerkoenigKeyConfiguredForRequests else { return }
+        guard !TankerkoenigAPIConfiguration.isLiveAccessConfigured else { return }
         print(
-            "⚠️ FuelNow: Kein Tankerkönig-API-Key — im DEBUG-Build werden Mock-Tankstellen aus dem Bundle genutzt. Für Live-Daten: Key wie in diesem File beschrieben setzen, oder `FUELNOW_USE_LIVE_STATIONS=1` zum Testen der Fehler-UI. Linear TAN-72."
+            "⚠️ FuelNow: Kein Tankerkönig-API-Key und kein Proxy — im DEBUG-Build werden Mock-Tankstellen aus dem Bundle genutzt. Für Live-Daten: Key wie in diesem File beschrieben setzen, Proxy konfigurieren, oder `FUELNOW_USE_LIVE_STATIONS=1` zum Testen der Fehler-UI. Linear TAN-72."
         )
     }
     #endif

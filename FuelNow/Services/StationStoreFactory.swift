@@ -48,7 +48,7 @@ enum StationStoreFactory {
     }
 
     private static var isConfiguredTankerkoenigKey: Bool {
-        APIKeys.isTankerkoenigKeyConfiguredForRequests
+        TankerkoenigAPIConfiguration.isLiveAccessConfigured
     }
 
     private static func logMock(reason: String) {

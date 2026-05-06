@@ -8,6 +8,8 @@
 
 **Tankerkönig-API-Key:** Beantragung und Eintragung über Linear [**TAN-72**](https://linear.app/tankradar-app/issue/TAN-72).
 
+**Key nicht in der App (Proxy):** Optional einen kleinen HTTPS-Endpunkt betreiben, der `GET …/json/list.php` **mit vom Client weitergegebenen Parametern** an Tankerkönig weiterleitet und **`apikey` nur serverseitig** anhängt. In FuelNow: Umgebungsvariable **`TANKERKOENIG_PROXY_BASE_URL`** (Scheme / lokale Tests) oder Info.plist **`TankerkoenigProxyBaseURL`** — Details in `FuelNow/Services/TankerkoenigAPIConfiguration.swift`. Ohne Proxy bleibt der direkte Modus mit lokalem Key (siehe unten).
+
 ### Checkliste TAN-72 (betrieblich)
 
 1. Key unter [creativecommons.tankerkoenig.de](https://creativecommons.tankerkoenig.de/) beantragen (Formular, E-Mail bestätigen).

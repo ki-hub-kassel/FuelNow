@@ -67,7 +67,7 @@ Responses carry **CC BY 4.0** licensing metadata (`license` field). Follow Tanke
 
 ## Secrets
 
-Never commit real API keys or paste them into public repos/snippets — use placeholders and local config (see project `APIKeys` patterns).
+Never commit real API keys or paste them into public repos/snippets — use placeholders and local config (see project `APIKeys` patterns). Client binaries cannot hide a direct key; for production without embedding it, use an **HTTPS proxy** that adds `apikey` server-side — FuelNow: `TankerkoenigAPIConfiguration` / `TANKERKOENIG_PROXY_BASE_URL` / Info.plist `TankerkoenigProxyBaseURL`.
 
 ## Before implementing Linear tickets (Tankerkönig-related)
 
