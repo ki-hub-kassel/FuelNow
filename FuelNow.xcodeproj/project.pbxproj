@@ -87,6 +87,7 @@
 		F66010000000000000000005 /* PlusMiniHero.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66000000000000000000005 /* PlusMiniHero.swift */; };
 		F60810000000000000000007 /* FuelTypeCardPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60800000000000000000007 /* FuelTypeCardPicker.swift */; };
 		F60810000000000000000008 /* FuelTypePresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60800000000000000000008 /* FuelTypePresentation.swift */; };
+		F60810000000000000000010 /* AppearanceIconPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60800000000000000000010 /* AppearanceIconPicker.swift */; };
 		F60810000000000000000009 /* FuelTypePresentationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60800000000000000000009 /* FuelTypePresentationTests.swift */; };
 		F66200000000000000000001 /* EntitlementManagerStoreKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66200000000000000000010 /* EntitlementManagerStoreKitTests.swift */; };
 		F66200000000000000000002 /* FuelNowPlus.storekit in Resources */ = {isa = PBXBuildFile; fileRef = F64000000000000000000001 /* FuelNowPlus.storekit */; };
@@ -197,6 +198,7 @@
 		F66000000000000000000005 /* PlusMiniHero.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlusMiniHero.swift; sourceTree = "<group>"; };
 		F60800000000000000000007 /* FuelTypeCardPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelTypeCardPicker.swift; sourceTree = "<group>"; };
 		F60800000000000000000008 /* FuelTypePresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelTypePresentation.swift; sourceTree = "<group>"; };
+		F60800000000000000000010 /* AppearanceIconPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceIconPicker.swift; sourceTree = "<group>"; };
 		F60800000000000000000009 /* FuelTypePresentationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelTypePresentationTests.swift; sourceTree = "<group>"; };
 		F66200000000000000000010 /* EntitlementManagerStoreKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntitlementManagerStoreKitTests.swift; sourceTree = "<group>"; };
 		F66300000000000000000010 /* PlusPaywallCopy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlusPaywallCopy.swift; sourceTree = "<group>"; };
@@ -362,6 +364,7 @@
 			children = (
 				F60800000000000000000003 /* SettingsView.swift */,
 				F60800000000000000000007 /* FuelTypeCardPicker.swift */,
+				F60800000000000000000010 /* AppearanceIconPicker.swift */,
 				F60800000000000000000008 /* FuelTypePresentation.swift */,
 			);
 			path = Settings;
@@ -610,6 +613,7 @@
 				F66010000000000000000003 /* PlusUpgradeView.swift in Sources */,
 				F66010000000000000000005 /* PlusMiniHero.swift in Sources */,
 				F60810000000000000000007 /* FuelTypeCardPicker.swift in Sources */,
+				F60810000000000000000010 /* AppearanceIconPicker.swift in Sources */,
 				F60810000000000000000008 /* FuelTypePresentation.swift in Sources */,
 				F37400000000000000000001 /* TRDesignPaletteNotes.swift in Sources */,
 				F37600000000000000000001 /* TRSpacing.swift in Sources */,

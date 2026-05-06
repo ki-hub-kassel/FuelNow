@@ -3,9 +3,11 @@ import SwiftUI
 
 /// Einstellungen als nutzerzentrierte `Form` mit Sections — Liquid Glass nur auf primären Aktionen.
 ///
-/// Reihenfolge (TAN-78, angepasst durch TAN-79):
+/// Reihenfolge (TAN-78, angepasst durch TAN-79 und TAN-86):
 /// 1. **Kraftstoff** – große Karten-Auswahl (E5 / E10 / Diesel) mit aktiver Glas-Karte als visuellem Anker.
-/// 2. **Erscheinungsbild** – kompakter `Picker(.menu)`, gehört zu den selteneren Anpassungen.
+///    Seit TAN-86 ohne 1-Zeilen-Untertitel — nur Glyph + Sortenname; Untertitel bleibt VoiceOver-only.
+/// 2. **Erscheinungsbild** – Drei-Segmente-Icon-Picker (Auto / Hell / Dunkel) mit Akzent-Glas-Pille
+///    auf dem aktiven Segment (TAN-86, ersetzt den zuvor genutzten `Picker(.menu)`).
 /// 3. **FuelNow Plus** – Mini-Hero mit Eyebrow / Headline / 1–2 Benefits / Preis prominent / einem
 ///    Glas-CTA, der das volle `PlusUpgradeView`-Sheet (TAN-45) öffnet. Bei aktivem Abo erscheint stattdessen
 ///    eine schlichte Status-Sektion mit Verwaltungs- und Restore-Aktionen.
@@ -118,15 +120,10 @@ struct SettingsView: View {
 
     private var appearanceSection: some View {
         Section {
-            Picker(selection: appearanceBinding) {
-                ForEach(AppSettings.AppearancePreference.allCases) { mode in
-                    Text(mode.localizedTitle).tag(mode)
-                }
-            } label: {
-                Text("settings.appearance.header")
-            }
-            .pickerStyle(.menu)
-            .accessibilityHint(Text("settings.appearance.a11yHint"))
+            AppearanceIconPicker(selection: appearanceBinding)
+                .listRowBackground(Color.clear)
+                .listRowInsets(EdgeInsets(top: TRSpacing.xs, leading: 0, bottom: TRSpacing.xs, trailing: 0))
+                .listRowSeparator(.hidden)
         } header: {
             Text("settings.section.appearance")
         } footer: {
@@ -283,17 +280,4 @@ struct SettingsView: View {
 private extension SettingsView {
     /// Öffnet die zentrale Apple-Abonnementübersicht (Review-konformes „Manage“).
     static let manageSubscriptionsURL = URL(string: "https://apps.apple.com/account/subscriptions")!
-}
-
-private extension AppSettings.AppearancePreference {
-    var localizedTitle: LocalizedStringResource {
-        switch self {
-        case .system:
-            "settings.appearance.system"
-        case .light:
-            "settings.appearance.light"
-        case .dark:
-            "settings.appearance.dark"
-        }
-    }
 }

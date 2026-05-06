@@ -1358,13 +1358,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kraftstoff & Suche"
+            "value" : "Kraftstoff"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Fuel & Search"
+            "value" : "Fuel"
           }
         }
       }

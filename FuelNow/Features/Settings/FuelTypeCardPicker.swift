@@ -1,10 +1,13 @@
 import SwiftUI
 
-/// Karten-Auswahl für die bevorzugte Kraftstoffsorte (TAN-78).
+/// Karten-Auswahl für die bevorzugte Kraftstoffsorte (TAN-78, vereinfacht in TAN-86).
 ///
-/// Ersetzt den kompakten `Picker(.menu)` durch drei großflächige Karten (Glyph + Titel + Untertitel)
-/// mit Liquid-Glass-Akzent-Tint auf der aktiven Karte. Mehrere Karten teilen sich einen
-/// `GlassEffectContainer`, damit nichts „Glas-auf-Glas“ stapelt (HIG iOS 26).
+/// Ersetzt den kompakten `Picker(.menu)` durch drei großflächige Karten (Glyph + Titel)
+/// mit Liquid-Glass-Akzent-Tint auf der aktiven Karte. Der ehemalige 1-Zeilen-Untertitel
+/// ist seit TAN-86 visuell entfernt — sehende Nutzer:innen bekommen eine ruhigere Karte;
+/// VoiceOver liest den Untertitel (`settingsCardSubtitleKey`) weiterhin als
+/// `accessibilityValue`. Mehrere Karten teilen sich einen `GlassEffectContainer`, damit
+/// nichts „Glas-auf-Glas" stapelt (HIG iOS 26).
 struct FuelTypeCardPicker: View {
     @Binding var selection: FuelType
 
@@ -53,16 +56,10 @@ private struct FuelTypeCard: View {
                 .frame(width: 36, height: 36, alignment: .center)
                 .accessibilityHidden(true)
 
-            VStack(alignment: .leading, spacing: TRSpacing.xxs) {
-                Text(fuel.displayName)
-                    .font(TRTypography.bodyBold())
-                    .foregroundStyle(TRColors.labelPrimary)
-                Text(fuel.settingsCardSubtitleKey)
-                    .font(TRTypography.callout())
-                    .foregroundStyle(TRColors.labelSecondary)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
+            Text(fuel.displayName)
+                .font(TRTypography.bodyBold())
+                .foregroundStyle(TRColors.labelPrimary)
+                .frame(maxWidth: .infinity, alignment: .leading)
 
             if isSelected {
                 Image(systemName: "checkmark.circle.fill")
