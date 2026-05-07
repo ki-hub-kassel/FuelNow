@@ -667,13 +667,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Schalte CarPlay frei und unterstütze FuelNow."
+            "value" : "FuelNow Plus für CarPlay und Support."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Unlock CarPlay and support FuelNow."
+            "value" : "FuelNow Plus for CarPlay and support."
           }
         }
       }
@@ -683,13 +683,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "FuelNow bleibt komplett nutzbar — Plus aktiviert CarPlay-Funktionen, sobald sie verfügbar sind, und finanziert die Weiterentwicklung."
+            "value" : "FuelNow bleibt gratis nutzbar. Plus finanziert API und Weiterentwicklung."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "FuelNow stays fully usable — Plus activates CarPlay features once they ship and funds further development."
+            "value" : "FuelNow remains free to use. Plus funds API access and development."
           }
         }
       }
@@ -711,6 +711,7 @@
       }
     },
     "plus.sheet.footer.billing" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -731,13 +732,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kein kostenloser Probezeitraum. Es fallen die im App Store angezeigten Kosten an."
+            "value" : "Kein Probezeitraum. Es gilt der App-Store-Preis."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No free trial. You are charged the price shown in the App Store."
+            "value" : "No free trial. The App Store price applies."
           }
         }
       }

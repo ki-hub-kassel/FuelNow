@@ -50,23 +50,17 @@ export function PhoneMockup({ feature, index, count }: PhoneMockupProps) {
             }}
           >
             <p className="screenEyebrow">{feature.eyebrow}</p>
-            <h3>{feature.title}</h3>
-            <p>{feature.description}</p>
-            <ul>
-              {feature.bullets.map((bullet, bulletIndex) => (
-                <motion.li
-                  key={bullet}
-                  initial={prefersReducedMotion ? undefined : { opacity: 0, x: 8 }}
-                  animate={prefersReducedMotion ? undefined : { opacity: 1, x: 0 }}
-                  transition={{
-                    duration: prefersReducedMotion ? 0 : 0.28,
-                    delay: prefersReducedMotion ? 0 : 0.08 + bulletIndex * 0.06,
-                  }}
-                >
-                  {bullet}
-                </motion.li>
-              ))}
-            </ul>
+            <div className="screenShotWrap">
+              <img
+                src={feature.screenshot}
+                alt={`${feature.title} App Screenshot`}
+                width={880}
+                height={1850}
+                loading="eager"
+                fetchPriority="high"
+              />
+            </div>
+            <h3 className="screenTitle">{feature.title}</h3>
           </motion.div>
         </AnimatePresence>
         <div className="screenFooter">

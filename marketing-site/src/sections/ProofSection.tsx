@@ -1,23 +1,22 @@
 const proofStats = [
-  { label: 'Durchschnittliche Ersparnis', value: '17,80 EUR / Monat' },
-  { label: 'Gefundene Stationen pro Session', value: '40+' },
-  { label: 'Zeit bis zur Entscheidung', value: '< 10 Sekunden' },
+  { label: 'Datenquelle', value: 'Tankerkönig API (Live-Default)' },
+  { label: 'Kartendarstellung', value: 'Zoom-abhaengige Cluster + Pins' },
+  { label: 'Navigation', value: 'Turn-by-turn in Apple Maps' },
 ]
 
 const trustSignals = [
-  'Live Preisdaten',
-  'Map-first UX',
-  'WCAG orientiertes Design',
-  'iOS-native Performance',
-  'Klare Entscheidung in Sekunden',
+  'Gebietssuche mit Search-Chip',
+  'Offline-Splash bei Verbindungsproblemen',
+  'FuelType Auswahl in Einstellungen',
+  'Preisformat im Schilder-Stil',
 ]
 
 export function ProofSection() {
   return (
     <section className="section proofSection" aria-labelledby="proof-heading">
       <div className="container">
-        <p className="eyebrow">Warum Menschen sofort umsteigen</p>
-        <h2 id="proof-heading">FuelNow fuehlt sich nicht wie eine App an, sondern wie ein Vorteil.</h2>
+        <p className="eyebrow">Verifizierbare Produktbasis</p>
+        <h2 id="proof-heading">Das kann FuelNow heute.</h2>
         <div className="proofGrid">
           {proofStats.map((item) => (
             <article key={item.label} className="proofCard">
@@ -26,12 +25,10 @@ export function ProofSection() {
             </article>
           ))}
         </div>
-        <div className="trustMarquee" aria-label="Product strengths">
-          <div className="trustTrack">
-            {[...trustSignals, ...trustSignals].map((signal, index) => (
-              <span key={`${signal}-${index}`}>{signal}</span>
-            ))}
-          </div>
+        <div className="trustPills" aria-label="Product strengths">
+          {trustSignals.map((signal) => (
+            <span key={signal}>{signal}</span>
+          ))}
         </div>
       </div>
     </section>

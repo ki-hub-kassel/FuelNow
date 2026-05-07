@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 925" fill="none">
+  <rect width="440" height="925" rx="56" fill="#0B1F33"/>
+  <rect x="20" y="20" width="400" height="885" rx="42" fill="#102741"/>
+  <rect x="90" y="38" width="260" height="24" rx="12" fill="#091725"/>
+  <rect x="44" y="86" width="352" height="84" rx="20" fill="#142F4D"/>
+  <text x="68" y="123" fill="#F5F7FA" font-family="Arial" font-size="26" font-weight="700">FuelNow Karte</text>
+  <text x="68" y="153" fill="#A8B4C0" font-family="Arial" font-size="16">4 Stationen in deiner Naehe</text>
+  <rect x="44" y="194" width="352" height="582" rx="28" fill="#0F3653"/>
+  <circle cx="124" cy="300" r="24" fill="#48E0D2"/>
+  <circle cx="220" cy="368" r="24" fill="#48E0D2"/>
+  <circle cx="312" cy="492" r="24" fill="#48E0D2"/>
+  <circle cx="176" cy="580" r="24" fill="#48E0D2"/>
+  <rect x="70" y="684" width="300" height="62" rx="31" fill="#0B1F33" stroke="#7DE4D9"/>
+  <text x="118" y="722" fill="#F5F7FA" font-family="Arial" font-size="19" font-weight="700">In diesem Gebiet suchen</text>
+  <rect x="44" y="796" width="352" height="94" rx="24" fill="#142F4D"/>
+  <text x="68" y="834" fill="#F5F7FA" font-family="Arial" font-size="22" font-weight="700">JET</text>
+  <text x="68" y="864" fill="#A8B4C0" font-family="Arial" font-size="16">1.589 · 0.8 km · Geoeffnet</text>
+  <text x="302" y="850" fill="#7DE4D9" font-family="Arial" font-size="34" font-weight="700">1,58y</text>
+</svg>

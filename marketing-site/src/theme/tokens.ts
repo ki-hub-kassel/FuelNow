@@ -6,6 +6,7 @@ export type Feature = {
   bullets: string[]
   accent: string
   gradient: string
+  screenshot: string
 }
 
 export const tokens = {
@@ -55,57 +56,41 @@ export const productFeatures: Feature[] = [
   {
     id: 'map',
     eyebrow: '01 Live Karte',
-    title: 'Finde sofort guenstige Tankstellen in deiner Umgebung',
-    description:
-      'FuelNow zeigt dir verifizierte Preise auf einer klaren Karte mit fokussierten Pins und schneller Orientierung.',
-    bullets: [
-      'Status auf einen Blick: geoeffnet oder geschlossen.',
-      'Preisfokus im Kartenpin fuer schnelle Entscheidungen.',
-      'Saubere Cluster-Aufloesung beim Zoomen.',
-    ],
-    accent: '#CA9978',
-    gradient: 'linear-gradient(160deg, rgba(202,153,120,0.8), rgba(56,91,147,0.45))',
+    title: 'Preis-Pins auf der Karte',
+    description: 'Live-Daten mit Status direkt in der Kartenansicht.',
+    bullets: [],
+    accent: '#48E0D2',
+    gradient: 'linear-gradient(160deg, rgba(72,224,210,0.72), rgba(56,91,147,0.45))',
+    screenshot: '/appshots/map-view.png',
   },
   {
     id: 'search',
     eyebrow: '02 Gebietssuche',
-    title: 'Scrolle, verschiebe, entdecke neue Preis-Hotspots',
-    description:
-      'Mit gezielter Gebietssuche vergleichst du Regionen effizient und findest den besten Stopp entlang deiner Route.',
-    bullets: [
-      'Optimiert fuer 25 km Datenqualitaet.',
-      'Klarer Suchimpuls statt permanentem Neuladen.',
-      'Hohe Lesbarkeit auch waehrend Bewegung.',
-    ],
-    accent: '#DB4E55',
-    gradient: 'linear-gradient(160deg, rgba(219,78,85,0.8), rgba(99,68,184,0.4))',
+    title: 'Search im Kartenausschnitt',
+    description: 'Neuer Kartenausschnitt, gezielter Abruf, klarer Fokus.',
+    bullets: [],
+    accent: '#7DE4D9',
+    gradient: 'linear-gradient(160deg, rgba(125,228,217,0.78), rgba(56,91,147,0.42))',
+    screenshot: '/appshots/area-search.png',
   },
   {
     id: 'detail',
     eyebrow: '03 Detailansicht',
-    title: 'Alle relevanten Infos ohne visuelle Unruhe',
-    description:
-      'Im Detail-Sheet stehen Preis, Distanz und Navigation im Fokus, damit der naechste Tankstopp in Sekunden klar ist.',
-    bullets: [
-      'Markenfokus im Header fuer Wiedererkennbarkeit.',
-      'Bottom-Action fuer direkte Navigation.',
-      'Kontraststark und klar strukturiert.',
-    ],
-    accent: '#BF5E40',
-    gradient: 'linear-gradient(160deg, rgba(191,94,64,0.8), rgba(130,61,61,0.45))',
+    title: 'Detail mit Navigation',
+    description: 'Preise, Distanz und direkter Start in Apple Maps.',
+    bullets: [],
+    accent: '#48E0D2',
+    gradient: 'linear-gradient(160deg, rgba(56,91,147,0.84), rgba(72,224,210,0.46))',
+    screenshot: '/appshots/station-detail.png',
   },
   {
-    id: 'plus',
-    eyebrow: '04 Plus Experience',
-    title: 'Premium Features, reduzierte Ablenkung, schnellere Entscheidungen',
-    description:
-      'FuelNow Plus setzt auf einen ruhigen, hochwertigen Look und priorisiert Informationen, die dich schneller ans Ziel bringen.',
-    bullets: [
-      'Elegante, moderne UI mit fokussierten Akzenten.',
-      'Schneller Zugriff auf relevante Preisinfos.',
-      'Konsistente Experience auf allen Groessen.',
-    ],
-    accent: '#385B93',
-    gradient: 'linear-gradient(160deg, rgba(56,91,147,0.8), rgba(15,86,80,0.45))',
+    id: 'settings',
+    eyebrow: '04 Einstellungen & Robustheit',
+    title: 'Settings & Offline-Handling',
+    description: 'FuelType-Auswahl und robuster Betrieb bei Netzproblemen.',
+    bullets: [],
+    accent: '#7DE4D9',
+    gradient: 'linear-gradient(160deg, rgba(20,42,66,0.92), rgba(72,224,210,0.42))',
+    screenshot: '/appshots/settings-plus.png',
   },
 ]

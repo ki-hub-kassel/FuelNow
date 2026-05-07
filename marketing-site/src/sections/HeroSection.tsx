@@ -2,23 +2,17 @@ export function HeroSection() {
   return (
     <section id="home" className="heroSection section">
       <div className="container">
-        <p className="eyebrow">FuelNow Performance Edition</p>
-        <h1>Der Moment, in dem jeder merkt: Ohne FuelNow tankst du zu teuer.</h1>
+        <p className="eyebrow">FuelNow Funktionen</p>
+        <h1>Aktuelle Spritpreise auf der Karte. Direkte Navigation zur Station.</h1>
         <p className="heroLead">
-          Gebaut fuer Menschen, die nicht suchen wollen, sondern in Sekunden entscheiden. FuelNow
-          kombiniert Live-Daten, ikonische Klarheit und ein Erlebnis, das sofort Vertrauen schafft.
+          Reale App-Flows, echte Simulator-Screenshots, kein Marketing-Filler.
         </p>
-        <ul className="heroHighlights" aria-label="Key benefits">
-          <li>Live Preisvorsprung statt veralteter Listen</li>
-          <li>Map Storytelling statt Informations-Chaos</li>
-          <li>Design, das nach Premium aussieht und sich so anfuehlt</li>
-        </ul>
         <div className="buttonRow">
           <a className="btnPrimary" href="#features">
-            Jetzt den Vorteil sehen
+            Funktionen ansehen
           </a>
           <a className="btnSecondary" href="#cta">
-            FuelNow sichern
+            Zusammenfassung
           </a>
         </div>
       </div>

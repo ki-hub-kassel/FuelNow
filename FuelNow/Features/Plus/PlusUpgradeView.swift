@@ -335,12 +335,7 @@ struct PlusUpgradeView: View {
     }
 
     private var fineprintSection: some View {
-        VStack(alignment: .leading, spacing: TRSpacing.xs) {
-            Text("plus.sheet.footer.billing")
-                .font(TRTypography.caption())
-                .foregroundStyle(TRColors.labelSecondary)
-                .fixedSize(horizontal: false, vertical: true)
-
+        VStack(alignment: .leading, spacing: TRSpacing.xxs) {
             Text(footerText)
                 .font(TRTypography.caption())
                 .foregroundStyle(TRColors.labelSecondary)

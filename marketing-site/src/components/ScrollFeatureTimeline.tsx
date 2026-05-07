@@ -100,17 +100,22 @@ export function ScrollFeatureTimeline({ features }: ScrollFeatureTimelineProps) 
             whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: prefersReducedMotion ? 0 : 0.45, ease: 'easeOut' }}
+            onClick={() => setActiveIndex(index)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault()
+                setActiveIndex(index)
+              }
+            }}
+            role="button"
+            tabIndex={0}
+            aria-label={`Schritt ${index + 1}: ${feature.title}`}
           >
-            <p className="featureEyebrow" style={{ color: feature.accent }}>
-              {feature.eyebrow}
+            <p className="featureNumber" style={{ color: feature.accent }}>
+              {index + 1}
             </p>
             <h3>{feature.title}</h3>
             <p>{feature.description}</p>
-            <ul>
-              {feature.bullets.map((bullet) => (
-                <li key={bullet}>{bullet}</li>
-              ))}
-            </ul>
           </motion.article>
         ))}
       </div>

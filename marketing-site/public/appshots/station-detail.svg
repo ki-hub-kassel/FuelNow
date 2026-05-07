@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 925" fill="none">
+  <rect width="440" height="925" rx="56" fill="#0B1F33"/>
+  <rect x="20" y="20" width="400" height="885" rx="42" fill="#102741"/>
+  <rect x="90" y="38" width="260" height="24" rx="12" fill="#091725"/>
+  <rect x="44" y="86" width="352" height="128" rx="24" fill="#142F4D"/>
+  <text x="68" y="132" fill="#F5F7FA" font-family="Arial" font-size="30" font-weight="700">TotalEnergies</text>
+  <text x="68" y="166" fill="#A8B4C0" font-family="Arial" font-size="17">Geoeffnet · 1.3 km</text>
+  <rect x="44" y="240" width="352" height="178" rx="24" fill="#0E2A45"/>
+  <text x="68" y="286" fill="#A8B4C0" font-family="Arial" font-size="16">Super E5</text>
+  <text x="296" y="292" fill="#7DE4D9" font-family="Arial" font-size="38" font-weight="700">1,60y</text>
+  <text x="68" y="338" fill="#A8B4C0" font-family="Arial" font-size="16">Super E10</text>
+  <text x="296" y="344" fill="#7DE4D9" font-family="Arial" font-size="38" font-weight="700">1,55y</text>
+  <text x="68" y="390" fill="#A8B4C0" font-family="Arial" font-size="16">Diesel</text>
+  <text x="296" y="396" fill="#7DE4D9" font-family="Arial" font-size="38" font-weight="700">1,48y</text>
+  <rect x="44" y="444" width="352" height="300" rx="24" fill="#0F3653"/>
+  <path d="M88 602C128 544 186 570 220 522C258 470 312 498 352 456" stroke="#48E0D2" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="220" cy="522" r="18" fill="#DB4E55"/>
+  <rect x="44" y="776" width="352" height="106" rx="30" fill="#0B1F33" stroke="#48E0D2"/>
+  <text x="124" y="840" fill="#F5F7FA" font-family="Arial" font-size="24" font-weight="700">In Apple Maps oeffnen</text>
+</svg>
