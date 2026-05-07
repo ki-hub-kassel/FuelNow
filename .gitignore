@@ -28,6 +28,10 @@ APIKeys.swift
 # App Store Connect API (never commit keys)
 .env.asc.local
 AuthKey_*.p8
+.asc/config.json
+.asc/artifacts/
+*.xcarchive
+*.ipa
 fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots
