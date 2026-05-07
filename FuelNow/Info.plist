@@ -51,6 +51,12 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>FuelNow benötigt deinen Standort, um Tankstellen in deiner Nähe anzuzeigen.</string>
 	<!--
+		Export Compliance (TestFlight/App Store Connect):
+		Die App nutzt keine nicht-ausgenommene Verschlüsselung.
+	-->
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+	<!--
 		TankerkoenigProxyBaseURL — Vercel Edge Function Proxy (TAN-92).
 		Hält den Tankerkönig-API-Key serverseitig (verschlüsselter Vercel-Env-Secret),
 		damit die App ohne gebundelten Key Live-Daten laden kann (Tankerkönig-AGB

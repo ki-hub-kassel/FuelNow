@@ -562,6 +562,31 @@ p {
   padding-top: var(--space-6);
 }
 
+.appStoreButton {
+  margin-top: 22px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 10px;
+  border: 1px solid rgb(255 255 255 / 0.2);
+  background: #0a0a0a;
+  color: #fff;
+  font-size: 15px;
+  line-height: 1;
+  transition:
+    transform var(--transition-smooth),
+    box-shadow var(--transition-smooth),
+    border-color var(--transition-smooth);
+}
+
+.appStoreButton:hover {
+  transform: translateY(-2px);
+  border-color: rgb(125 228 217 / 0.5);
+  box-shadow: 0 10px 24px rgb(11 31 51 / 0.45);
+}
+
 a:focus-visible {
   outline: 2px solid transparent;
   box-shadow: inset 0 0 0 2px var(--accent-brand);

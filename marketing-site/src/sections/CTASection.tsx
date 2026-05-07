@@ -12,6 +12,16 @@ export function CTASection() {
             Walkthrough erneut oeffnen
           </a>
         </div>
+        <a
+          className="appStoreButton"
+          href="https://apps.apple.com/"
+          target="_blank"
+          rel="noreferrer"
+          aria-label="Open Apple App Store"
+        >
+          <span aria-hidden="true"></span>
+          <span>Im App Store</span>
+        </a>
       </div>
     </section>
   )

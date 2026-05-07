@@ -667,13 +667,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "FuelNow Plus für CarPlay und Support."
+            "value" : "FuelNow Plus inklusive CarPlay."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "FuelNow Plus for CarPlay and support."
+            "value" : "FuelNow Plus including CarPlay."
           }
         }
       }
@@ -683,13 +683,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "FuelNow bleibt gratis nutzbar. Plus finanziert API und Weiterentwicklung."
+            "value" : "FuelNow bleibt gratis nutzbar. Plus enthält CarPlay (sobald verfügbar) und finanziert API sowie Weiterentwicklung."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "FuelNow remains free to use. Plus funds API access and development."
+            "value" : "FuelNow remains free to use. Plus includes CarPlay (once available) and funds API access and development."
           }
         }
       }
