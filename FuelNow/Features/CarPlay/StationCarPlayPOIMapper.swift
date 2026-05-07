@@ -42,12 +42,8 @@ enum StationCarPlayPOIMapper {
         let brand = station.brand.trimmingCharacters(in: .whitespacesAndNewlines)
         let pickerTitle = brand.isEmpty ? station.name : brand
 
-        let priceText: String
-        if let euros = station.price(for: preferredFuel) {
-            priceText = StationDisplayFormatting.priceString(euros: euros)
-        } else {
-            priceText = "—"
-        }
+        // TAN-93: Schilder-Stil `1,58⁹` mit Unicode-Superscript für CarPlay-detailText.
+        let priceText = StationDisplayFormatting.priceString(euros: station.price(for: preferredFuel))
         let pickerSubtitle = "\(preferredFuel.displayName) \(priceText)"
 
         let status = station.isOpen
@@ -76,17 +72,12 @@ enum StationCarPlayPOIMapper {
         )
     }
 
-    /// Eine kompakte Preiszeile für alle Sorten — konsistent mit der Detailansicht (2 Nachkommastellen).
+    /// Eine kompakte Preiszeile für alle Sorten — konsistent mit der Detailansicht
+    /// (Schilder-Stil `1,58⁹` mit Unicode-Superscript, TAN-93).
     static func compactFuelLine(station: Station) -> String {
         FuelType.allCases.map { fuel in
-            let label = fuel.displayName
-            let value: String
-            if let euros = station.price(for: fuel) {
-                value = StationDisplayFormatting.priceString(euros: euros)
-            } else {
-                value = "—"
-            }
-            return "\(label) \(value)"
+            let value = StationDisplayFormatting.priceString(euros: station.price(for: fuel))
+            return "\(fuel.displayName) \(value)"
         }.joined(separator: " · ")
     }
 

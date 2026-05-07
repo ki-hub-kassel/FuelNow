@@ -31,7 +31,7 @@ Diese Datei ist die **zentrale Einstiegs-Spezifikation** im Repo: Kurzfassung vo
 ## UI-Konventionen (FuelNow)
 
 - Öffnungsstatus: **farbiger Punkt** (grün offen / rot zu), kein separates Status-Icon.
-- Preise: **zwei Nachkommastellen** (z. B. `1,89`), **ohne** „€/l“-Label in der Anzeige.
+- Preise: **Tankstellen-Schilder-Stil** `1,58⁹` (TAN-93) — drei Nachkommastellen, die dritte als hochgestellte Zehntel-Ziffer; **ohne** „€/l“-Label und ohne `€`-Suffix in der Anzeige. Zentrale Komponente: `FuelPriceLabel` (SwiftUI) bzw. `FuelPriceFormatting.pumpStyleString` für reine Strings (CarPlay-`detailText`). VoiceOver/Siri-Voice nutzen weiterhin die volle Zahl natürlichsprachlich (`„1 Euro 58,9 Cent“` via `FuelPriceFormatting.voiceOverString`), nicht das Schilder-Format.
 - „In Apple Maps öffnen“: **Turn-by-turn-Navigation** zur Station, nicht nur Kartenansicht.
 - Sheets: **Schließen-Icon**, kein „Fertig“-Button als Standard.
 
