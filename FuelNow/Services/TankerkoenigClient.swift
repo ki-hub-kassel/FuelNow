@@ -94,7 +94,13 @@ actor TankerkoenigClient {
                 radKm: rad
             )
         case .proxy(let baseURL):
-            let pathURL = baseURL.appendingPathComponent("json").appendingPathComponent("list.php")
+            // Proxy-Pfad: **`/api/json/list`** (Vercel Edge Function direkt, ohne
+            // `.php`-Rewrite). `.php`-Pfade triggern Vercels Bot-Mitigation
+            // (`x-vercel-mitigated: deny`) — siehe TAN-92 / `tankerkoenig-proxy/README.md`.
+            let pathURL = baseURL
+                .appendingPathComponent("api")
+                .appendingPathComponent("json")
+                .appendingPathComponent("list")
             url = try Self.makeListURL(hostFromAbsoluteURL: pathURL, apiKey: nil, latitude: latitude, longitude: longitude, radKm: rad)
         }
 

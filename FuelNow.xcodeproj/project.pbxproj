@@ -38,6 +38,7 @@
 		F51900000000000000000001 /* TankerkoenigClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F51800000000000000000001 /* TankerkoenigClientTests.swift */; };
 		F52100000000000000000001 /* StationStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F52000000000000000000001 /* StationStoreTests.swift */; };
 		F52200000000000000000001 /* NetworkMonitorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F52200000000000000000002 /* NetworkMonitorTests.swift */; };
+		F92E00000000000000000001 /* TankerkoenigAPIConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92E00000000000000000002 /* TankerkoenigAPIConfigurationTests.swift */; };
 		F52510000000000000000001 /* StationMapClusteringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F52500000000000000000001 /* StationMapClusteringTests.swift */; };
 		F52310000000000000000001 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F52300000000000000000001 /* AppSettings.swift */; };
 		F52330000000000000000001 /* StationVoiceOverCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = F52300000000000000000002 /* StationVoiceOverCopy.swift */; };
@@ -165,6 +166,7 @@
 		F51800000000000000000001 /* TankerkoenigClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TankerkoenigClientTests.swift; sourceTree = "<group>"; };
 		F52000000000000000000001 /* StationStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationStoreTests.swift; sourceTree = "<group>"; };
 		F52200000000000000000002 /* NetworkMonitorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitorTests.swift; sourceTree = "<group>"; };
+		F92E00000000000000000002 /* TankerkoenigAPIConfigurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TankerkoenigAPIConfigurationTests.swift; sourceTree = "<group>"; };
 		F52500000000000000000001 /* StationMapClusteringTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationMapClusteringTests.swift; sourceTree = "<group>"; };
 		F52300000000000000000001 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		F52300000000000000000002 /* StationVoiceOverCopy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationVoiceOverCopy.swift; sourceTree = "<group>"; };
@@ -319,6 +321,7 @@
 				F51800000000000000000001 /* TankerkoenigClientTests.swift */,
 				F52000000000000000000001 /* StationStoreTests.swift */,
 				F52200000000000000000002 /* NetworkMonitorTests.swift */,
+				F92E00000000000000000002 /* TankerkoenigAPIConfigurationTests.swift */,
 				F52500000000000000000001 /* StationMapClusteringTests.swift */,
 				F65400000000000000000002 /* QueryServiceTests.swift */,
 				F52400000000000000000001 /* AppSettingsTests.swift */,
@@ -729,6 +732,7 @@
 				F51900000000000000000001 /* TankerkoenigClientTests.swift in Sources */,
 				F52100000000000000000001 /* StationStoreTests.swift in Sources */,
 				F52200000000000000000001 /* NetworkMonitorTests.swift in Sources */,
+				F92E00000000000000000001 /* TankerkoenigAPIConfigurationTests.swift in Sources */,
 				F52510000000000000000001 /* StationMapClusteringTests.swift in Sources */,
 				F65410000000000000000002 /* QueryServiceTests.swift in Sources */,
 				F52410000000000000000001 /* AppSettingsTests.swift in Sources */,

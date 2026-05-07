@@ -1,0 +1,15 @@
+{
+    "name": "tankerkoenig-proxy",
+    "version": "1.0.0",
+    "private": true,
+    "description": "Vercel Edge Functions proxy that attaches the Tankerkönig API key server-side so FuelNow can ship without bundling the key (Tankerkönig terms forbid public key distribution).",
+    "scripts": {
+        "dev": "vercel dev",
+        "deploy": "vercel deploy --prod",
+        "lint": "tsc --noEmit"
+    },
+    "devDependencies": {
+        "@types/node": "^20.0.0",
+        "typescript": "^5.4.0"
+    }
+}

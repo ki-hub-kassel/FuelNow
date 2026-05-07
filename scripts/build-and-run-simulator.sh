@@ -65,23 +65,21 @@ if [[ "${FUELNOW_DEMO_PLUS:-0}" == "1" ]]; then
   echo "FuelNow: Demo-Plus aktiv (--mock-plus-subscriber)."
 fi
 
-# TAN-91: Live-Tankerkönig ist Default. Damit der Simulator beim Skript-Start an einen
-# echten Key kommt, wird ~/.fuelnow/tankerkoenig-api-key gelesen und über die
-# `SIMCTL_CHILD_*`-Konvention an `xcrun simctl launch` weitergereicht (kein Klartext-Key
-# im Skript). Ohne Key-Datei startet die App trotzdem — sie zeigt dann den Offline-Splash
-# bei fehlender Verbindung bzw. den bestehenden Error-Alert (missingAPIKey).
+# TAN-92: Default-Pfad für Live-Daten ist der Vercel-Proxy aus `tankerkoenig-proxy/`.
+# Die Proxy-URL liegt in `FuelNow/Info.plist` (Schlüssel `TankerkoenigProxyBaseURL`) und
+# wird vom Build automatisch genutzt — kein Key auf dem Mac nötig.
+#
+# Direct-Modus bleibt als Notnagel: wer ohne Proxy testet (z. B. Proxy down, alternativer
+# Key), kann optional `~/.fuelnow/tankerkoenig-api-key` anlegen. Das Skript reicht den
+# Key dann via `SIMCTL_CHILD_*` an `xcrun simctl launch` weiter (kein Klartext-Key im
+# Skript). Fehlt die Datei: die App nutzt den Proxy aus der Info.plist — kein Hinweis nötig.
 TANKERKOENIG_KEY_FILE="${TANKERKOENIG_KEY_FILE:-${HOME}/.fuelnow/tankerkoenig-api-key}"
 if [[ -f "${TANKERKOENIG_KEY_FILE}" ]]; then
   TANKERKOENIG_KEY="$(tr -d '[:space:]' < "${TANKERKOENIG_KEY_FILE}")"
   if [[ -n "${TANKERKOENIG_KEY}" ]]; then
     export SIMCTL_CHILD_TANKERKOENIG_API_KEY="${TANKERKOENIG_KEY}"
-    echo "FuelNow: Tankerkönig-Key aus ${TANKERKOENIG_KEY_FILE} übernommen."
-  else
-    echo "FuelNow: ${TANKERKOENIG_KEY_FILE} ist leer — App startet ohne Live-Key (Offline-Splash bei fehlender Verbindung, Error-Alert ohne Key)." >&2
+    echo "FuelNow: Direct-Key aus ${TANKERKOENIG_KEY_FILE} übernommen (wirkt nur, falls Info.plist keinen Proxy konfiguriert)."
   fi
-else
-  echo "FuelNow: Kein Tankerkönig-Key unter ${TANKERKOENIG_KEY_FILE} — App startet ohne Live-Key." >&2
-  echo "         Tipp: 'mkdir -p ${HOME}/.fuelnow && echo <KEY> > ${TANKERKOENIG_KEY_FILE}' (siehe TAN-72/TAN-91)." >&2
 fi
 
 # Optional: lokale FUELNOW_USE_MOCK_STATIONS=1 (z. B. UI-Tests), wird an die App gereicht.
