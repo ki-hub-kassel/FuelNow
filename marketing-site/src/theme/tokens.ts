@@ -6,7 +6,6 @@ export type Feature = {
   bullets: string[]
   accent: string
   gradient: string
-  screenshot: string
 }
 
 export const tokens = {
@@ -61,7 +60,6 @@ export const productFeatures: Feature[] = [
     bullets: [],
     accent: '#48E0D2',
     gradient: 'linear-gradient(160deg, rgba(72,224,210,0.72), rgba(56,91,147,0.45))',
-    screenshot: '/appshots/map-view.png',
   },
   {
     id: 'search',
@@ -71,7 +69,6 @@ export const productFeatures: Feature[] = [
     bullets: [],
     accent: '#7DE4D9',
     gradient: 'linear-gradient(160deg, rgba(125,228,217,0.78), rgba(56,91,147,0.42))',
-    screenshot: '/appshots/area-search.png',
   },
   {
     id: 'detail',
@@ -81,7 +78,6 @@ export const productFeatures: Feature[] = [
     bullets: [],
     accent: '#48E0D2',
     gradient: 'linear-gradient(160deg, rgba(56,91,147,0.84), rgba(72,224,210,0.46))',
-    screenshot: '/appshots/station-detail.png',
   },
   {
     id: 'settings',
@@ -91,6 +87,5 @@ export const productFeatures: Feature[] = [
     bullets: [],
     accent: '#7DE4D9',
     gradient: 'linear-gradient(160deg, rgba(20,42,66,0.92), rgba(72,224,210,0.42))',
-    screenshot: '/appshots/settings-plus.png',
   },
 ]

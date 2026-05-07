@@ -64,6 +64,25 @@ Das Skript führt vollständig aus:
 - ASC-Web → FuelNow → TestFlight: Build erscheint zuerst als „Processing", danach mit grünem Status. Verschlüsselungs-/Export-Compliance-Antwort kann pro Build gefragt werden.
 - TestFlight-Verteilung an Gruppen läuft über `asc publish testflight --app 6766354442 --ipa … --group <GROUP_ID>` oder via ASC-Web.
 
+### Automatisch nach Push auf `main`
+
+Wenn du nach jedem Push auf `main` automatisch eine neue Version in TestFlight hochladen willst:
+
+```bash
+git config core.hooksPath scripts/git-hooks
+```
+
+Dann triggert `scripts/git-hooks/post-push` bei `refs/heads/main` automatisch:
+
+1. Patch-Bump der Marketing-Version (z. B. `1.0` → `1.0.1`)
+2. `./scripts/asc-upload.sh` (inkl. nächster Build-Nummer via `asc builds next-build-number`)
+
+Temporär deaktivieren:
+
+```bash
+FUELNOW_SKIP_POST_PUSH_RELEASE=1 git push origin main
+```
+
 ## Fastlane — Legacy / Fallback
 
 Wird beibehalten, falls der `asc`-Pfad blockiert ist (z. B. wenn Xcode-Provisioning aus dem Cache fällt). Funktional identisch zum Apple-Team **`FNXU97S3QK`**.

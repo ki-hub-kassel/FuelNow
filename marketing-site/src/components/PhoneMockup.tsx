@@ -50,17 +50,18 @@ export function PhoneMockup({ feature, index, count }: PhoneMockupProps) {
             }}
           >
             <p className="screenEyebrow">{feature.eyebrow}</p>
-            <div className="screenShotWrap">
-              <img
-                src={feature.screenshot}
-                alt={`${feature.title} App Screenshot`}
-                width={880}
-                height={1850}
-                loading="eager"
-                fetchPriority="high"
-              />
+            <div className="screenMock">
+              <div className="mockTopBar" />
+              <div className="mockCard" />
+              <div className="mockCard" />
+              <div className="mockMapDots">
+                <span />
+                <span />
+                <span />
+              </div>
             </div>
             <h3 className="screenTitle">{feature.title}</h3>
+            <p className="screenCopy">{feature.description}</p>
           </motion.div>
         </AnimatePresence>
         <div className="screenFooter">
