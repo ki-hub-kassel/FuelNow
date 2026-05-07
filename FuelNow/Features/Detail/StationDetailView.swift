@@ -8,6 +8,7 @@ struct StationDetailView: View {
     let preferredFuel: FuelType
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(LocationService.self) private var locationService
 
     /// Marke in der Toolbar; wenn leer, voller Stationsname.
     private var navigationBarBrandTitle: String {
@@ -118,7 +119,11 @@ struct StationDetailView: View {
     }
 
     private var distanceLabel: String {
-        StationDisplayFormatting.distanceString(kilometers: station.distanceKilometers)
+        let dynamicDistanceKm = locationService.currentLocation.map { userLocation in
+            let stationLocation = CLLocation(latitude: station.latitude, longitude: station.longitude)
+            return userLocation.distance(from: stationLocation) / 1000
+        }
+        return StationDisplayFormatting.distanceString(kilometers: dynamicDistanceKm ?? station.distanceKilometers)
     }
 
     private func priceRow(fuel: FuelType, isPreferred: Bool) -> some View {

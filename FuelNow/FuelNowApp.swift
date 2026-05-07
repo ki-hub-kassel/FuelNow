@@ -1,4 +1,5 @@
 import SwiftUI
+import WhatsNewKit
 
 @main
 struct FuelNowApp: App {
@@ -13,6 +14,39 @@ struct FuelNowApp: App {
         AppSettings.AppearancePreference.resolved(storedRaw: appearanceRaw)
     }
 
+    private var whatsNewEnvironment: WhatsNewEnvironment {
+        WhatsNewEnvironment(
+            whatsNewCollection: [
+                WhatsNew(
+                    version: "1.0.0",
+                    title: "Was ist neu in FuelNow",
+                    features: [
+                        .init(
+                            image: .init(systemName: "location.fill", foregroundColor: .blue),
+                            title: "Stabilere Entfernungen",
+                            subtitle: "Entfernungen werden jetzt beim Zuruckkehren zum Standort konsistenter aktualisiert."
+                        ),
+                        .init(
+                            image: .init(systemName: "hand.raised.fill", foregroundColor: .mint),
+                            title: "Besserer Start",
+                            subtitle: "Neues Onboarding mit klarem Nutzen und optionaler Standortfreigabe."
+                        ),
+                        .init(
+                            image: .init(systemName: "sparkles", foregroundColor: .teal),
+                            title: "Plus deutlicher kommuniziert",
+                            subtitle: "FuelNow Plus nennt CarPlay jetzt direkt im Einstiegstext."
+                        ),
+                    ],
+                    primaryAction: .init(
+                        title: "Weiter",
+                        backgroundColor: .accentColor,
+                        foregroundColor: .white
+                    )
+                )
+            ]
+        )
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()
@@ -22,6 +56,7 @@ struct FuelNowApp: App {
                 .environment(entitlementManager)
                 .environment(networkMonitor)
                 .environment(MapDeepLinkStore.shared)
+                .environment(\.whatsNew, whatsNewEnvironment)
                 .onAppear {
                     FuelNowRuntimeRegistry.stationStore = stationStore
                     FuelNowRuntimeRegistry.locationService = locationService
@@ -40,21 +75,11 @@ struct FuelNowApp: App {
                 }
                 .task {
                     await entitlementManager.start()
-                    await requestLocationAuthorizationIfNeeded()
                     #if DEBUG
                     APIKeys.warnIfPlaceholderActive()
                     #endif
                 }
         }
-    }
-
-    @MainActor
-    private func requestLocationAuthorizationIfNeeded() async {
-        guard ProcessInfo.processInfo.environment["UITESTING"] != "1" else { return }
-        // Über den gehaltenen LocationService, nicht über eine Wegwerf-CLLocationManager-Instanz
-        // (TAN-79): Apple verlangt eine über die Anfrage hinaus gehaltene Instanz mit Delegate,
-        // sonst geht der System-Dialog/die Antwort verloren.
-        locationService.requestWhenInUseAuthorizationIfNeeded()
     }
 }
 

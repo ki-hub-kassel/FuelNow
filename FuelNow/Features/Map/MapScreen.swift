@@ -334,6 +334,26 @@ struct MapScreen: View {
                 cameraPosition = .region(region)
             }
         }
+
+        // Wenn zuletzt per „In diesem Gebiet suchen“ ein deutlich anderer Bereich geladen wurde,
+        // holen wir beim Zurückkehren zum Nutzerstandort sofort passende Stationen nach.
+        if shouldRefreshStationsAfterRecentering(on: location) {
+            stationStore.forceRefresh(
+                using: location,
+                radiusKm: AppSettings.SearchRadius.apiMaxKm,
+                trigger: .forcedUserLocation
+            )
+        }
+    }
+
+    private func shouldRefreshStationsAfterRecentering(on userLocation: CLLocation) -> Bool {
+        guard stationStore.loadState != .loading else { return false }
+        guard let lastFetchCenter = stationStore.lastFetchCenter else { return false }
+        let lastCenterLocation = CLLocation(
+            latitude: lastFetchCenter.latitude,
+            longitude: lastFetchCenter.longitude
+        )
+        return userLocation.distance(from: lastCenterLocation) >= MapRegionSearchOffer.panThresholdMeters
     }
 
     private func refreshStations() async {

@@ -18,6 +18,8 @@ enum AppSettings {
         static let locationCacheRecordedAt = "tr.locationCache.recordedAt"
         /// Kurzbefehle / Custom-URL: Tankstelle auf der Karte fokussieren (`MapDeepLinkStore`).
         static let pendingMapStationFocusID = "tr.pendingMapStationFocusID"
+        /// First-run Onboarding wurde abgeschlossen/übersprungen.
+        static let hasCompletedOnboarding = "tr.hasCompletedOnboarding"
     }
 
     /// Suchradius für Tankerkönig-`list.php` (TAN-79).
