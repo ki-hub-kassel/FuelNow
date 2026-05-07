@@ -18,9 +18,6 @@ struct ContentView: View {
                     onContinue: {
                         hasCompletedOnboarding = true
                         locationService.requestWhenInUseAuthorizationIfNeeded()
-                    },
-                    onSkip: {
-                        hasCompletedOnboarding = true
                     }
                 )
             }
@@ -30,15 +27,17 @@ struct ContentView: View {
 
 private struct OnboardingScreen: View {
     let onContinue: () -> Void
-    let onSkip: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: TRSpacing.l) {
-            Spacer(minLength: TRSpacing.m)
-
-            Image(systemName: "fuelpump.and.car.fill")
-                .font(.system(size: 44, weight: .semibold))
-                .foregroundStyle(TRColors.accentText)
+            Image(.appLogo)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 96, height: 96)
+                .clipShape(.rect(cornerRadius: 22, style: .continuous))
+                .shadow(color: .black.opacity(0.35), radius: 12, x: 0, y: 6)
+                .frame(maxWidth: .infinity, alignment: .center)
+                .padding(.top, TRSpacing.s)
                 .accessibilityHidden(true)
 
             Text("Willkommen bei FuelNow")
@@ -70,13 +69,20 @@ private struct OnboardingScreen: View {
 
             Spacer()
 
-            Button("Standortzugriff erlauben", action: onContinue)
+            VStack(spacing: TRSpacing.s) {
+                Text("FuelNow benötigt deinen Standort, um Tankstellen in deiner Nähe zu finden.")
+                    .font(TRTypography.caption())
+                    .foregroundStyle(TRColors.labelTertiary)
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity)
+
+                Button(action: onContinue) {
+                    Text("Standortzugriff erlauben")
+                        .frame(maxWidth: .infinity)
+                }
                 .buttonStyle(.trPrimaryGlass)
                 .accessibilityHint("Fordert den Standortzugriff an und startet FuelNow.")
-
-            Button("Später", action: onSkip)
-                .buttonStyle(.plain)
-                .foregroundStyle(TRColors.labelSecondary)
+            }
         }
         .padding(TRSpacing.m)
     }
