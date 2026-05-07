@@ -90,11 +90,20 @@ struct StationDetailView: View {
 
             Spacer(minLength: TRSpacing.s)
 
-            Text(distanceLabel)
-                .font(TRTypography.callout())
-                .foregroundStyle(TRColors.labelSecondary)
-                .multilineTextAlignment(.trailing)
-                .accessibilityLabel("Entfernung, \(distanceLabel)")
+            // TAN-94: kleines `location.fill`-Symbol vor dem Wert; das frühere
+            // „ca."-Präfix entfällt, weil das Symbol die Schätzung visuell trägt.
+            HStack(spacing: TRSpacing.xxs) {
+                Image(systemName: "location.fill")
+                    .font(TRTypography.callout())
+                    .foregroundStyle(TRColors.labelSecondary)
+                    .accessibilityHidden(true)
+                Text(distanceLabel)
+                    .font(TRTypography.callout())
+                    .foregroundStyle(TRColors.labelSecondary)
+                    .multilineTextAlignment(.trailing)
+            }
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel("Entfernung, \(distanceLabel)")
         }
     }
 
