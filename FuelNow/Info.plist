@@ -50,6 +50,15 @@
 	<true/>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>FuelNow benötigt deinen Standort, um Tankstellen in deiner Nähe anzuzeigen.</string>
+	<!--
+		TankerkoenigProxyBaseURL — Vercel Edge Function Proxy (TAN-92).
+		Hält den Tankerkönig-API-Key serverseitig (verschlüsselter Vercel-Env-Secret),
+		damit die App ohne gebundelten Key Live-Daten laden kann (Tankerkönig-AGB
+		untersagen public Key-Distribution). Quellcode: tankerkoenig-proxy/.
+		Override für lokale Tests via Env `TANKERKOENIG_PROXY_BASE_URL` im Run-Scheme.
+	-->
+	<key>TankerkoenigProxyBaseURL</key>
+	<string>https://fuel-now-ki-hub-kassels-projects.vercel.app</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

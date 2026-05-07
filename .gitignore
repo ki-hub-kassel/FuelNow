@@ -35,3 +35,9 @@ fastlane/screenshots
 # AXe CLI smoke output (scripts/build-run-and-axe.sh, run-axe-batch.sh)
 scripts/axe/output/
 .derived-data-ios-test
+
+# Vercel Edge Functions proxy (tankerkoenig-proxy/) — local-only artefacts
+tankerkoenig-proxy/node_modules/
+tankerkoenig-proxy/.vercel/
+tankerkoenig-proxy/.env
+tankerkoenig-proxy/.env.*

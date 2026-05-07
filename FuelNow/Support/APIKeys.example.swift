@@ -8,19 +8,24 @@ enum APIKeys {
 
     /// Tankerkönig-UUID. **Nie** echten Key committen.
     ///
-    /// **Ohne Key in der App (Produktion):** HTTPS-Proxy konfigurieren — siehe ``TankerkoenigAPIConfiguration``
-    /// (`TankerkoenigProxyBaseURL` in Info.plist oder Umgebungsvariable `TANKERKOENIG_PROXY_BASE_URL`).
-    /// Der Proxy setzt `apikey` nur serverseitig beim Weiterleiten an Tankerkönig.
+    /// **Default-Pfad (TAN-92, Debug + Release):** Die App läuft über den
+    /// **Vercel Edge Function Proxy** (`tankerkoenig-proxy/`); die Proxy-URL liegt in
+    /// `FuelNow/Info.plist` unter `TankerkoenigProxyBaseURL`, der echte Key bleibt
+    /// serverseitig. ``TankerkoenigAPIConfiguration/resolved()`` schaltet automatisch
+    /// in den Proxy-Modus, sodass diese Resolver hier dann **gar nicht** aufgerufen
+    /// werden — `tankerkoenig` darf leer bleiben.
     ///
-    /// **Lokal testen (bleibt bei Git nicht „weg“):**
-    /// 1. **Simulator (empfohlen):** Auf dem Mac `mkdir -p ~/.fuelnow` und eine Zeile Key in
-    ///    `~/.fuelnow/tankerkoenig-api-key` speichern. Im Simulator wird über
-    ///    `SIMULATOR_HOST_HOME` automatisch diese Datei gelesen.
-    /// 2. **Umgebungsvariable** `TANKERKOENIG_API_KEY` (Xcode Scheme → Run → Environment Variables).
-    /// 3. **Dateipfad** `TANKERKOENIG_API_KEY_FILE` = absoluter Pfad zu einer Textdatei (eine Zeile Key).
-    /// 4. Nur **DEBUG:** UserDefaults-Schlüssel `dev.fuelnow.tankerkoenigAPIKey` (z. B. einmalig per Code oder `defaults write`).
+    /// **Direct-Modus (Notnagel, nur ohne Proxy nötig):** wird hier in dieser
+    /// Reihenfolge resolved. Sinnvoll z. B. wenn der Proxy gerade offline ist oder
+    /// du gegen einen alternativen Key testen willst.
+    /// 1. **Umgebungsvariable** `TANKERKOENIG_API_KEY` (Xcode Scheme → Run → Environment Variables).
+    /// 2. **Dateipfad** `TANKERKOENIG_API_KEY_FILE` = absoluter Pfad zu einer Textdatei (eine Zeile Key).
+    /// 3. Nur **DEBUG / Simulator:** `~/.fuelnow/tankerkoenig-api-key` auf dem Mac
+    ///    (`mkdir -p ~/.fuelnow && echo <KEY> > ~/.fuelnow/tankerkoenig-api-key`).
+    ///    Im Simulator wird das über `SIMULATOR_HOST_HOME` gelesen.
+    /// 4. Nur **DEBUG:** UserDefaults-Schlüssel `dev.fuelnow.tankerkoenigAPIKey` (z. B. via `defaults write`).
     ///
-    /// Beantragung Key: Linear **TAN-72**.
+    /// Beantragung Key: Linear **TAN-72**. Proxy-Setup: Linear **TAN-92**.
     static var tankerkoenig: String {
         if let key = resolvedFromEnvironmentVariable() { return key }
         if let key = resolvedFromExplicitKeyFile() { return key }
@@ -89,10 +94,11 @@ enum APIKeys {
     static func warnIfPlaceholderActive() {
         guard !TankerkoenigAPIConfiguration.isLiveAccessConfigured else { return }
         print(
-            "⚠️ FuelNow: Kein Tankerkönig-API-Key und kein Proxy — im DEBUG-Build werden "
-                + "Mock-Tankstellen aus dem Bundle genutzt. Für Live-Daten: Key wie in diesem "
-                + "File beschrieben setzen, Proxy konfigurieren, oder `FUELNOW_USE_LIVE_STATIONS=1` "
-                + "zum Testen der Fehler-UI. Linear TAN-72."
+            "FuelNow: Weder Tankerkönig-Proxy (Info.plist `TankerkoenigProxyBaseURL` / "
+                + "Env `TANKERKOENIG_PROXY_BASE_URL`) noch Direct-Key (Env `TANKERKOENIG_API_KEY` "
+                + "bzw. `~/.fuelnow/tankerkoenig-api-key` im Simulator) gesetzt — Live-Daten "
+                + "schlagen mit `missingAPIKey` fehl. Standard-Setup: Vercel-Proxy aus "
+                + "tankerkoenig-proxy/ deployen und URL in Info.plist eintragen (Linear TAN-92)."
         )
     }
     #endif
