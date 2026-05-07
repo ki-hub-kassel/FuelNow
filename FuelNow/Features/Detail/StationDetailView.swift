@@ -115,8 +115,9 @@ struct StationDetailView: View {
     private func priceRow(fuel: FuelType, isPreferred: Bool) -> some View {
         let euros = station.price(for: fuel)
         // TAN-93: Hauptsorte deutlich prominent (größer, accentText), Vergleichssorten
-        // sekundär (Standardgröße, labelSecondary) — Häkchen-Badge bleibt als
-        // zusätzlicher Hinweis. Bei fehlendem Preis (nil) immer secondary, weil ein
+        // sekundär (Standardgröße, labelSecondary). Schriftgröße + Farbe sind als
+        // visueller Marker ausreichend; das frühere Häkchen-Badge wäre redundant
+        // und wurde entfernt. Bei fehlendem Preis (nil) immer secondary, weil ein
         // „—"-Platzhalter nicht „leuchten" soll.
         let priceProminence: FuelPriceLabel.Prominence = isPreferred ? .display : .standard
         let priceForeground: Color =
@@ -127,19 +128,11 @@ struct StationDetailView: View {
         let nameColor: Color = isPreferred ? TRColors.labelPrimary : TRColors.labelSecondary
 
         return HStack(alignment: .firstTextBaseline) {
-            HStack(spacing: TRSpacing.xxs) {
-                Text(fuel.displayName)
-                    .font(nameFont)
-                    .foregroundStyle(nameColor)
-                    .lineLimit(2)
-                    .minimumScaleFactor(0.85)
-                if isPreferred {
-                    Image(systemName: "checkmark.circle.fill")
-                        .font(TRTypography.caption())
-                        .foregroundStyle(TRColors.accentText)
-                        .accessibilityHidden(true)
-                }
-            }
+            Text(fuel.displayName)
+                .font(nameFont)
+                .foregroundStyle(nameColor)
+                .lineLimit(2)
+                .minimumScaleFactor(0.85)
             Spacer(minLength: TRSpacing.s)
             FuelPriceLabel(
                 euros: euros,
