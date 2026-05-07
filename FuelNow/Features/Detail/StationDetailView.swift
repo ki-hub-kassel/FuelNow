@@ -113,7 +113,8 @@ struct StationDetailView: View {
     }
 
     private func priceRow(fuel: FuelType, isPreferred: Bool) -> some View {
-        HStack(alignment: .firstTextBaseline) {
+        let euros = station.price(for: fuel)
+        return HStack(alignment: .firstTextBaseline) {
             HStack(spacing: TRSpacing.xxs) {
                 Text(fuel.displayName)
                     .font(TRTypography.body())
@@ -128,31 +129,21 @@ struct StationDetailView: View {
                 }
             }
             Spacer(minLength: TRSpacing.s)
-            Group {
-                if let euros = station.price(for: fuel) {
-                    Text(StationDisplayFormatting.priceString(euros: euros))
-                        .font(TRTypography.bodyBold())
-                        .foregroundStyle(TRColors.accentText)
-                        .lineLimit(2)
-                        .minimumScaleFactor(0.85)
-                } else {
-                    Text("—")
-                        .font(TRTypography.bodyBold())
-                        .foregroundStyle(TRColors.labelSecondary)
-                }
-            }
+            // TAN-93: Schilder-Stil `1,58⁹` über `FuelPriceLabel`.
+            FuelPriceLabel(
+                euros: euros,
+                prominence: .standard,
+                foreground: euros == nil ? TRColors.labelSecondary : TRColors.accentText
+            )
+            .lineLimit(2)
+            .minimumScaleFactor(0.85)
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(priceRowAccessibilityLabel(fuel: fuel, isPreferred: isPreferred))
     }
 
     private func priceRowAccessibilityLabel(fuel: FuelType, isPreferred: Bool) -> String {
-        let pricePart: String
-        if let euros = station.price(for: fuel) {
-            pricePart = StationDisplayFormatting.priceString(euros: euros)
-        } else {
-            pricePart = "Kein Preis verfügbar"
-        }
+        let pricePart = FuelPriceFormatting.voiceOverString(euros: station.price(for: fuel))
         return StationVoiceOverCopy.detailPriceRow(
             fuelDisplayName: fuel.displayName,
             formattedPriceOrUnavailable: pricePart,

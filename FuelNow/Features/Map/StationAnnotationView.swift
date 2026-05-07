@@ -9,15 +9,15 @@ struct StationAnnotationView: View {
 
     @ScaledMetric(relativeTo: .body) private var statusDotDiameter: CGFloat = 12
 
-    private var priceText: String {
-        StationAnnotationFormatting.priceString(euros: station.price(for: preferredFuel))
+    private var priceEuros: Double? {
+        station.price(for: preferredFuel)
     }
 
     private var accessibilitySummary: String {
         StationVoiceOverCopy.mapPinSummary(
             stationName: station.name,
             isOpen: station.isOpen,
-            priceDisplay: priceText,
+            priceDisplay: FuelPriceFormatting.voiceOverString(euros: priceEuros),
             fuelDisplayName: preferredFuel.displayName
         )
     }
@@ -30,13 +30,13 @@ struct StationAnnotationView: View {
     var body: some View {
         HStack(alignment: .center, spacing: TRSpacing.xs) {
             statusBadge
-            Text(priceText)
-                .font(TRTypography.bodyBold())
-                .foregroundStyle(TRColors.labelPrimary)
+            // TAN-93: Schilder-Stil `1,58⁹` über `FuelPriceLabel`.
+            FuelPriceLabel(euros: priceEuros, prominence: .compact)
                 .multilineTextAlignment(.center)
                 .lineLimit(priceLineLimit)
                 .minimumScaleFactor(dynamicTypeSize >= .accessibility3 ? 0.6 : 0.72)
                 .fixedSize(horizontal: false, vertical: true)
+                .accessibilityHidden(true)
         }
         .padding(.horizontal, TRSpacing.s)
         .padding(.vertical, TRSpacing.xxs)
@@ -60,25 +60,6 @@ struct StationAnnotationView: View {
                     .strokeBorder(TRColors.background.opacity(0.55), lineWidth: 1)
             }
             .accessibilityHidden(true)
-    }
-}
-
-private enum StationAnnotationFormatting {
-    private static let eurosFormatter: NumberFormatter = {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.currencyCode = "EUR"
-        formatter.locale = Locale(identifier: "de_DE")
-        formatter.maximumFractionDigits = 2
-        formatter.minimumFractionDigits = 2
-        return formatter
-    }()
-
-    static func priceString(euros: Double?) -> String {
-        guard let euros else {
-            return "—"
-        }
-        return eurosFormatter.string(from: NSNumber(value: euros)) ?? String(format: "%.2f €", euros)
     }
 }
 
