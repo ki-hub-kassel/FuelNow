@@ -114,11 +114,23 @@ struct StationDetailView: View {
 
     private func priceRow(fuel: FuelType, isPreferred: Bool) -> some View {
         let euros = station.price(for: fuel)
+        // TAN-93: Hauptsorte deutlich prominent (größer, accentText), Vergleichssorten
+        // sekundär (Standardgröße, labelSecondary) — Häkchen-Badge bleibt als
+        // zusätzlicher Hinweis. Bei fehlendem Preis (nil) immer secondary, weil ein
+        // „—"-Platzhalter nicht „leuchten" soll.
+        let priceProminence: FuelPriceLabel.Prominence = isPreferred ? .display : .standard
+        let priceForeground: Color =
+            (euros == nil)
+            ? TRColors.labelSecondary
+            : (isPreferred ? TRColors.accentText : TRColors.labelSecondary)
+        let nameFont: Font = isPreferred ? TRTypography.headline() : TRTypography.body()
+        let nameColor: Color = isPreferred ? TRColors.labelPrimary : TRColors.labelSecondary
+
         return HStack(alignment: .firstTextBaseline) {
             HStack(spacing: TRSpacing.xxs) {
                 Text(fuel.displayName)
-                    .font(TRTypography.body())
-                    .foregroundStyle(TRColors.labelPrimary)
+                    .font(nameFont)
+                    .foregroundStyle(nameColor)
                     .lineLimit(2)
                     .minimumScaleFactor(0.85)
                 if isPreferred {
@@ -129,14 +141,13 @@ struct StationDetailView: View {
                 }
             }
             Spacer(minLength: TRSpacing.s)
-            // TAN-93: Schilder-Stil `1,58⁹` über `FuelPriceLabel`.
             FuelPriceLabel(
                 euros: euros,
-                prominence: .standard,
-                foreground: euros == nil ? TRColors.labelSecondary : TRColors.accentText
+                prominence: priceProminence,
+                foreground: priceForeground
             )
-            .lineLimit(2)
-            .minimumScaleFactor(0.85)
+            .lineLimit(1)
+            .minimumScaleFactor(0.7)
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(priceRowAccessibilityLabel(fuel: fuel, isPreferred: isPreferred))
