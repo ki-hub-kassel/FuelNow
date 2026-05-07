@@ -153,8 +153,7 @@ struct MapScreen: View {
         }
         .sheet(item: $selectedStation) { station in
             StationDetailView(station: station, preferredFuel: preferredFuel)
-                .presentationDetents([.medium, .large])
-                .presentationDragIndicator(.visible)
+                .presentationDetents([.medium])
         }
         .sheet(isPresented: $showSettings) {
             SettingsView()
