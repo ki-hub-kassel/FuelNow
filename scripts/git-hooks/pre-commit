@@ -18,7 +18,12 @@
 set -uo pipefail
 
 # Collect staged .swift files inside the watched targets.
-mapfile -t staged < <(
+# NOTE: avoid `mapfile` — macOS ships bash 3.2 which doesn't have it. Use a
+# portable `while read` loop instead so the hook works on every dev machine.
+staged=()
+while IFS= read -r line; do
+  [[ -n "$line" ]] && staged+=("$line")
+done < <(
   git diff --cached --name-only --diff-filter=ACMR \
     | grep -E '^(FuelNow|FuelNowTests|FuelNowUITests)/.*\.swift$' || true
 )
