@@ -9,8 +9,14 @@ struct FuelNowAppShortcuts: AppShortcutsProvider {
             phrases: [
                 "Nächste Tankstelle in \(.applicationName)",
                 "Wo ist die nächste Tankstelle in \(.applicationName)",
+                "Nächste Tankstelle in meiner Nähe in \(.applicationName)",
+                "Tankstelle in der Nähe in \(.applicationName)",
+                "Zeig mir die nächste Tankstelle in \(.applicationName)",
+                "Finde die nächste Tankstelle in \(.applicationName)",
                 "Nearest gas station in \(.applicationName)",
                 "Where is the nearest gas station in \(.applicationName)",
+                "Find the nearest gas station in \(.applicationName)",
+                "Show me the nearest gas station in \(.applicationName)",
             ],
             shortTitle: "Nächste Tankstelle",
             systemImageName: "fuelpump.fill"
@@ -20,12 +26,14 @@ struct FuelNowAppShortcuts: AppShortcutsProvider {
             phrases: [
                 "Günstigste Tankstelle in \(.applicationName)",
                 "Wo ist die günstigste Tankstelle in \(.applicationName)",
-                "Wo ist die günstigste Tankstelle in meiner Nähe in \(.applicationName)",
                 "Günstigste Tankstelle in meiner Nähe in \(.applicationName)",
+                "Wo kann ich günstig tanken in \(.applicationName)",
+                "Wo gibt es den günstigsten Sprit in \(.applicationName)",
+                "Billigste Tankstelle in \(.applicationName)",
                 "Cheapest gas station in \(.applicationName)",
                 "Where is the cheapest gas station in \(.applicationName)",
-                "Where is the cheapest gas station near me in \(.applicationName)",
                 "Cheapest gas station near me in \(.applicationName)",
+                "Find me cheap gas in \(.applicationName)",
             ],
             shortTitle: "Günstigste Tankstelle",
             systemImageName: "eurosign.circle.fill"
