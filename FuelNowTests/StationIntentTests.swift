@@ -52,6 +52,38 @@ struct StationIntentTests {
         #expect(entities.isEmpty)
     }
 
+    /// Siri-Dialog für „günstigste Tankstelle“ soll den gesprochenen Preis (`voiceOverString`) einbetten, nicht „€/l“.
+    @Test func findCheapestDialogTemplateEmbedsVoicePricePhrase() {
+        let germanTemplate = String(
+            localized: String.LocalizationValue("intent.findCheapest.dialog.success"),
+            locale: Locale(identifier: "de_DE")
+        )
+        let voice = FuelPriceFormatting.voiceOverString(euros: 1.589)
+        let lineDe = String(
+            format: germanTemplate,
+            locale: Locale(identifier: "de_DE"),
+            "Super E10",
+            "Demo Tankstelle",
+            voice
+        )
+        #expect(lineDe.contains(voice))
+        #expect(voice.contains("Euro"))
+        #expect(voice.contains("Cent"))
+
+        let englishTemplate = String(
+            localized: String.LocalizationValue("intent.findCheapest.dialog.success"),
+            locale: Locale(identifier: "en_US")
+        )
+        let lineEn = String(
+            format: englishTemplate,
+            locale: Locale(identifier: "en_US"),
+            "Super E10",
+            "Demo Station",
+            voice
+        )
+        #expect(lineEn.contains(voice))
+    }
+
     private func loadFixture(named name: String) throws -> Data {
         let bundle = Bundle(for: BundleToken.self)
         let url = try #require(bundle.url(forResource: name, withExtension: "json"))

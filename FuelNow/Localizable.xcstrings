@@ -406,6 +406,391 @@
         }
       }
     },
+    "fuelType.display.diesel" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diesel"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diesel"
+          }
+        }
+      }
+    },
+    "fuelType.display.e10" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Super E10"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Super E10"
+          }
+        }
+      }
+    },
+    "fuelType.display.e5" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Super E5"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Super E5"
+          }
+        }
+      }
+    },
+    "intent.error.bannerTitle" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FuelNow"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FuelNow"
+          }
+        }
+      }
+    },
+    "intent.error.locationDenied" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FuelNow hat keinen Zugriff auf den Standort. Bitte Ortung in den iOS-Einstellungen erlauben."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FuelNow does not have location access. Please allow location in iOS Settings."
+          }
+        }
+      }
+    },
+    "intent.error.noPriceForFuel" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kein Preis für %@ verfügbar."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No price available for %@."
+          }
+        }
+      }
+    },
+    "intent.error.noStationsInRadius" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Tankstelle im 25-km-Umkreis gefunden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No station found within 25 km."
+          }
+        }
+      }
+    },
+    "intent.error.noStationWithPrice" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Tankstelle mit Preis für diese Sorte im 25-km-Umkreis."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No station with a price for this fuel type within 25 km."
+          }
+        }
+      }
+    },
+    "intent.findCheapest.description" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sucht die günstigste Tankstelle in deiner Nähe für eine Kraftstoffsorte (25-km-Umkreis). Ohne Auswahl nutzt FuelNow deine Standard-Spritart."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finds the cheapest station near you for a fuel type (25 km radius). If you do not choose a type, FuelNow uses your default fuel."
+          }
+        }
+      }
+    },
+    "intent.findCheapest.dialog.success" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die günstigste Tankstelle für %1$@ ist %2$@ für %3$@."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The cheapest station for %1$@ is %2$@ at %3$@."
+          }
+        }
+      }
+    },
+    "intent.findCheapest.parameter.fuel" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kraftstoff"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fuel"
+          }
+        }
+      }
+    },
+    "intent.findCheapest.title" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Günstigste Tankstelle"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cheapest station"
+          }
+        }
+      }
+    },
+    "intent.findNearest.description" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sucht die nächste Tankstelle in deinem 25-km-Umkreis."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finds the nearest station within 25 km."
+          }
+        }
+      }
+    },
+    "intent.findNearest.dialog.success" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die nächste Tankstelle ist %@."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The nearest station is %@."
+          }
+        }
+      }
+    },
+    "intent.findNearest.title" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nächste Tankstelle"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nearest station"
+          }
+        }
+      }
+    },
+    "intent.snippet.distanceKm" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%.1f km"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%.1f km"
+          }
+        }
+      }
+    },
+    "intent.snippet.mapAccessibility" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Karte mit Tankstellenstandort"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Map showing station location"
+          }
+        }
+      }
+    },
+    "intent.snippet.mapsNavigationButton" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navigation in Apple Maps"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Directions in Apple Maps"
+          }
+        }
+      }
+    },
+    "intent.snippet.showInFuelNowButton" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In FuelNow anzeigen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show in FuelNow"
+          }
+        }
+      }
+    },
+    "intent.startDrivingNavigation.description" : {
+      "comment" : "Internal App Intent; not offered in Shortcuts library (isDiscoverable false).",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Startet die Autoroute in Apple Maps zum angegebenen Ort."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starts driving directions in Apple Maps to the given location."
+          }
+        }
+      }
+    },
+    "intent.startDrivingNavigation.parameter.latitude" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Breitengrad"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Latitude"
+          }
+        }
+      }
+    },
+    "intent.startDrivingNavigation.parameter.longitude" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Längengrad"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Longitude"
+          }
+        }
+      }
+    },
+    "intent.startDrivingNavigation.parameter.placeName" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name"
+          }
+        }
+      }
+    },
+    "intent.startDrivingNavigation.title" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Route in Apple Maps"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Maps directions"
+          }
+        }
+      }
+    },
     "iOS-Einstellungen öffnen" : {
       "comment" : "A button that opens the iOS settings app.",
       "isCommentAutoGenerated" : true
@@ -1885,6 +2270,285 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Open"
+          }
+        }
+      }
+    },
+    "station.openingHours.footer.source" : {
+      "comment" : "Attribution below Tankerkönig opening-hours content.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quelle: Tankerkönig (MTS-K), CC BY 4.0"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Source: Tankerkönig (MTS-K), CC BY 4.0"
+          }
+        }
+      }
+    },
+    "station.openingHours.info.accessibilityHint" : {
+      "comment" : "VoiceOver hint for opening-hours info button.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeigt reguläre Öffnungszeiten und Sonderhinweise."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shows regular hours and special notices."
+          }
+        }
+      }
+    },
+    "station.openingHours.info.accessibilityLabel" : {
+      "comment" : "VoiceOver label for opening-hours info button.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öffnungszeiten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opening hours"
+          }
+        }
+      }
+    },
+    "station.openingHours.loadFailed" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öffnungszeiten konnten nicht geladen werden. Prüfe deine Verbindung und versuche es später erneut."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opening hours couldn’t load. Check your connection and try again later."
+          }
+        }
+      }
+    },
+    "station.openingHours.loading" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öffnungszeiten werden geladen …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading opening hours…"
+          }
+        }
+      }
+    },
+    "station.openingHours.noSchedule" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Für diese Tankstelle liegen keine regulären Öffnungszeiten vor."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No regular opening hours are available for this station."
+          }
+        }
+      }
+    },
+    "station.openingHours.primary.closed" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktuell geschlossen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Currently closed."
+          }
+        }
+      }
+    },
+    "station.openingHours.primary.openNoInterval" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laut Daten geöffnet — genaue Schließzeit unbekannt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shown as open — exact closing time unknown."
+          }
+        }
+      }
+    },
+    "station.openingHours.primary.openWholeDay" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rund um die Uhr geöffnet."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open 24 hours."
+          }
+        }
+      }
+    },
+    "station.openingHours.primary.untilFormat" : {
+      "comment" : "First argument is a localized short time.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Heute bis %@ geöffnet."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open today until %@."
+          }
+        }
+      }
+    },
+    "station.openingHours.row.labeledTimeRangeFormat" : {
+      "comment" : "Format: 1=day label, 2=start time, 3=end time.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · %2$@–%3$@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · %2$@–%3$@"
+          }
+        }
+      }
+    },
+    "station.openingHours.row.timeRangeFormat" : {
+      "comment" : "Format: 1=start time, 2=end time.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@–%2$@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@–%2$@"
+          }
+        }
+      }
+    },
+    "station.openingHours.section.overrides" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sonderhinweise"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exceptions"
+          }
+        }
+      }
+    },
+    "station.openingHours.section.schedule" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reguläre Zeiten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Regular hours"
+          }
+        }
+      }
+    },
+    "station.openingHours.subtitle.untilFormat" : {
+      "comment" : "First argument is a localized short time.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noch bis %@ geöffnet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open until %@"
+          }
+        }
+      }
+    },
+    "station.openingHours.subtitle.wholeDay" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rund um die Uhr"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open 24 hours"
+          }
+        }
+      }
+    },
+    "station.openingHours.title" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öffnungszeiten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opening hours"
           }
         }
       }

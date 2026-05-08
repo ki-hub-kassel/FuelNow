@@ -4,6 +4,7 @@ import WhatsNewKit
 @main
 struct FuelNowApp: App {
     @State private var locationService = LocationService(snapshotStore: UserDefaultsLocationSnapshotStore())
+    @State private var stationDetailFetcher = TankerkoenigStationDetailFetcher(client: TankerkoenigClient())
     @State private var stationStore = StationStoreFactory.makeDefault()
     @State private var entitlementManager = EntitlementManager()
     @State private var networkMonitor = NetworkMonitor()
@@ -42,7 +43,7 @@ struct FuelNowApp: App {
                         backgroundColor: .accentColor,
                         foregroundColor: .white
                     )
-                )
+                ),
             ]
         )
     }
@@ -53,6 +54,7 @@ struct FuelNowApp: App {
                 .preferredColorScheme(appearancePreference.preferredSwiftUIColorScheme)
                 .environment(locationService)
                 .environment(stationStore)
+                .environment(\.stationDetailFetcher, stationDetailFetcher)
                 .environment(entitlementManager)
                 .environment(networkMonitor)
                 .environment(MapDeepLinkStore.shared)
@@ -61,6 +63,9 @@ struct FuelNowApp: App {
                     FuelNowRuntimeRegistry.stationStore = stationStore
                     FuelNowRuntimeRegistry.locationService = locationService
                     networkMonitor.start()
+                    Task {
+                        await StationIntentResolution.shared.setResolver(StationStoreIntentResolver())
+                    }
                 }
                 .onOpenURL { url in
                     Task { @MainActor in

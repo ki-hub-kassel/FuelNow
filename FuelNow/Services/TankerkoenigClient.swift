@@ -1,6 +1,6 @@
 import Foundation
 
-/// Tankerkönig JSON API — Umkreissuche (`list.php`).
+/// Tankerkönig JSON API — Umkreissuche (`list.php`) und optional Detail (`detail.php`).
 ///
 /// Dokumentation: [creativecommons.tankerkoenig.de](https://creativecommons.tankerkoenig.de/?page=info).
 /// Für stabiles `Station`-Decoding wird **`type=all`** verwendet (getrennte Felder `e5`/`e10`/`diesel`).
@@ -35,7 +35,7 @@ actor TankerkoenigClient {
                 """
                     .trimmingCharacters(in: .whitespacesAndNewlines)
             case .invalidURL:
-                "Ungültige Anfrage-URL für Tankerkönig list.php."
+                "Ungültige Anfrage-URL für die Tankerkönig-API."
             case let .network(err):
                 err.localizedDescription
             case let .http(code):
@@ -53,6 +53,12 @@ actor TankerkoenigClient {
     nonisolated private struct ListResponse: Decodable {
         let ok: Bool
         let stations: [Station]?
+        let message: String?
+    }
+
+    nonisolated private struct DetailResponse: Decodable {
+        let ok: Bool
+        let station: Station?
         let message: String?
     }
 
@@ -153,6 +159,76 @@ actor TankerkoenigClient {
         return decoded.stations ?? []
     }
 
+    /// Liefert eine Station inkl. Öffnungszeiten (`detail.php`). Nur bei Bedarf aufrufen — Rate-Limits.
+    func fetchStationDetail(id: UUID) async throws -> Station {
+        let url: URL
+        switch configuration {
+        case .direct(let apiKey):
+            let trimmedKey = apiKey.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard APIKeys.isConfiguredTankerkoenigKey(trimmedKey) else {
+                throw Failure.missingAPIKey
+            }
+            url = try Self.makeDetailURL(host: "creativecommons.tankerkoenig.de", apiKey: trimmedKey, id: id)
+        case .proxy(let baseURL):
+            let pathURL = baseURL
+                .appendingPathComponent("api")
+                .appendingPathComponent("json")
+                .appendingPathComponent("detail")
+            url = try Self.makeDetailURL(hostFromAbsoluteURL: pathURL, apiKey: nil, id: id)
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+
+        let data: Data
+        let response: URLResponse
+        do {
+            (data, response) = try await session.data(for: request)
+        } catch let urlError as URLError {
+            throw Failure.network(urlError)
+        } catch {
+            throw Failure.network(URLError(.unknown))
+        }
+
+        guard let http = response as? HTTPURLResponse else {
+            throw Failure.http(statusCode: -1)
+        }
+
+        switch http.statusCode {
+        case 200:
+            break
+        case 429:
+            throw Failure.rateLimited
+        default:
+            throw Failure.http(statusCode: http.statusCode)
+        }
+
+        let decoded: DetailResponse
+        do {
+            decoded = try JSONDecoder().decode(DetailResponse.self, from: data)
+        } catch let err as DecodingError {
+            throw Failure.decoding(err)
+        } catch {
+            throw Failure.decoding(
+                DecodingError.dataCorrupted(.init(codingPath: [], debugDescription: String(describing: error)))
+            )
+        }
+
+        guard decoded.ok else {
+            let msg = decoded.message.flatMap { raw -> String? in
+                let t = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+                return t.isEmpty ? nil : t
+            }
+            throw Failure.apiFailed(message: msg ?? "Tankerkönig API meldet ok=false ohne Nachricht.")
+        }
+
+        guard let station = decoded.station else {
+            throw Failure.apiFailed(message: "Tankerkönig Detail ohne Station.")
+        }
+        return station
+    }
+
     nonisolated private static func makeListURL(
         host: String,
         apiKey: String?,
@@ -210,6 +286,39 @@ actor TankerkoenigClient {
 
     nonisolated private static func formatCoordinate(_ value: Double) -> String {
         String(format: "%.6f", value)
+    }
+
+    nonisolated private static func makeDetailURL(host: String, apiKey: String, id: UUID) throws -> URL {
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = host
+        components.path = "/json/detail.php"
+        components.queryItems = detailQueryItems(id: id, apiKey: apiKey)
+        guard let url = components.url else {
+            throw Failure.invalidURL
+        }
+        return url
+    }
+
+    nonisolated private static func makeDetailURL(hostFromAbsoluteURL absolute: URL, apiKey: String?, id: UUID) throws -> URL {
+        guard var components = URLComponents(url: absolute, resolvingAgainstBaseURL: false) else {
+            throw Failure.invalidURL
+        }
+        components.queryItems = detailQueryItems(id: id, apiKey: apiKey)
+        guard let url = components.url else {
+            throw Failure.invalidURL
+        }
+        return url
+    }
+
+    nonisolated private static func detailQueryItems(id: UUID, apiKey: String?) -> [URLQueryItem] {
+        var items: [URLQueryItem] = [
+            URLQueryItem(name: "id", value: id.uuidString.lowercased()),
+        ]
+        if let apiKey {
+            items.append(URLQueryItem(name: "apikey", value: apiKey))
+        }
+        return items
     }
 
     /// Tankerkönig liefert u. a. deutschsprachige Key-Fehler; für Siri/Kurzbefehle klarere Hinweise.

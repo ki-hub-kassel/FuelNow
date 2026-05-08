@@ -35,6 +35,22 @@ struct StationTests {
         #expect(station.price(for: .diesel) == 1.189)
     }
 
+    /// Live-Stichprobe-Ersatz: API kann `houseNumber` als Zahl liefern (oder weglassen).
+    @Test func decode_numericHouseNumber_becomesString() throws {
+        let data = try loadFixture(named: "station-numeric-house-sample")
+        let station = try JSONDecoder().decode(Station.self, from: data)
+        #expect(station.houseNumber == "12")
+        #expect(station.fullAddress.contains("HAUPTSTR."))
+        #expect(station.fullAddress.contains("12"))
+    }
+
+    @Test func decode_missingHouseNumber_defaultsEmpty() throws {
+        let data = try loadFixture(named: "station-missing-house-sample")
+        let station = try JSONDecoder().decode(Station.self, from: data)
+        #expect(station.houseNumber.isEmpty)
+        #expect(station.fullAddress == "HAUPTSTR., 80331 MUENCHEN")
+    }
+
     @Test func hashableIdentityUsesId() throws {
         let data = try loadFixture(named: "station-list-sample")
         let a = try JSONDecoder().decode(StationListEnvelope.self, from: data).stations[0]

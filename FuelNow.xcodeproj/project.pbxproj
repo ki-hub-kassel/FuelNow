@@ -33,14 +33,19 @@
 		F50400000000000000000001 /* station-list-sample.json in Resources */ = {isa = PBXBuildFile; fileRef = F51200000000000000000001 /* station-list-sample.json */; };
 		F50400000000000000000002 /* station-price-false-sample.json in Resources */ = {isa = PBXBuildFile; fileRef = F51200000000000000000002 /* station-price-false-sample.json */; };
 		F50400000000000000000003 /* tankerkoenig-list-ok-sample.json in Resources */ = {isa = PBXBuildFile; fileRef = F51200000000000000000003 /* tankerkoenig-list-ok-sample.json */; };
+		F50400000000000000000004 /* station-numeric-house-sample.json in Resources */ = {isa = PBXBuildFile; fileRef = F51200000000000000000004 /* station-numeric-house-sample.json */; };
+		F50400000000000000000005 /* station-missing-house-sample.json in Resources */ = {isa = PBXBuildFile; fileRef = F51200000000000000000005 /* station-missing-house-sample.json */; };
 		F51600000000000000000001 /* TRDesignTokenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F51500000000000000000001 /* TRDesignTokenTests.swift */; };
 		F51900000000000000000001 /* TankerkoenigClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F51800000000000000000001 /* TankerkoenigClientTests.swift */; };
 		F52100000000000000000001 /* StationStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F52000000000000000000001 /* StationStoreTests.swift */; };
 		F52200000000000000000001 /* NetworkMonitorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F52200000000000000000002 /* NetworkMonitorTests.swift */; };
 		F52310000000000000000001 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F52300000000000000000001 /* AppSettings.swift */; };
 		F52330000000000000000001 /* StationVoiceOverCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = F52300000000000000000002 /* StationVoiceOverCopy.swift */; };
+		F52331000000000000000002 /* StationDetailFetching.swift in Sources */ = {isa = PBXBuildFile; fileRef = F52300000000000000000006 /* StationDetailFetching.swift */; };
+		F52331000000000000000003 /* StationOpeningHoursPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F52300000000000000000007 /* StationOpeningHoursPresenter.swift */; };
 		F52410000000000000000001 /* AppSettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F52400000000000000000001 /* AppSettingsTests.swift */; };
 		F52430000000000000000001 /* StationVoiceOverCopyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F52400000000000000000002 /* StationVoiceOverCopyTests.swift */; };
+		F52430000000000000000002 /* StationOpeningHoursPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F52400000000000000000003 /* StationOpeningHoursPresenterTests.swift */; };
 		F52510000000000000000001 /* StationMapClusteringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F52500000000000000000001 /* StationMapClusteringTests.swift */; };
 		F60200000000000000000001 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60100000000000000000001 /* LocationService.swift */; };
 		F60300000000000000000001 /* LocationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61100000000000000000001 /* LocationServiceTests.swift */; };
@@ -88,6 +93,10 @@
 		F65710000000000000000004 /* OpenMapIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65700000000000000000004 /* OpenMapIntents.swift */; };
 		F65710000000000000000005 /* FuelNowAppShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65700000000000000000005 /* FuelNowAppShortcuts.swift */; };
 		F65710000000000000000006 /* FuelNowDeepLinkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65700000000000000000006 /* FuelNowDeepLinkTests.swift */; };
+		F65910000000000000000001 /* AppleMapsDrivingNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65900000000000000000001 /* AppleMapsDrivingNavigation.swift */; };
+		F65A10000000000000000001 /* StartDrivingNavigationIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65A00000000000000000001 /* StartDrivingNavigationIntent.swift */; };
+		F65B10000000000000000001 /* StationStoreIntentResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65B00000000000000000001 /* StationStoreIntentResolver.swift */; };
+		F65C10000000000000000001 /* StationResultSnippetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65C00000000000000000001 /* StationResultSnippetView.swift */; };
 		F65810000000000000000001 /* EntitlementManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65800000000000000000001 /* EntitlementManager.swift */; };
 		F65810000000000000000002 /* EntitlementManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65800000000000000000002 /* EntitlementManagerTests.swift */; };
 		F66010000000000000000002 /* PlusPurchaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66000000000000000000002 /* PlusPurchaseController.swift */; };
@@ -164,14 +173,19 @@
 		F51200000000000000000001 /* station-list-sample.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "station-list-sample.json"; sourceTree = "<group>"; };
 		F51200000000000000000002 /* station-price-false-sample.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "station-price-false-sample.json"; sourceTree = "<group>"; };
 		F51200000000000000000003 /* tankerkoenig-list-ok-sample.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "tankerkoenig-list-ok-sample.json"; sourceTree = "<group>"; };
+		F51200000000000000000004 /* station-numeric-house-sample.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "station-numeric-house-sample.json"; sourceTree = "<group>"; };
+		F51200000000000000000005 /* station-missing-house-sample.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "station-missing-house-sample.json"; sourceTree = "<group>"; };
 		F51500000000000000000001 /* TRDesignTokenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRDesignTokenTests.swift; sourceTree = "<group>"; };
 		F51800000000000000000001 /* TankerkoenigClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TankerkoenigClientTests.swift; sourceTree = "<group>"; };
 		F52000000000000000000001 /* StationStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationStoreTests.swift; sourceTree = "<group>"; };
 		F52200000000000000000002 /* NetworkMonitorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitorTests.swift; sourceTree = "<group>"; };
 		F52300000000000000000001 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		F52300000000000000000002 /* StationVoiceOverCopy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationVoiceOverCopy.swift; sourceTree = "<group>"; };
+		F52300000000000000000006 /* StationDetailFetching.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationDetailFetching.swift; sourceTree = "<group>"; };
+		F52300000000000000000007 /* StationOpeningHoursPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationOpeningHoursPresenter.swift; sourceTree = "<group>"; };
 		F52400000000000000000001 /* AppSettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsTests.swift; sourceTree = "<group>"; };
 		F52400000000000000000002 /* StationVoiceOverCopyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationVoiceOverCopyTests.swift; sourceTree = "<group>"; };
+		F52400000000000000000003 /* StationOpeningHoursPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationOpeningHoursPresenterTests.swift; sourceTree = "<group>"; };
 		F52500000000000000000001 /* StationMapClusteringTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationMapClusteringTests.swift; sourceTree = "<group>"; };
 		F60100000000000000000001 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		F60500000000000000000001 /* TankerkoenigClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TankerkoenigClient.swift; sourceTree = "<group>"; };
@@ -220,6 +234,10 @@
 		F65700000000000000000004 /* OpenMapIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMapIntents.swift; sourceTree = "<group>"; };
 		F65700000000000000000005 /* FuelNowAppShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelNowAppShortcuts.swift; sourceTree = "<group>"; };
 		F65700000000000000000006 /* FuelNowDeepLinkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelNowDeepLinkTests.swift; sourceTree = "<group>"; };
+		F65900000000000000000001 /* AppleMapsDrivingNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleMapsDrivingNavigation.swift; sourceTree = "<group>"; };
+		F65A00000000000000000001 /* StartDrivingNavigationIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartDrivingNavigationIntent.swift; sourceTree = "<group>"; };
+		F65B00000000000000000001 /* StationStoreIntentResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationStoreIntentResolver.swift; sourceTree = "<group>"; };
+		F65C00000000000000000001 /* StationResultSnippetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationResultSnippetView.swift; sourceTree = "<group>"; };
 		F65800000000000000000001 /* EntitlementManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntitlementManager.swift; sourceTree = "<group>"; };
 		F65800000000000000000002 /* EntitlementManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntitlementManagerTests.swift; sourceTree = "<group>"; };
 		F66000000000000000000002 /* PlusPurchaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlusPurchaseController.swift; sourceTree = "<group>"; };
@@ -336,6 +354,7 @@
 				F65400000000000000000002 /* QueryServiceTests.swift */,
 				F52400000000000000000001 /* AppSettingsTests.swift */,
 				F52400000000000000000002 /* StationVoiceOverCopyTests.swift */,
+				F52400000000000000000003 /* StationOpeningHoursPresenterTests.swift */,
 				F64000000000000000000003 /* SubscriptionConstantsTests.swift */,
 				F65100000000000000000001 /* StationIntentTests.swift */,
 				F65600000000000000000004 /* SiriStationLookupTests.swift */,
@@ -363,6 +382,7 @@
 		F30000000000000000000001 /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				F65900000000000000000001 /* AppleMapsDrivingNavigation.swift */,
 				F10000000000000000000001 /* APIKeys.example.swift */,
 				F52300000000000000000001 /* AppSettings.swift */,
 				F70100000000000000000006 /* FuelNowFeatureFlags.swift */,
@@ -371,6 +391,8 @@
 				F70100000000000000000001 /* StationDisplayFormatting.swift */,
 				F93000000000000000000002 /* FuelPriceLabel.swift */,
 				F52300000000000000000002 /* StationVoiceOverCopy.swift */,
+				F52300000000000000000006 /* StationDetailFetching.swift */,
+				F52300000000000000000007 /* StationOpeningHoursPresenter.swift */,
 				F64000000000000000000002 /* SubscriptionConstants.swift */,
 			);
 			path = Support;
@@ -480,8 +502,11 @@
 				F65600000000000000000001 /* StationIntentLookup.swift */,
 				F65000000000000000000002 /* StationIntentResolving.swift */,
 				F65000000000000000000003 /* StationIntentResolution.swift */,
+				F65C00000000000000000001 /* StationResultSnippetView.swift */,
 				F65600000000000000000002 /* StationSnippetView.swift */,
+				F65A00000000000000000001 /* StartDrivingNavigationIntent.swift */,
 				F65000000000000000000004 /* StationEntity.swift */,
+				F65B00000000000000000001 /* StationStoreIntentResolver.swift */,
 				F65000000000000000000005 /* StationQuery.swift */,
 			);
 			path = Intents;
@@ -502,6 +527,8 @@
 				F51200000000000000000001 /* station-list-sample.json */,
 				F51200000000000000000002 /* station-price-false-sample.json */,
 				F51200000000000000000003 /* tankerkoenig-list-ok-sample.json */,
+				F51200000000000000000004 /* station-numeric-house-sample.json */,
+				F51200000000000000000005 /* station-missing-house-sample.json */,
 			);
 			path = Fixtures;
 			sourceTree = "<group>";
@@ -652,6 +679,8 @@
 				F50400000000000000000001 /* station-list-sample.json in Resources */,
 				F50400000000000000000002 /* station-price-false-sample.json in Resources */,
 				F50400000000000000000003 /* tankerkoenig-list-ok-sample.json in Resources */,
+				F50400000000000000000004 /* station-numeric-house-sample.json in Resources */,
+				F50400000000000000000005 /* station-missing-house-sample.json in Resources */,
 				F66200000000000000000002 /* FuelNowPlus.storekit in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -670,6 +699,8 @@
 				F20000000000000000000001 /* APIKeys.example.swift in Sources */,
 				F52310000000000000000001 /* AppSettings.swift in Sources */,
 				F52330000000000000000001 /* StationVoiceOverCopy.swift in Sources */,
+				F52331000000000000000002 /* StationDetailFetching.swift in Sources */,
+				F52331000000000000000003 /* StationOpeningHoursPresenter.swift in Sources */,
 				F64110000000000000000001 /* SubscriptionConstants.swift in Sources */,
 				F50200000000000000000001 /* FuelType.swift in Sources */,
 				F50200000000000000000002 /* Station.swift in Sources */,
@@ -722,6 +753,10 @@
 				F65610000000000000000002 /* StationSnippetView.swift in Sources */,
 				F65610000000000000000003 /* StationSearchIntents.swift in Sources */,
 				F65710000000000000000004 /* OpenMapIntents.swift in Sources */,
+				F65910000000000000000001 /* AppleMapsDrivingNavigation.swift in Sources */,
+				F65A10000000000000000001 /* StartDrivingNavigationIntent.swift in Sources */,
+				F65B10000000000000000001 /* StationStoreIntentResolver.swift in Sources */,
+				F65C10000000000000000001 /* StationResultSnippetView.swift in Sources */,
 				F65710000000000000000005 /* FuelNowAppShortcuts.swift in Sources */,
 				F65810000000000000000001 /* EntitlementManager.swift in Sources */,
 				F70010000000000000000003 /* CarPlayEntitlementProviding.swift in Sources */,
@@ -757,6 +792,7 @@
 				F65410000000000000000002 /* QueryServiceTests.swift in Sources */,
 				F52410000000000000000001 /* AppSettingsTests.swift in Sources */,
 				F52430000000000000000001 /* StationVoiceOverCopyTests.swift in Sources */,
+				F52430000000000000000002 /* StationOpeningHoursPresenterTests.swift in Sources */,
 				F64110000000000000000002 /* SubscriptionConstantsTests.swift in Sources */,
 				F65110000000000000000001 /* StationIntentTests.swift in Sources */,
 				F65610000000000000000004 /* SiriStationLookupTests.swift in Sources */,
