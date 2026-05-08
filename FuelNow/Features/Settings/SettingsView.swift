@@ -13,6 +13,8 @@ import SwiftUI
 /// 3. **FuelNow Plus** – Mini-Hero mit Eyebrow / Headline / 1–2 Benefits / Preis prominent / einem
 ///    Glas-CTA, der das volle `PlusUpgradeView`-Sheet (TAN-45) öffnet. Bei aktivem Abo erscheint stattdessen
 ///    eine schlichte Status-Sektion mit Verwaltungs- und Restore-Aktionen.
+///    Seit 1.0-Release bewusst hinter `FuelNowFeatureFlags.isPlusUIEnabled` versteckt — Code bleibt
+///    kompiliert, das Re-Enable ist ein Flag-Flip ohne strukturelle Änderung.
 /// 4. **Datenquellen-Footer** – unauffälliger Tankerkönig/MTS-K-Hinweis (CC BY 4.0).
 /// 5. **DEBUG (#if DEBUG-only)** – Toggle „Demo-Modus: FuelNow Plus aktiv" (TAN-90), schaltet
 ///    `EntitlementManager.isPlusSubscriber` lokal ohne echten Kauf — für Simulator-/CarPlay-Tests
@@ -63,7 +65,9 @@ struct SettingsView: View {
             Form {
                 fuelSection
                 appearanceSection
-                plusSection
+                if FuelNowFeatureFlags.isPlusUIEnabled {
+                    plusSection
+                }
                 dataSourceFooterSection
                 #if DEBUG
                 debugSection
