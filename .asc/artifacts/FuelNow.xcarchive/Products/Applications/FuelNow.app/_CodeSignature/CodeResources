@@ -14,19 +14,19 @@
 		</data>
 		<key>Assets.car</key>
 		<data>
-		PhwlQMnxqI+y5pew+Um/Qr04DMw=
+		HtwYsnTQSE9FmKu/Fl48DKz0NeA=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		+NS4/BTDJIMiaj0X9cCb1mwPYCg=
+		Lis69PMLVC3zyxLd4iM7zg2vqew=
 		</data>
 		<key>Metadata.appintents/extract.actionsdata</key>
 		<data>
-		9WXPbiLGIb+uSR78ufB6oXRWz3o=
+		UcKtWZyLfEwjacIF8gqSwTJ1kVE=
 		</data>
 		<key>Metadata.appintents/version.json</key>
 		<data>
-		jBaV/di7mvzg5oR4p7Cs2YgjqZo=
+		FhoQrwr4RxYIhVrUhR/DWE5AQMg=
 		</data>
 		<key>PkgInfo</key>
 		<data>
@@ -44,12 +44,12 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			3HhLulyFKpjgsTHX5lpSkUQEboE=
+			0e5Ojn34BMrSWOn8Jiyp1laY6ek=
 			</data>
 			<key>optional</key>
 			<true/>
 		</dict>
-		<key>de.lproj/nlu.appintents/830958eb5da2773eb852527ecb253551.version</key>
+		<key>de.lproj/nlu.appintents/15c2d19a6ab64e16d0bed90b231c7adb.version</key>
 		<dict>
 			<key>hash</key>
 			<data>
@@ -62,7 +62,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			fDORncpm3l0UWmV46X9xURBzikg=
+			ynDqn5SBTkrM+G2p/zGURxLrRx0=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -75,12 +75,12 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			6F1+3OhvPkXGykeEYjHWV7XHc0g=
+			xUaYVBdBJjdZokdMVVDNSdyuS+Y=
 			</data>
 			<key>optional</key>
 			<true/>
 		</dict>
-		<key>en.lproj/nlu.appintents/fddaa91538417917b8d5862c847f49c1.version</key>
+		<key>en.lproj/nlu.appintents/c1e895771d9faed97251ce64df5347a9.version</key>
 		<dict>
 			<key>hash</key>
 			<data>
@@ -93,7 +93,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			q2aO46fqTYK2DGAkSuTk7zqXlRI=
+			LA1BOhv85awuidFEqQufc32V6jU=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -123,21 +123,21 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			1tJOT2mqyqP37SRCwiAXH5fZbLVXgMpRAlxqOvewU40=
+			aNuI/fAHFnZ/f5uOuijBSeUOh/3VejhDfKcehcMZdLI=
 			</data>
 		</dict>
 		<key>Metadata.appintents/extract.actionsdata</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			lrBrSn+XeIC65WjgSSQ25AeS0ci2MEYZNs+O2zXWbro=
+			m44ox6py4Twb6g/6v83aiYJbfb+NRHUKZMc8an8E6Uw=
 			</data>
 		</dict>
 		<key>Metadata.appintents/version.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			5Cs5LOfU/7QFN2Dodu/9KDrcR26S1JmAL5f/aEWKNxM=
+			iycNDL6ZMSBvIrWrJAIdm7zohpixvAuzQBcCIQVdjn0=
 			</data>
 		</dict>
 		<key>WhatsNewKit_WhatsNewKit.bundle/Info.plist</key>
@@ -158,12 +158,12 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			PCMuJzeqA22Ky2K62BQnUXh4MnapxJz9McsQ3DGKb/M=
+			BpsN+TXN+ZNegZfnXYT82CT2DAZRjfhnZ0PC7shWPGk=
 			</data>
 			<key>optional</key>
 			<true/>
 		</dict>
-		<key>de.lproj/nlu.appintents/830958eb5da2773eb852527ecb253551.version</key>
+		<key>de.lproj/nlu.appintents/15c2d19a6ab64e16d0bed90b231c7adb.version</key>
 		<dict>
 			<key>hash2</key>
 			<data>
@@ -176,7 +176,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			iKvtRfoiMgzsNv/OcTT1dwIISUYL7Wgv7Vmima6Wlgg=
+			xs5ZlQ9V3ueAzvOVkED009U8B0J2M/Qa4SrEFKIhwZk=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -192,12 +192,12 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			94EOVCt+3fqlq2HXxdRbFKfSgkib6Ohj4X9Hwq638Ss=
+			RBznLOp+iBLevMtK0aduPAWqtRbh2YhemQJBtsQgORU=
 			</data>
 			<key>optional</key>
 			<true/>
 		</dict>
-		<key>en.lproj/nlu.appintents/fddaa91538417917b8d5862c847f49c1.version</key>
+		<key>en.lproj/nlu.appintents/c1e895771d9faed97251ce64df5347a9.version</key>
 		<dict>
 			<key>hash2</key>
 			<data>
@@ -210,7 +210,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			OiK0AVfKTOHbU6ZIyn3gZ1+D97jWuqynCblC1YT4lak=
+			DRNcdSktGuhEI9oMhbwYjzF34JcrG5KBVAEMz4DylsM=
 			</data>
 			<key>optional</key>
 			<true/>

@@ -108,13 +108,17 @@ enum StationCarPlayPOIMapper {
 
     /// Zweites Tab: sortierte Liste — dieselben Stationen wie die POI-Karte (kein zweites Datenmodell).
     @MainActor
-    static func makeNearbyListTemplate(stations: [Station], preferredFuel: FuelType) -> CPListTemplate {
-        let sliced = Array(stations.prefix(maxPointsOfInterest))
-        let items: [CPListItem] = sliced.map { station in
-            let row = makeRow(station: station, preferredFuel: preferredFuel)
-            let item = CPListItem(text: row.pickerTitle, detailText: row.pickerSubtitle)
+    static func makeNearbyListTemplate(
+        rows: [StationCarPlayPOIRow],
+        stationsByID: [UUID: Station]
+    ) -> CPListTemplate {
+        let items: [CPListItem] = rows.map { row in
+            let detailText = "\(row.pickerSubtitle) · \(row.pickerSummary)"
+            let item = CPListItem(text: row.pickerTitle, detailText: detailText)
             item.handler = { _, completion in
-                CarPlayDrivingNavigation.openDrivingDirections(to: station)
+                if let station = stationsByID[row.stationID] {
+                    CarPlayDrivingNavigation.openDrivingDirections(to: station)
+                }
                 completion()
             }
             return item
@@ -131,7 +135,7 @@ enum StationCarPlayPOIMapper {
         let template = CPPointOfInterestTemplate(
             title: String(localized: "carplay.plus.map.title"),
             pointsOfInterest: points,
-            selectedIndex: points.isEmpty ? 0 : 0
+            selectedIndex: 0
         )
         template.pointOfInterestDelegate = delegate
         return template

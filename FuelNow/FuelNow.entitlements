@@ -3,13 +3,16 @@
 <plist version="1.0">
 <dict>
 	<!--
-		CarPlay Fueling (`com.apple.developer.carplay-fueling`) ist absichtlich
-		entfernt, solange Apple noch nicht genehmigt hat — sonst scheitern
-		Device-Signing / Archive an fehlendem Profil-Flag.
+		Temporärer CarPlay-Testpfad über EV-Charging-Capability:
+		`com.apple.developer.carplay-charging` ist aktiv, bis Fueling
+		offiziell freigeschaltet ist.
 
-		Nach Freigabe: Key wieder eintragen (Boolean YES), `FuelNowFeatureFlags
-		.isCarPlayCapabilityEnabled = true`, CarPlay-Scene in Info.plist — siehe
+		Nach Fueling-Freigabe: Key auf `com.apple.developer.carplay-fueling`
+		umstellen und `FuelNowFeatureFlags.carPlayCapabilityMode = .fueling` setzen,
+		CarPlay-Scene bleibt aktiv — siehe
 		`docs/CARPLAY.md`.
 	-->
+	<key>com.apple.developer.carplay-charging</key>
+	<true/>
 </dict>
 </plist>

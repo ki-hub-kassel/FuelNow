@@ -3,12 +3,10 @@
 <plist version="1.0">
 <dict>
 	<!--
-		FuelNow Info.plist — manuelles Scene-Manifest (SwiftUI Window).
+		FuelNow Info.plist — manuelles Scene-Manifest (SwiftUI Window + CarPlay).
 
-		CarPlay-Scene (`CPTemplateApplicationSceneSessionRoleApplication`) ist
-		entfernt, solange `FuelNowFeatureFlags.isCarPlayCapabilityEnabled == false`
-		(kein Fueling-Entitlement vor Apple-Approval). Nach Freigabe wieder ergänzen,
-		siehe `docs/CARPLAY.md`.
+		Temporär ist der CarPlay-Testpfad über EV-Charging aktiv. Nach Fueling-Freigabe
+		auf Fueling-Capability umstellen (siehe `FuelNowFeatureFlags` + `docs/CARPLAY.md`).
 
 		Vorherige INFOPLIST_KEY_*-Werte (CFBundleDisplayName, CFBundleURLTypes,
 		NSLocationWhenInUseUsageDescription etc.) liegen hier gebündelt.
@@ -68,9 +66,20 @@
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
-		<false/>
+		<true/>
 		<key>UISceneConfigurations</key>
 		<dict>
+			<key>CPTemplateApplicationSceneSessionRoleApplication</key>
+			<array>
+				<dict>
+					<key>UISceneClassName</key>
+					<string>CPTemplateApplicationScene</string>
+					<key>UISceneConfigurationName</key>
+					<string>FuelNow CarPlay Scene</string>
+					<key>UISceneDelegateClassName</key>
+					<string>$(PRODUCT_MODULE_NAME).FuelNowCarPlaySceneDelegate</string>
+				</dict>
+			</array>
 			<key>UIWindowSceneSessionRoleApplication</key>
 			<array>
 				<dict>

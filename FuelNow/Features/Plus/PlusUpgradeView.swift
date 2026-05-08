@@ -382,7 +382,7 @@ private extension PlusUpgradeView {
         ),
     ]
 
-    /// Ohne Apple-CarPlay-Freigabe kein Marketing für eine noch nicht auslieferbare Funktion.
+    /// CarPlay wird erst gezeigt, wenn eine Capability aktiv ist (none/fueling/evCharging).
     static var paywallBenefits: [Benefit] {
         benefits.filter { benefit in
             benefit.id != "carplay" || FuelNowFeatureFlags.isCarPlayCapabilityEnabled

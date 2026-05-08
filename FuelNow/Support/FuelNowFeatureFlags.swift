@@ -1,8 +1,22 @@
 /// Zentraler Schalter für Produktfunktionen, die zusätzliche Apple-Freigaben brauchen.
 enum FuelNowFeatureFlags {
-    /// CarPlay Fueling (`com.apple.developer.carplay-fueling`): erst nach Apple-Approval
-    /// Entitlement + Scene in `Info.plist` aktivieren — siehe `docs/CARPLAY.md`.
+    enum CarPlayCapabilityMode {
+        /// CarPlay deaktiviert (kein Entitlement + keine CarPlay-Scene im Manifest).
+        case none
+        /// Offizielle Fueling-Capability nach Apple-Freigabe.
+        case fueling
+        /// Temporärer Testpfad, solange Fueling noch nicht freigeschaltet ist.
+        case evCharging
+    }
+
+    /// Aktive CarPlay-Capability für diesen Build.
     ///
-    /// Bei `false`: keine CarPlay-Capability im Bundle → Geräte-Archive/TestFlight ohne Fueling-Profil.
-    static let isCarPlayCapabilityEnabled = false
+    /// Default für den temporären Testzweig: EV-Charging, damit CarPlay in TestFlight/Fahrzeug
+    /// verifiziert werden kann, bis Fueling freigegeben ist.
+    static let carPlayCapabilityMode: CarPlayCapabilityMode = .evCharging
+
+    /// `true`, wenn irgendeine CarPlay-Capability im Bundle aktiv ist.
+    static var isCarPlayCapabilityEnabled: Bool {
+        carPlayCapabilityMode != .none
+    }
 }

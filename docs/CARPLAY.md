@@ -81,34 +81,43 @@ Sobald der Antrag raus ist, im Linear-Ticket TAN-54 ergänzen:
 
 ## 2. Technische Vorbereitung im Code (dieses Ticket)
 
-### 2.0 Ship-Toggle vor Apple-Approval
+### 2.0 Temporärer EV-Charging-Testmodus vor Apple-Approval
 
-Solange CarPlay Fueling **noch nicht** von Apple freigegeben ist, bleibt die App
-ohne Fueling-Capability signierbar (Archive/TestFlight/Device):
+Solange CarPlay Fueling **noch nicht** von Apple freigegeben ist, kann FuelNow
+über einen **temporären EV-Charging-Testpfad** in TestFlight/Fahrzeug verifiziert
+werden:
 
-1. `FuelNow/Support/FuelNowFeatureFlags.swift` — `isCarPlayCapabilityEnabled = false`
-   (Plus-Paywall blendet den CarPlay-Vorteil aus).
-2. `FuelNow/FuelNow.entitlements` — **kein** `com.apple.developer.carplay-fueling`.
-3. `FuelNow/Info.plist` — **keine** `CPTemplateApplicationSceneSessionRoleApplication`-Scene.
+1. `FuelNow/Support/FuelNowFeatureFlags.swift` — `carPlayCapabilityMode = .evCharging`.
+2. `FuelNow/FuelNow.entitlements` — `com.apple.developer.carplay-charging = true`.
+3. `FuelNow/Info.plist` — `CPTemplateApplicationSceneSessionRoleApplication` ist aktiv.
 
-**Nach Approval:** Flag auf `true` setzen, Entitlement-Key wieder einfügen (Boolean
-`YES`), CarPlay-Scene wie unten beschreiben ins Manifest legen, App-ID/Capability
-in Apple Developer wie gewohnt aktivieren.
+Wichtig: Dieser Modus ist ein Übergang für Verifikation und muss klar als
+temporär gekennzeichnet bleiben.
+
+**Nach Fueling-Approval:** Flag auf `.fueling` setzen und Entitlement-Key auf
+`com.apple.developer.carplay-fueling` umstellen.
 
 ### 2.1 Entitlements-Datei
 
 `FuelNow/FuelNow.entitlements` ist im Build-Setting
 `CODE_SIGN_ENTITLEMENTS = FuelNow/FuelNow.entitlements` (Debug + Release)
-verlinkt. **Mit Freigabe** enthält sie:
+verlinkt.
+
+**Temporärer Testmodus (aktuell):**
+
+```xml
+<key>com.apple.developer.carplay-charging</key>
+<true/>
+```
+
+**Mit Fueling-Freigabe umstellen auf:**
 
 ```xml
 <key>com.apple.developer.carplay-fueling</key>
 <true/>
 ```
 
-Ohne diesen Key verlangt kein Profil das Fueling-Flag — **Device- und Simulator-Builds**
-laufen normal; CarPlay-UI startet im Fahrzeug erst wieder, wenn Entitlement + Scene
-gesetzt sind.
+Ohne passenden Key bzw. Profil-Capability schlägt Device/Archive-Signing fehl.
 
 ### 2.2 Scene-Manifest & Template-Scene ([TAN-54](https://linear.app/tankradar-app/issue/TAN-54), [TAN-56](https://linear.app/tankradar-app/issue/TAN-56))
 
@@ -196,4 +205,18 @@ aktiv sind (`FuelNowFeatureFlags.isCarPlayCapabilityEnabled`).
 - **Device-Builds** mit CarPlay: freigegebenes Fueling-Entitlement im Profil.
 - **Unit:** `CarPlayRoutingPolicyTests` deckt die TAN-56-Routing-Entscheidung ab.
 - **Manuell / Sandbox:** Plus vs. Limited Templates — [TAN-59](https://linear.app/tankradar-app/issue/TAN-59).
+
+## 4. Rollback und finaler Switch
+
+### 4.1 Sofort-Rollback (CarPlay komplett aus)
+
+1. `FuelNowFeatureFlags.carPlayCapabilityMode = .none`
+2. `FuelNow.entitlements`: CarPlay-Key entfernen
+3. `Info.plist`: `CPTemplateApplicationSceneSessionRoleApplication` entfernen
+
+### 4.2 Finaler Switch nach Apple-Freigabe
+
+1. `FuelNowFeatureFlags.carPlayCapabilityMode = .fueling`
+2. `FuelNow.entitlements`: `com.apple.developer.carplay-fueling = true`
+3. Capability/Profil in Apple Developer auf Fueling abgleichen
 
