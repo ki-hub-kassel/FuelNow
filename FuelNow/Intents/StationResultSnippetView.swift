@@ -238,9 +238,32 @@ struct StationSearchResultSnippetView: View {
 
     // MARK: - Action-Footer
 
+    /// `fuelnow://station/<uuid>` — wird von `FuelNowApp.onOpenURL` über `FuelNowDeepLink.parse(_:)`
+    /// aufgelöst und ruft `MapDeepLinkStore.enqueueStationFocus(id:)` auf.
+    private var openInAppURL: URL {
+        URL(string: "fuelnow://station/\(station.id.uuidString)")
+            ?? URL(string: "fuelnow://map")!
+    }
+
+    /// Apple Maps Web-URL für Turn-by-Turn-Routing — wird vom System direkt in Apple Maps geöffnet.
+    /// Reference: [Apple Maps URL Scheme — Map Links](https://developer.apple.com/library/archive/featuredarticles/iPhoneURLScheme_Reference/MapLinks/MapLinks.html).
+    private var drivingDirectionsURL: URL {
+        var components = URLComponents(string: "https://maps.apple.com/")!
+        components.queryItems = [
+            URLQueryItem(name: "daddr", value: "\(station.latitude),\(station.longitude)"),
+            URLQueryItem(name: "dirflg", value: "d"),
+            URLQueryItem(name: "q", value: station.name),
+        ]
+        return components.url ?? URL(string: "https://maps.apple.com/")!
+    }
+
+    /// Wir nutzen `Link` statt `Button(intent:)`: Static-Snippets (`ShowsSnippetView`) rendern
+    /// `Button(intent:)` zwar als Knopf, das System triggert den Intent in der Siri-UI-Sandbox aber
+    /// nicht zuverlässig. URL-Links werden vom System dagegen über den Standard-`openURL`-Pfad
+    /// aufgelöst (FuelNow-Scheme bzw. Apple Maps Web-URL) und sind dort robust.
     private var actionFooter: some View {
         HStack(spacing: TRSpacing.s) {
-            Button(intent: OpenStationIntent(station: StationEntity(station: station))) {
+            Link(destination: openInAppURL) {
                 Label(
                     String(localized: "intent.snippet.showInFuelNowButton"),
                     systemImage: "fuelpump.fill"
@@ -249,13 +272,7 @@ struct StationSearchResultSnippetView: View {
             }
             .buttonStyle(.bordered)
 
-            Button(
-                intent: StartDrivingNavigationIntent(
-                    latitude: station.latitude,
-                    longitude: station.longitude,
-                    placeName: station.name
-                )
-            ) {
+            Link(destination: drivingDirectionsURL) {
                 Label(
                     String(localized: "intent.snippet.mapsNavigationButton"),
                     systemImage: "location.north.line.fill"
