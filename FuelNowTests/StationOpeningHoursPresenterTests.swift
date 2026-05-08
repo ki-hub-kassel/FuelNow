@@ -11,7 +11,7 @@ struct StationOpeningHoursPresenterTests {
             cal.date(from: DateComponents(calendar: cal, year: 2025, month: 5, day: 7, hour: 12))
         )
         let today = StationOpeningHoursPresenter.todayMask(date: noon, calendar: cal)
-        #expect(!mask.intersection(today).isEmpty)
+        #expect(!mask.isDisjoint(with: today))
     }
 
     @Test func closingTime_moFrSlot_wednesdayNoon() throws {
