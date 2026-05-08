@@ -11,6 +11,13 @@
 		800000000000000000000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 300000000000000000000002 /* ContentView.swift */; };
 		800000000000000000000003 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 300000000000000000000003 /* Assets.xcassets */; };
 		800000000000000000000005 /* FuelNowUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500000000000000000000001 /* FuelNowUITests.swift */; };
+		8C34A26389F0B76469EDB8FD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB6916EECB4E1B3C2ABFB3AE /* Foundation.framework */; };
+		9EBBB10B408B1EB76966E794 /* WidgetSnapshotStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96A9A26AC911821D9433665 /* WidgetSnapshotStore.swift */; };
+		AC86F7B392CE20719A88F688 /* WidgetSnapshotStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96A9A26AC911821D9433665 /* WidgetSnapshotStore.swift */; };
+		AD7773331292C5888A27AA36 /* FuelNowWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29EF13678B417327854B6A5F /* FuelNowWidgets.swift */; };
+		B7F408A7BC145A5CB3CC63DA /* WidgetSnapshotBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 269EA733547319C628DE1B80 /* WidgetSnapshotBuilderTests.swift */; };
+		BC5D99E292E59147554A49E8 /* WidgetSnapshotBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A336E76E5BC59A02A452D3 /* WidgetSnapshotBuilder.swift */; };
+		CAB86FD10A1A71FC570A9CC6 /* FuelNowWidgets.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 654B45CE068FA57784C38C4E /* FuelNowWidgets.appex */; };
 		F20000000000000000000001 /* APIKeys.example.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000001 /* APIKeys.example.swift */; };
 		F37300000000000000000001 /* TRDesignAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F37100000000000000000001 /* TRDesignAssets.xcassets */; };
 		F37400000000000000000001 /* TRDesignPaletteNotes.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37200000000000000000001 /* TRDesignPaletteNotes.swift */; };
@@ -93,12 +100,12 @@
 		F65710000000000000000004 /* OpenMapIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65700000000000000000004 /* OpenMapIntents.swift */; };
 		F65710000000000000000005 /* FuelNowAppShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65700000000000000000005 /* FuelNowAppShortcuts.swift */; };
 		F65710000000000000000006 /* FuelNowDeepLinkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65700000000000000000006 /* FuelNowDeepLinkTests.swift */; };
+		F65810000000000000000001 /* EntitlementManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65800000000000000000001 /* EntitlementManager.swift */; };
+		F65810000000000000000002 /* EntitlementManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65800000000000000000002 /* EntitlementManagerTests.swift */; };
 		F65910000000000000000001 /* AppleMapsDrivingNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65900000000000000000001 /* AppleMapsDrivingNavigation.swift */; };
 		F65A10000000000000000001 /* StartDrivingNavigationIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65A00000000000000000001 /* StartDrivingNavigationIntent.swift */; };
 		F65B10000000000000000001 /* StationStoreIntentResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65B00000000000000000001 /* StationStoreIntentResolver.swift */; };
 		F65C10000000000000000001 /* StationResultSnippetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65C00000000000000000001 /* StationResultSnippetView.swift */; };
-		F65810000000000000000001 /* EntitlementManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65800000000000000000001 /* EntitlementManager.swift */; };
-		F65810000000000000000002 /* EntitlementManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65800000000000000000002 /* EntitlementManagerTests.swift */; };
 		F66010000000000000000002 /* PlusPurchaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66000000000000000000002 /* PlusPurchaseController.swift */; };
 		F66010000000000000000003 /* PlusUpgradeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66000000000000000000003 /* PlusUpgradeView.swift */; };
 		F66010000000000000000004 /* PlusPurchaseControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66000000000000000000004 /* PlusPurchaseControllerTests.swift */; };
@@ -141,16 +148,45 @@
 			remoteGlobalIDString = 100000000000000000000002;
 			remoteInfo = FuelNow;
 		};
+		CBC1BDD8E60A7DA1B01CC79B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 100000000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 20533F36DF941C10878303FC;
+			remoteInfo = FuelNowWidgets;
+		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		04CB77A34A76AE26E70E366E /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				CAB86FD10A1A71FC570A9CC6 /* FuelNowWidgets.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		0EFF8C993D01E0D843AD75F2 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		200000000000000000000001 /* FuelNow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FuelNow.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		200000000000000000000002 /* FuelNowTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FuelNowTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		200000000000000000000003 /* FuelNowUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FuelNowUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		269EA733547319C628DE1B80 /* WidgetSnapshotBuilderTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WidgetSnapshotBuilderTests.swift; sourceTree = "<group>"; };
+		29EF13678B417327854B6A5F /* FuelNowWidgets.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FuelNowWidgets.swift; sourceTree = "<group>"; };
 		300000000000000000000001 /* FuelNowApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelNowApp.swift; sourceTree = "<group>"; };
 		300000000000000000000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		300000000000000000000003 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		500000000000000000000001 /* FuelNowUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelNowUITests.swift; sourceTree = "<group>"; };
+		654B45CE068FA57784C38C4E /* FuelNowWidgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FuelNowWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		A96A9A26AC911821D9433665 /* WidgetSnapshotStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WidgetSnapshotStore.swift; path = Shared/WidgetSnapshotStore.swift; sourceTree = "<group>"; };
+		AB6916EECB4E1B3C2ABFB3AE /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		CCCAF6F904C31BD56BD3B36F /* FuelNowWidgets.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = FuelNowWidgets.entitlements; sourceTree = "<group>"; };
+		D8A336E76E5BC59A02A452D3 /* WidgetSnapshotBuilder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WidgetSnapshotBuilder.swift; path = Shared/WidgetSnapshotBuilder.swift; sourceTree = "<group>"; };
 		F10000000000000000000001 /* APIKeys.example.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKeys.example.swift; sourceTree = "<group>"; };
 		F37100000000000000000001 /* TRDesignAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = TRDesignAssets.xcassets; sourceTree = "<group>"; };
 		F37200000000000000000001 /* TRDesignPaletteNotes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRDesignPaletteNotes.swift; sourceTree = "<group>"; };
@@ -234,12 +270,12 @@
 		F65700000000000000000004 /* OpenMapIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMapIntents.swift; sourceTree = "<group>"; };
 		F65700000000000000000005 /* FuelNowAppShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelNowAppShortcuts.swift; sourceTree = "<group>"; };
 		F65700000000000000000006 /* FuelNowDeepLinkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelNowDeepLinkTests.swift; sourceTree = "<group>"; };
+		F65800000000000000000001 /* EntitlementManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntitlementManager.swift; sourceTree = "<group>"; };
+		F65800000000000000000002 /* EntitlementManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntitlementManagerTests.swift; sourceTree = "<group>"; };
 		F65900000000000000000001 /* AppleMapsDrivingNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleMapsDrivingNavigation.swift; sourceTree = "<group>"; };
 		F65A00000000000000000001 /* StartDrivingNavigationIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartDrivingNavigationIntent.swift; sourceTree = "<group>"; };
 		F65B00000000000000000001 /* StationStoreIntentResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationStoreIntentResolver.swift; sourceTree = "<group>"; };
 		F65C00000000000000000001 /* StationResultSnippetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationResultSnippetView.swift; sourceTree = "<group>"; };
-		F65800000000000000000001 /* EntitlementManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntitlementManager.swift; sourceTree = "<group>"; };
-		F65800000000000000000002 /* EntitlementManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntitlementManagerTests.swift; sourceTree = "<group>"; };
 		F66000000000000000000002 /* PlusPurchaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlusPurchaseController.swift; sourceTree = "<group>"; };
 		F66000000000000000000003 /* PlusUpgradeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlusUpgradeView.swift; sourceTree = "<group>"; };
 		F66000000000000000000004 /* PlusPurchaseControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlusPurchaseControllerTests.swift; sourceTree = "<group>"; };
@@ -268,6 +304,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		1EA6D5935DA3F8A37774E348 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8C34A26389F0B76469EDB8FD /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		700000000000000000000002 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -301,6 +345,8 @@
 				600000000000000000000004 /* FuelNowTests */,
 				600000000000000000000005 /* FuelNowUITests */,
 				600000000000000000000002 /* Products */,
+				EF4988595BF54AE89CB84166 /* Frameworks */,
+				DD7ED4756EFFEE4FDD8FB463 /* FuelNowWidgets */,
 			);
 			sourceTree = "<group>";
 		};
@@ -310,6 +356,7 @@
 				200000000000000000000001 /* FuelNow.app */,
 				200000000000000000000002 /* FuelNowTests.xctest */,
 				200000000000000000000003 /* FuelNowUITests.xctest */,
+				654B45CE068FA57784C38C4E /* FuelNowWidgets.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -331,6 +378,7 @@
 				F38000000000000000000001 /* Intents */,
 				F30000000000000000000001 /* Support */,
 				F62D00000000000000000001 /* MockData */,
+				F013EE77E0950D0BE933AAE1 /* Shared */,
 			);
 			path = FuelNow;
 			sourceTree = "<group>";
@@ -367,6 +415,7 @@
 				F70000000000000000000005 /* CarPlayRoutingPolicyTests.swift */,
 				F70600000000000000000001 /* StationCarPlayPOIMapperTests.swift */,
 				F51300000000000000000001 /* Fixtures */,
+				269EA733547319C628DE1B80 /* WidgetSnapshotBuilderTests.swift */,
 			);
 			path = FuelNowTests;
 			sourceTree = "<group>";
@@ -377,6 +426,42 @@
 				500000000000000000000001 /* FuelNowUITests.swift */,
 			);
 			path = FuelNowUITests;
+			sourceTree = "<group>";
+		};
+		98FF0FA8E8BCEF0A2BA5F04A /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				AB6916EECB4E1B3C2ABFB3AE /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		DD7ED4756EFFEE4FDD8FB463 /* FuelNowWidgets */ = {
+			isa = PBXGroup;
+			children = (
+				29EF13678B417327854B6A5F /* FuelNowWidgets.swift */,
+				0EFF8C993D01E0D843AD75F2 /* Info.plist */,
+				CCCAF6F904C31BD56BD3B36F /* FuelNowWidgets.entitlements */,
+			);
+			name = FuelNowWidgets;
+			path = FuelNowWidgets;
+			sourceTree = "<group>";
+		};
+		EF4988595BF54AE89CB84166 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				98FF0FA8E8BCEF0A2BA5F04A /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F013EE77E0950D0BE933AAE1 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				A96A9A26AC911821D9433665 /* WidgetSnapshotStore.swift */,
+				D8A336E76E5BC59A02A452D3 /* WidgetSnapshotBuilder.swift */,
+			);
+			name = Shared;
 			sourceTree = "<group>";
 		};
 		F30000000000000000000001 /* Support */ = {
@@ -574,10 +659,12 @@
 				700000000000000000000001 /* Sources */,
 				700000000000000000000002 /* Frameworks */,
 				700000000000000000000003 /* Resources */,
+				04CB77A34A76AE26E70E366E /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				749CBE80CB71AD161256562B /* PBXTargetDependency */,
 			);
 			name = FuelNow;
 			packageProductDependencies = (
@@ -622,6 +709,23 @@
 			productReference = 200000000000000000000003 /* FuelNowUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		20533F36DF941C10878303FC /* FuelNowWidgets */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 56A486C17C1AFF622BA14841 /* Build configuration list for PBXNativeTarget "FuelNowWidgets" */;
+			buildPhases = (
+				2BEDAA14142E04CE6F14D9A5 /* Sources */,
+				1EA6D5935DA3F8A37774E348 /* Frameworks */,
+				2648A1A6BCD8D43439E1313A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FuelNowWidgets;
+			productName = FuelNowWidgets;
+			productReference = 654B45CE068FA57784C38C4E /* FuelNowWidgets.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -656,11 +760,19 @@
 				100000000000000000000002 /* FuelNow */,
 				100000000000000000000003 /* FuelNowTests */,
 				100000000000000000000004 /* FuelNowUITests */,
+				20533F36DF941C10878303FC /* FuelNowWidgets */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		2648A1A6BCD8D43439E1313A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		700000000000000000000003 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -688,6 +800,15 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		2BEDAA14142E04CE6F14D9A5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AC86F7B392CE20719A88F688 /* WidgetSnapshotStore.swift in Sources */,
+				AD7773331292C5888A27AA36 /* FuelNowWidgets.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		700000000000000000000001 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -769,6 +890,8 @@
 				F70110000000000000000006 /* FuelNowFeatureFlags.swift in Sources */,
 				F70110000000000000000004 /* CarPlayDrivingNavigation.swift in Sources */,
 				F70110000000000000000005 /* StationCarPlayPOIMapper.swift in Sources */,
+				9EBBB10B408B1EB76966E794 /* WidgetSnapshotStore.swift in Sources */,
+				BC5D99E292E59147554A49E8 /* WidgetSnapshotBuilder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -804,6 +927,7 @@
 				F66200000000000000000001 /* EntitlementManagerStoreKitTests.swift in Sources */,
 				F70010000000000000000005 /* CarPlayRoutingPolicyTests.swift in Sources */,
 				F70610000000000000000001 /* StationCarPlayPOIMapperTests.swift in Sources */,
+				B7F408A7BC145A5CB3CC63DA /* WidgetSnapshotBuilderTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -818,6 +942,12 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		749CBE80CB71AD161256562B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = FuelNowWidgets;
+			target = 20533F36DF941C10878303FC /* FuelNowWidgets */;
+			targetProxy = CBC1BDD8E60A7DA1B01CC79B /* PBXContainerItemProxy */;
+		};
 		910000000000000000000001 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 100000000000000000000002 /* FuelNow */;
@@ -831,6 +961,49 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		442BB07CA780C03F4DC142FB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_ENTITLEMENTS = FuelNowWidgets/FuelNowWidgets.entitlements;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = FNXU97S3QK;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = FuelNowWidgets/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vibecoding.fuelnow.widgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		C2C402020E427E87D1A7D142 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_ENTITLEMENTS = FuelNowWidgets/FuelNowWidgets.entitlements;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = FNXU97S3QK;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = FuelNowWidgets/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vibecoding.fuelnow.widgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
 		D100000000000000000000001 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1081,6 +1254,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		56A486C17C1AFF622BA14841 /* Build configuration list for PBXNativeTarget "FuelNowWidgets" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				442BB07CA780C03F4DC142FB /* Release */,
+				C2C402020E427E87D1A7D142 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		C100000000000000000000001 /* Build configuration list for PBXProject "FuelNow" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
