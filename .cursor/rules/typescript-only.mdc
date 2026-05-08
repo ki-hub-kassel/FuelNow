@@ -1,0 +1,43 @@
+---
+description: Web/Node-Code im Repo ausschließlich in TypeScript schreiben
+globs: **/*.{ts,tsx,js,jsx,mjs,cjs}
+alwaysApply: false
+---
+
+# TypeScript-only (kein plain JavaScript)
+
+Im Repo sind alle JS/TS-fähigen Bereiche (`marketing-site/`, `tankerkoenig-proxy/`,
+sonstige Tooling-Skripte unter Node) **TypeScript-only**.
+
+## Regeln
+
+- **Neue Dateien:** ausschließlich `.ts` / `.tsx` (oder `.mts`/`.cts` falls Build benötigt).
+- **Bestehende `.js` / `.jsx` / `.mjs` / `.cjs`:** vor inhaltlicher Erweiterung
+  zu `.ts` / `.tsx` migrieren — keine neuen Features in JS-Dateien hinzufügen.
+- **Keine `// @ts-nocheck`** ganzer Dateien und **kein `any`** ohne kurze
+  Begründung im Code-Kommentar (nicht im Commit) — sonst echte Typen modellieren
+  oder `unknown` + Narrowing nutzen.
+- **`tsconfig` bleibt strict:** `strict: true`, `noUncheckedIndexedAccess` aktiv;
+  kein Lockern, um schneller zu liefern.
+- **Build-/CI-Skripte** (z. B. unter `scripts/`) bevorzugt als `.ts` mit
+  `tsx`/`ts-node` ausführen, statt neue `.js`-Skripte anzulegen.
+
+## Beispiel
+
+```ts
+// ✅ marketing-site/src/utils/format-price.ts
+export function formatPumpPrice(euros: number, cents: number, tenth: number): string {
+  return `${euros},${cents.toString().padStart(2, '0')}`
+}
+```
+
+```js
+// ❌ marketing-site/src/utils/format-price.js  — bitte migrieren
+module.exports.formatPumpPrice = (e, c, t) => `${e},${c}`
+```
+
+## Ausnahmen
+
+- Generierte Artefakte (`dist/`, `build/`, `node_modules/`) — nicht relevant.
+- Konfigurationsdateien, die nur in JS funktionieren (z. B. einige Vite-/ESLint-
+  Plugins ohne TS-Support), bleiben erlaubt — bitte aber gezielt einsetzen.
