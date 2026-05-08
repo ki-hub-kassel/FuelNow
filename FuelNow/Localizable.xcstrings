@@ -1889,6 +1889,285 @@
         }
       }
     },
+    "station.openingHours.footer.source" : {
+      "comment" : "Attribution below Tankerkönig opening-hours content.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quelle: Tankerkönig (MTS-K), CC BY 4.0"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Source: Tankerkönig (MTS-K), CC BY 4.0"
+          }
+        }
+      }
+    },
+    "station.openingHours.info.accessibilityHint" : {
+      "comment" : "VoiceOver hint for opening-hours info button.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeigt reguläre Öffnungszeiten und Sonderhinweise."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shows regular hours and special notices."
+          }
+        }
+      }
+    },
+    "station.openingHours.info.accessibilityLabel" : {
+      "comment" : "VoiceOver label for opening-hours info button.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öffnungszeiten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opening hours"
+          }
+        }
+      }
+    },
+    "station.openingHours.loadFailed" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öffnungszeiten konnten nicht geladen werden. Prüfe deine Verbindung und versuche es später erneut."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opening hours couldn’t load. Check your connection and try again later."
+          }
+        }
+      }
+    },
+    "station.openingHours.loading" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öffnungszeiten werden geladen …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading opening hours…"
+          }
+        }
+      }
+    },
+    "station.openingHours.noSchedule" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Für diese Tankstelle liegen keine regulären Öffnungszeiten vor."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No regular opening hours are available for this station."
+          }
+        }
+      }
+    },
+    "station.openingHours.primary.closed" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktuell geschlossen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Currently closed."
+          }
+        }
+      }
+    },
+    "station.openingHours.primary.openNoInterval" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laut Daten geöffnet — genaue Schließzeit unbekannt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shown as open — exact closing time unknown."
+          }
+        }
+      }
+    },
+    "station.openingHours.primary.openWholeDay" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rund um die Uhr geöffnet."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open 24 hours."
+          }
+        }
+      }
+    },
+    "station.openingHours.primary.untilFormat" : {
+      "comment" : "First argument is a localized short time.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Heute bis %@ geöffnet."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open today until %@."
+          }
+        }
+      }
+    },
+    "station.openingHours.row.labeledTimeRangeFormat" : {
+      "comment" : "Format: 1=day label, 2=start time, 3=end time.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · %2$@–%3$@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · %2$@–%3$@"
+          }
+        }
+      }
+    },
+    "station.openingHours.row.timeRangeFormat" : {
+      "comment" : "Format: 1=start time, 2=end time.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@–%2$@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@–%2$@"
+          }
+        }
+      }
+    },
+    "station.openingHours.section.overrides" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sonderhinweise"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exceptions"
+          }
+        }
+      }
+    },
+    "station.openingHours.section.schedule" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reguläre Zeiten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Regular hours"
+          }
+        }
+      }
+    },
+    "station.openingHours.subtitle.untilFormat" : {
+      "comment" : "First argument is a localized short time.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noch bis %@ geöffnet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open until %@"
+          }
+        }
+      }
+    },
+    "station.openingHours.subtitle.wholeDay" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rund um die Uhr"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open 24 hours"
+          }
+        }
+      }
+    },
+    "station.openingHours.title" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öffnungszeiten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opening hours"
+          }
+        }
+      }
+    },
     "Status" : {
       "comment" : "A label displayed above a card with a status.",
       "isCommentAutoGenerated" : true

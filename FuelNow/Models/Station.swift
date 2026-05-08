@@ -18,6 +18,7 @@ struct Station: Identifiable, Hashable, Sendable, Decodable {
     let name: String
     let brand: String
     let street: String
+    /// Wird aus String oder Zahl dekodiert; fehlend/`null` → leer (`list.php`-Robustheit).
     let houseNumber: String
     let place: String
     /// PLZ; die API liefert sie als Ganzzahl, wir halten sie als String für die Anzeige.
@@ -71,7 +72,7 @@ struct Station: Identifiable, Hashable, Sendable, Decodable {
         name = try c.decode(String.self, forKey: .name)
         brand = try c.decode(String.self, forKey: .brand)
         street = try c.decode(String.self, forKey: .street)
-        houseNumber = try c.decode(String.self, forKey: .houseNumber)
+        houseNumber = try Self.decodeTankerkoenigHouseNumber(from: c)
         place = try c.decode(String.self, forKey: .place)
 
         if let code = try c.decodeIfPresent(Int.self, forKey: .postCode) {
@@ -95,6 +96,30 @@ struct Station: Identifiable, Hashable, Sendable, Decodable {
         overrides = try c.decodeIfPresent([String].self, forKey: .overrides)
         wholeDay = try c.decodeIfPresent(Bool.self, forKey: .wholeDay)
         state = try c.decodeIfPresent(String.self, forKey: .state)
+    }
+
+    /// Hausnummer: meist String; die API kann sie auch als Zahl liefern — fehlend/`null` → leer.
+    private static func decodeTankerkoenigHouseNumber(from c: KeyedDecodingContainer<CodingKeys>) throws -> String {
+        guard c.contains(.houseNumber) else { return "" }
+        if try c.decodeNil(forKey: .houseNumber) { return "" }
+        if let s = try? c.decode(String.self, forKey: .houseNumber) {
+            return s.trimmingCharacters(in: .whitespaces)
+        }
+        if let n = try? c.decode(Int.self, forKey: .houseNumber) {
+            return String(n)
+        }
+        if let d = try? c.decode(Double.self, forKey: .houseNumber) {
+            let rounded = d.rounded()
+            if abs(d - rounded) < .ulpOfOne {
+                return String(Int(rounded))
+            }
+            return String(d)
+        }
+        let context = DecodingError.Context(
+            codingPath: c.codingPath + [CodingKeys.houseNumber],
+            debugDescription: "Expected String, number, or null for Tankerkönig houseNumber."
+        )
+        throw DecodingError.typeMismatch(String.self, context)
     }
 
     static func == (lhs: Station, rhs: Station) -> Bool {

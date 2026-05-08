@@ -2,18 +2,59 @@ import CoreLocation
 import MapKit
 import SwiftUI
 
+private enum StationDetailFetchPhase: Equatable {
+    case idle
+    case loading
+    case loaded
+    case failed
+}
+
 /// Detail-Sheet für eine Tankstelle: Marke in der Navigationsleiste, Status/Entfernung, Spritpreise und Apple-Maps-Navigation (Autoroute).
 struct StationDetailView: View {
     let station: Station
     let preferredFuel: FuelType
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.stationDetailFetcher) private var stationDetailFetcher
     @Environment(LocationService.self) private var locationService
+
+    @State private var detailStation: Station?
+    @State private var detailFetchPhase: StationDetailFetchPhase = .idle
+    @State private var showOpeningHoursPopover = false
+
+    /// Tankerkönig-`list.php` liefert kein `openingTimes`; nach `detail.php` ersetzen wir die Anzeige-Daten.
+    private var resolvedStation: Station {
+        detailStation ?? station
+    }
 
     /// Marke in der Toolbar; wenn leer, voller Stationsname.
     private var navigationBarBrandTitle: String {
-        let trimmed = station.brand.trimmingCharacters(in: .whitespacesAndNewlines)
-        return trimmed.isEmpty ? station.name : trimmed
+        let trimmed = resolvedStation.brand.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmed.isEmpty ? resolvedStation.name : trimmed
+    }
+
+    private var openHoursSubtitle: String? {
+        StationOpeningHoursPresenter.openStatusSubtitle(station: resolvedStation)
+    }
+
+    private var showsOpeningHoursInfo: Bool {
+        stationDetailFetcher != nil && resolvedStation.isOpen
+    }
+
+    private var openingHoursPopoverPhase: StationDetailFetchPhase {
+        guard stationDetailFetcher != nil else { return .idle }
+        if detailFetchPhase == .idle { return .loading }
+        return detailFetchPhase
+    }
+
+    private var statusAccessibilityLabel: String {
+        let status = resolvedStation.isOpen
+            ? String(localized: "station.status.open")
+            : String(localized: "station.status.closed")
+        if let sub = openHoursSubtitle {
+            return "\(status), \(sub)"
+        }
+        return status
     }
 
     var body: some View {
@@ -44,6 +85,9 @@ struct StationDetailView: View {
                     .padding(.bottom, TRSpacing.m)
             }
             .navigationBarTitleDisplayMode(.inline)
+            .task(id: station.id) {
+                await refreshStationDetail()
+            }
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text(navigationBarBrandTitle)
@@ -51,7 +95,7 @@ struct StationDetailView: View {
                         .foregroundStyle(TRColors.labelPrimary)
                         .lineLimit(1)
                         .minimumScaleFactor(0.75)
-                        .accessibilityLabel(station.name)
+                        .accessibilityLabel(resolvedStation.name)
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button {
@@ -67,27 +111,82 @@ struct StationDetailView: View {
                 }
             }
         }
+        .popover(isPresented: $showOpeningHoursPopover) {
+            StationOpeningHoursPopoverView(
+                phase: openingHoursPopoverPhase,
+                enrichedStation: detailStation,
+                listStation: station
+            )
+            .presentationCompactAdaptation(.popover)
+        }
+    }
+
+    private func refreshStationDetail() async {
+        guard let fetcher = stationDetailFetcher else {
+            detailFetchPhase = .idle
+            detailStation = nil
+            return
+        }
+        detailFetchPhase = .loading
+        detailStation = nil
+        do {
+            detailStation = try await fetcher.fetchStationDetail(id: station.id)
+            detailFetchPhase = .loaded
+        } catch {
+            detailFetchPhase = .failed
+            detailStation = nil
+        }
     }
 
     /// Status und Entfernung unter der Toolbar (fix, ohne Scrollen).
     private var statusAndDistanceRow: some View {
         HStack(alignment: .firstTextBaseline, spacing: TRSpacing.m) {
-            HStack(spacing: TRSpacing.s) {
+            HStack(alignment: .top, spacing: TRSpacing.s) {
                 Circle()
-                    .fill(station.isOpen ? TRColors.success : TRColors.danger)
+                    .fill(resolvedStation.isOpen ? TRColors.success : TRColors.danger)
                     .frame(width: 12, height: 12)
                     .overlay {
                         Circle()
                             .strokeBorder(TRColors.labelPrimary.opacity(0.12), lineWidth: 1)
                     }
+                    .padding(.top, 3)
                     .accessibilityHidden(true)
-                Text(station.isOpen ? String(localized: "station.status.open") : String(localized: "station.status.closed"))
-                    .font(TRTypography.callout())
-                    .fontWeight(.semibold)
-                    .foregroundStyle(station.isOpen ? TRColors.success : TRColors.danger)
+
+                HStack(alignment: .firstTextBaseline, spacing: TRSpacing.xs) {
+                    VStack(alignment: .leading, spacing: TRSpacing.xxs) {
+                        Text(
+                            resolvedStation.isOpen
+                                ? String(localized: "station.status.open")
+                                : String(localized: "station.status.closed")
+                        )
+                        .font(TRTypography.callout())
+                        .fontWeight(.semibold)
+                        .foregroundStyle(resolvedStation.isOpen ? TRColors.success : TRColors.danger)
+
+                        if let openHoursSubtitle {
+                            Text(openHoursSubtitle)
+                                .font(TRTypography.caption())
+                                .foregroundStyle(TRColors.labelSecondary)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                    }
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel(statusAccessibilityLabel)
+
+                    if showsOpeningHoursInfo {
+                        Button {
+                            showOpeningHoursPopover = true
+                        } label: {
+                            Image(systemName: "info.circle")
+                                .font(TRTypography.callout().weight(.medium))
+                                .foregroundStyle(TRColors.accentText.opacity(0.92))
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel(String(localized: "station.openingHours.info.accessibilityLabel"))
+                        .accessibilityHint(String(localized: "station.openingHours.info.accessibilityHint"))
+                    }
+                }
             }
-            .accessibilityElement(children: .combine)
-            .accessibilityLabel(station.isOpen ? String(localized: "station.status.open") : String(localized: "station.status.closed"))
 
             Spacer(minLength: TRSpacing.s)
 
@@ -120,14 +219,16 @@ struct StationDetailView: View {
 
     private var distanceLabel: String {
         let dynamicDistanceKm = locationService.currentLocation.map { userLocation in
-            let stationLocation = CLLocation(latitude: station.latitude, longitude: station.longitude)
+            let stationLocation = CLLocation(latitude: resolvedStation.latitude, longitude: resolvedStation.longitude)
             return userLocation.distance(from: stationLocation) / 1000
         }
-        return StationDisplayFormatting.distanceString(kilometers: dynamicDistanceKm ?? station.distanceKilometers)
+        return StationDisplayFormatting.distanceString(
+            kilometers: dynamicDistanceKm ?? resolvedStation.distanceKilometers
+        )
     }
 
     private func priceRow(fuel: FuelType, isPreferred: Bool) -> some View {
-        let euros = station.price(for: fuel)
+        let euros = resolvedStation.price(for: fuel)
         // TAN-93: Hauptsorte deutlich prominent (größer, accentText), Vergleichssorten
         // sekundär (Standardgröße, labelSecondary). Schriftgröße + Farbe sind als
         // visueller Marker ausreichend; das frühere Häkchen-Badge wäre redundant
@@ -161,7 +262,7 @@ struct StationDetailView: View {
     }
 
     private func priceRowAccessibilityLabel(fuel: FuelType, isPreferred: Bool) -> String {
-        let pricePart = FuelPriceFormatting.voiceOverString(euros: station.price(for: fuel))
+        let pricePart = FuelPriceFormatting.voiceOverString(euros: resolvedStation.price(for: fuel))
         return StationVoiceOverCopy.detailPriceRow(
             fuelDisplayName: fuel.displayName,
             formattedPriceOrUnavailable: pricePart,
@@ -170,15 +271,104 @@ struct StationDetailView: View {
     }
 
     private func startAppleMapsDrivingNavigation() {
-        let destinationLocation = CLLocation(latitude: station.latitude, longitude: station.longitude)
+        let destinationLocation = CLLocation(
+            latitude: resolvedStation.latitude,
+            longitude: resolvedStation.longitude
+        )
         let destination = MKMapItem(location: destinationLocation, address: nil)
-        destination.name = station.name
+        destination.name = resolvedStation.name
 
         let current = MKMapItem.forCurrentLocation()
         MKMapItem.openMaps(
             with: [current, destination],
             launchOptions: [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving]
         )
+    }
+}
+
+// MARK: - Öffnungszeiten-Popover
+
+private struct StationOpeningHoursPopoverView: View {
+    var phase: StationDetailFetchPhase
+    var enrichedStation: Station?
+    var listStation: Station
+
+    private var displayStation: Station {
+        enrichedStation ?? listStation
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: TRSpacing.m) {
+            Text(String(localized: "station.openingHours.title"))
+                .font(TRTypography.title2())
+
+            switch phase {
+            case .loading:
+                ProgressView()
+                Text(String(localized: "station.openingHours.loading"))
+                    .font(TRTypography.subheadline())
+                    .foregroundStyle(TRColors.labelSecondary)
+            case .failed:
+                Text(String(localized: "station.openingHours.loadFailed"))
+                    .font(TRTypography.subheadline())
+                    .foregroundStyle(TRColors.labelSecondary)
+            case .idle, .loaded:
+                loadedBody
+            }
+        }
+        .padding(TRSpacing.m)
+        .frame(minWidth: 288, maxWidth: 340)
+    }
+
+    @ViewBuilder
+    private var loadedBody: some View {
+        let model = StationOpeningHoursPresenter.popoverModel(station: displayStation)
+
+        if let primary = model.primaryLine {
+            Text(primary)
+                .font(TRTypography.bodyBold())
+                .foregroundStyle(TRColors.labelPrimary)
+        }
+
+        if model.scheduleLines.isEmpty {
+            Text(String(localized: "station.openingHours.noSchedule"))
+                .font(TRTypography.subheadline())
+                .foregroundStyle(TRColors.labelSecondary)
+        } else {
+            Text(String(localized: "station.openingHours.section.schedule"))
+                .font(TRTypography.caption())
+                .foregroundStyle(TRColors.labelSecondary)
+                .textCase(.uppercase)
+
+            VStack(alignment: .leading, spacing: TRSpacing.xs) {
+                ForEach(Array(model.scheduleLines.enumerated()), id: \.offset) { _, line in
+                    Text(line)
+                        .font(TRTypography.subheadline())
+                        .foregroundStyle(TRColors.labelPrimary)
+                }
+            }
+        }
+
+        if let overrides = model.overrideLines, !overrides.isEmpty {
+            Text(String(localized: "station.openingHours.section.overrides"))
+                .font(TRTypography.caption())
+                .foregroundStyle(TRColors.labelSecondary)
+                .textCase(.uppercase)
+                .padding(.top, TRSpacing.xs)
+
+            VStack(alignment: .leading, spacing: TRSpacing.xs) {
+                ForEach(Array(overrides.enumerated()), id: \.offset) { _, line in
+                    Text(line)
+                        .font(TRTypography.caption())
+                        .foregroundStyle(TRColors.labelPrimary)
+                }
+            }
+        }
+
+        Text(String(localized: "station.openingHours.footer.source"))
+            .font(TRTypography.captionSmall())
+            .foregroundStyle(TRColors.labelTertiary)
+            .padding(.top, TRSpacing.s)
     }
 }
 
@@ -214,9 +404,35 @@ private struct StationDetailPreviewHost: View {
             """.utf8
         )
         let station = (try? JSONDecoder().decode(StationDetailPreviewEnvelope.self, from: json).stations.first)!
+        let detailFetcher = StationDetailPreviewDetailFetcher(previewStationID: station.id)
         return NavigationStack {
             StationDetailView(station: station, preferredFuel: .e10)
         }
         .environment(\.dynamicTypeSize, dynamicType)
+        .environment(\.stationDetailFetcher, detailFetcher)
+    }
+}
+
+private struct StationDetailPreviewDetailFetcher: StationDetailFetching {
+    let previewStationID: UUID
+
+    func fetchStationDetail(id: UUID) async throws -> Station {
+        guard id == previewStationID else {
+            struct PreviewMismatch: Error {}
+            throw PreviewMismatch()
+        }
+        let detailJSON = Data(
+            """
+            {"id":"474e5046-deaf-4f9b-9a32-9797b778f047","name":"TOTAL BERLIN",
+            "brand":"TOTAL","street":"MARGARETE-SOMMER-STR.","place":"BERLIN","lat":52.53083,
+            "lng":13.440946,"dist":1.12,"diesel":1.109,"e5":1.339,"e10":1.319,"isOpen":true,
+            "houseNumber":"2","postCode":10407,"wholeDay":false,
+            "openingTimes":[
+              {"text":"Mo-Fr","start":"06:00:00","end":"22:30:00"},
+              {"text":"Samstag","start":"07:00:00","end":"22:00:00"}
+            ]}
+            """.utf8
+        )
+        return try JSONDecoder().decode(Station.self, from: detailJSON)
     }
 }
