@@ -48,6 +48,7 @@ Diese Datei ist die **zentrale Einstiegs-Spezifikation** im Repo: Kurzfassung vo
 | Betrieb, Keys, StoreKit, AXe | [README.md](../README.md) |
 | Agent-/Team-Workflow, Backlog-Reihenfolge, Kurzfakten | [AGENTS.md](../AGENTS.md) |
 | Siri & Kurzbefehle QA | [docs/SiriShortcutsQA.md](SiriShortcutsQA.md) |
+| WidgetKit MVP | [docs/WIDGETS.md](WIDGETS.md) |
 | App Store Connect Upload | [docs/AppStoreConnectUpload.md](AppStoreConnectUpload.md) |
 | Light/Dark & Linear-Tickets | [docs/LightDarkModeLinearTickets.md](LightDarkModeLinearTickets.md) |
 | Tankerkönig API | [`.cursor/skills/tankerkoenig-api/SKILL.md`](../.cursor/skills/tankerkoenig-api/SKILL.md) |

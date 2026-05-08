@@ -1,0 +1,17 @@
+{
+  "name": "FuelNow",
+  "short_name": "FuelNow",
+  "description": "Spritpreise vergleichen und die passende Tankstelle direkt finden.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#06131f",
+  "theme_color": "#06131f",
+  "icons": [
+    {
+      "src": "/fuelnow-favicon.svg?v=1",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

@@ -19,6 +19,7 @@ final class FuelNowCarPlaySceneDelegate: UIResponder, CPTemplateApplicationScene
     private var lastPlusUISnapshot: PlusUISnapshot?
     private var didStartEntitlementObservation = false
     private var didStartStationObservation = false
+    private var runtimeBootstrapTask: Task<Void, Never>?
 
     func templateApplicationScene(
         _ templateApplicationScene: CPTemplateApplicationScene,
@@ -35,6 +36,7 @@ final class FuelNowCarPlaySceneDelegate: UIResponder, CPTemplateApplicationScene
             reconcileCarPlayUI(animated: false)
             armEntitlementObservation()
             armStationObservationIfPossible()
+            bootstrapRuntimeDependenciesIfNeeded()
         }
     }
 
@@ -98,7 +100,18 @@ final class FuelNowCarPlaySceneDelegate: UIResponder, CPTemplateApplicationScene
 
     @MainActor
     private func updatePlusRootIfNeeded(interfaceController: CPInterfaceController, animated: Bool) {
-        let store = FuelNowRuntimeRegistry.stationStore ?? StationStoreFactory.makeDefault()
+        guard let store = FuelNowRuntimeRegistry.stationStore else {
+            let snapshot = PlusUISnapshot(kind: .waitingForStore)
+            guard snapshot != lastPlusUISnapshot else { return }
+            lastPlusUISnapshot = snapshot
+            interfaceController.setRootTemplate(
+                makePlusRootTemplate(store: nil, snapshot: snapshot),
+                animated: animated,
+                completion: nil
+            )
+            return
+        }
+
         let snapshot = PlusUISnapshot(store: store)
         guard snapshot != lastPlusUISnapshot else { return }
         lastPlusUISnapshot = snapshot
@@ -124,71 +137,64 @@ final class FuelNowCarPlaySceneDelegate: UIResponder, CPTemplateApplicationScene
                     detail: nil
                 ),
             ],
-            actions: []
+            actions: [openOnIPhoneAction()]
         )
     }
 
     @MainActor
-    private func makePlusRootTemplate(store: StationStore, snapshot: PlusUISnapshot) -> CPTemplate {
+    private func makePlusRootTemplate(store: StationStore?, snapshot: PlusUISnapshot) -> CPTemplate {
         switch snapshot.kind {
-        case .loadingWithoutStations:
-            return CPInformationTemplate(
+        case .waitingForStore, .loadingWithoutStations:
+            return makeSimpleInfoTemplate(
                 title: String(localized: "carplay.plus.loading.title"),
-                layout: .leading,
-                items: [
-                    CPInformationItem(
-                        title: String(localized: "carplay.plus.loading.body"),
-                        detail: nil
-                    ),
-                ],
-                actions: []
+                body: String(localized: "carplay.plus.loading.body")
             )
         case .idleWithoutStations:
-            return CPInformationTemplate(
+            return makeSimpleInfoTemplate(
                 title: String(localized: "carplay.plus.idle.title"),
-                layout: .leading,
-                items: [
-                    CPInformationItem(
-                        title: String(localized: "carplay.plus.idle.body"),
-                        detail: nil
-                    ),
-                ],
-                actions: []
+                body: String(localized: "carplay.plus.idle.body")
             )
         case .loadedEmpty:
-            return CPInformationTemplate(
+            return makeSimpleInfoTemplate(
                 title: String(localized: "carplay.plus.empty.title"),
-                layout: .leading,
-                items: [
-                    CPInformationItem(
-                        title: String(localized: "carplay.plus.empty.body"),
-                        detail: nil
-                    ),
-                ],
-                actions: []
+                body: String(localized: "carplay.plus.empty.body")
             )
-        case let .failed(message):
-            return CPInformationTemplate(
+        case let .failed(errorKind):
+            return makeSimpleInfoTemplate(
                 title: String(localized: "carplay.plus.error.title"),
-                layout: .leading,
-                items: [
-                    CPInformationItem(
-                        title: message,
-                        detail: nil
-                    ),
-                ],
-                actions: []
+                body: localizedCarPlayErrorBody(for: errorKind)
             )
         case .stations:
-            let fuel = AppSettings.preferredFuelFromStorage()
-            let stations = store.stations
-            let rows = StationCarPlayPOIMapper.buildRows(stations: stations, preferredFuel: fuel)
-            let byID = Dictionary(uniqueKeysWithValues: stations.map { ($0.id, $0) })
-            let points = StationCarPlayPOIMapper.makePointsOfInterest(rows: rows, stationsByID: byID)
-            let poiTemplate = StationCarPlayPOIMapper.makePointsTemplate(points: points, delegate: self)
-            let listTemplate = StationCarPlayPOIMapper.makeNearbyListTemplate(stations: stations, preferredFuel: fuel)
-            return CPTabBarTemplate(templates: [poiTemplate, listTemplate])
+            guard let store else {
+                return makeSimpleInfoTemplate(
+                    title: String(localized: "carplay.plus.loading.title"),
+                    body: String(localized: "carplay.plus.loading.body")
+                )
+            }
+            return makeStationsTabBar(store: store)
         }
+    }
+
+    @MainActor
+    private func makeSimpleInfoTemplate(title: String, body: String) -> CPInformationTemplate {
+        CPInformationTemplate(
+            title: title,
+            layout: .leading,
+            items: [CPInformationItem(title: body, detail: nil)],
+            actions: makeInfoActions()
+        )
+    }
+
+    @MainActor
+    private func makeStationsTabBar(store: StationStore) -> CPTabBarTemplate {
+        let fuel = AppSettings.preferredFuelFromStorage()
+        let stations = store.stations
+        let rows = StationCarPlayPOIMapper.buildRows(stations: stations, preferredFuel: fuel)
+        let byID = Dictionary(uniqueKeysWithValues: stations.map { ($0.id, $0) })
+        let points = StationCarPlayPOIMapper.makePointsOfInterest(rows: rows, stationsByID: byID)
+        let poiTemplate = StationCarPlayPOIMapper.makePointsTemplate(points: points, delegate: self)
+        let listTemplate = StationCarPlayPOIMapper.makeNearbyListTemplate(rows: rows, stationsByID: byID)
+        return CPTabBarTemplate(templates: [poiTemplate, listTemplate])
     }
 
     @MainActor
@@ -197,27 +203,103 @@ final class FuelNowCarPlaySceneDelegate: UIResponder, CPTemplateApplicationScene
         guard let location = FuelNowRuntimeRegistry.locationService?.currentLocation else { return }
         store.handleLocationUpdate(location, radiusKm: AppSettings.SearchRadius.apiMaxKm, force: false)
     }
+
+    @MainActor
+    private func refreshStationsFromCarPlay() {
+        guard let store = FuelNowRuntimeRegistry.stationStore else { return }
+        guard let location = FuelNowRuntimeRegistry.locationService?.currentLocation else { return }
+        store.forceRefresh(
+            using: location,
+            radiusKm: AppSettings.SearchRadius.apiMaxKm,
+            trigger: .forcedUserLocation
+        )
+    }
+
+    @MainActor
+    private func makeInfoActions() -> [CPTextButton] {
+        [retryAction(), openOnIPhoneAction()]
+    }
+
+    @MainActor
+    private func retryAction() -> CPTextButton {
+        CPTextButton(title: String(localized: "carplay.plus.retry"), textStyle: .confirm) { [weak self] _ in
+            self?.refreshStationsFromCarPlay()
+        }
+    }
+
+    @MainActor
+    private func openOnIPhoneAction() -> CPTextButton {
+        CPTextButton(title: String(localized: "carplay.openOnIPhone"), textStyle: .normal) { _ in
+            // Hinweis-Aktion für den sicheren Handoff: Start/Unlock erfolgen bewusst auf dem iPhone.
+        }
+    }
+
+    private func localizedCarPlayErrorBody(for errorKind: PlusUISnapshot.CarPlayErrorKind) -> String {
+        switch errorKind {
+        case .connectivity:
+            String(localized: "carplay.plus.error.connectivity")
+        case .rateLimited:
+            String(localized: "carplay.plus.error.rateLimited")
+        case .generic:
+            String(localized: "carplay.plus.error.generic")
+        }
+    }
+
+    @MainActor
+    private func bootstrapRuntimeDependenciesIfNeeded() {
+        runtimeBootstrapTask?.cancel()
+        runtimeBootstrapTask = Task { @MainActor [weak self] in
+            guard let self else { return }
+
+            // CarPlay kann vor dem iPhone-Window connecten. Wir geben der Runtime kurz Zeit,
+            // StationStore/LocationService im Registry zu setzen, bevor wir den Plus-Pfad festlegen.
+            for _ in 0..<20 {
+                try? await Task.sleep(for: .milliseconds(250))
+                guard self.interfaceController != nil else { return }
+
+                let hasStore = FuelNowRuntimeRegistry.stationStore != nil
+                let hasLocation = FuelNowRuntimeRegistry.locationService?.currentLocation != nil
+                guard hasStore || hasLocation else { continue }
+
+                self.armStationObservationIfPossible()
+                self.primeStationFetchForCarPlay()
+                self.reconcileCarPlayUI(animated: true)
+                return
+            }
+        }
+    }
 }
 
 // MARK: - Plus UI Snapshot
 
 private struct PlusUISnapshot: Equatable {
+    enum CarPlayErrorKind: Equatable {
+        case connectivity
+        case rateLimited
+        case generic
+    }
+
     enum Kind: Equatable {
+        case waitingForStore
         case loadingWithoutStations
         case idleWithoutStations
         case loadedEmpty
-        case failed(String)
+        case failed(CarPlayErrorKind)
         case stations([UUID])
     }
 
     let kind: Kind
 
+    init(kind: Kind) {
+        self.kind = kind
+    }
+
     @MainActor
     init(store: StationStore) {
         switch store.loadState {
-        case let .failed(message):
+        case .failed:
             if store.stations.isEmpty {
-                kind = .failed(message)
+                kind = .failed(Self.mapErrorKind(from: store.lastError))
             } else {
                 kind = .stations(store.stations.map(\.id))
             }
@@ -234,6 +316,37 @@ private struct PlusUISnapshot: Equatable {
         case .loaded:
             kind = .stations(store.stations.map(\.id))
         }
+    }
+
+    private static func mapErrorKind(from error: Error?) -> CarPlayErrorKind {
+        if let urlError = error as? URLError {
+            switch urlError.code {
+            case .notConnectedToInternet,
+                 .timedOut,
+                 .networkConnectionLost,
+                 .cannotFindHost,
+                 .cannotConnectToHost,
+                 .dnsLookupFailed:
+                return .connectivity
+            default:
+                break
+            }
+        }
+
+        if let tankerkoenigFailure = error as? TankerkoenigClient.Failure {
+            switch tankerkoenigFailure {
+            case .rateLimited:
+                return .rateLimited
+            case let .http(statusCode) where statusCode == 429:
+                return .rateLimited
+            case let .network(urlError):
+                return mapErrorKind(from: urlError)
+            default:
+                break
+            }
+        }
+
+        return .generic
     }
 }
 
@@ -256,6 +369,8 @@ extension FuelNowCarPlaySceneDelegate {
         _ templateApplicationScene: CPTemplateApplicationScene,
         didDisconnect interfaceController: CPInterfaceController
     ) {
+        runtimeBootstrapTask?.cancel()
+        runtimeBootstrapTask = nil
         self.interfaceController = nil
         entitlementProvider = nil
         lastRoutingPath = nil

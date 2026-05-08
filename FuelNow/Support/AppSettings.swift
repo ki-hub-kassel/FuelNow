@@ -2,6 +2,9 @@ import Foundation
 
 /// Gemeinsame `@AppStorage`-Schlüssel und Regeln für Karte + Einstellungen (**TAN-19**).
 enum AppSettings {
+    /// App Group für gemeinsam genutzte Daten zwischen App und Widget.
+    static let widgetAppGroupIdentifier = "group.com.vibecoding.fuelnow"
+
     enum UserDefaultsKey {
         static let preferredFuelType = "tr.preferredFuelType"
         /// Veraltet seit TAN-79: Suchradius wurde aus den Settings entfernt und ist

@@ -152,7 +152,7 @@ enum StationOpeningHoursPresenter: Sendable {
         var best: Date?
         for slot in slots {
             let mask = weekdayMask(from: slot.text)
-            guard !mask.intersection(todayBit).isEmpty else { continue }
+            guard !mask.isDisjoint(with: todayBit) else { continue }
 
             guard let start = clockTimeOnSameDay(clock: slot.start, reference: now, calendar: calendar),
                   let endClock = clockTimeOnSameDay(clock: slot.end, reference: now, calendar: calendar)

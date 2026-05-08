@@ -1,70 +1,185 @@
-import type { CSSProperties } from 'react'
-import { CTASection } from './sections/CTASection'
-import { FeatureShowcaseSection } from './sections/FeatureShowcaseSection'
-import { HeroSection } from './sections/HeroSection'
-import { ProofSection } from './sections/ProofSection'
-import { ValueSection } from './sections/ValueSection'
-import { tokens } from './theme/tokens'
+import { useEffect } from 'react'
+
+const keyBenefits = [
+  {
+    title: 'Live in deiner Nähe',
+    text: 'Tankstellen inklusive Preise direkt auf der Karte.',
+  },
+  {
+    title: 'Schneller zur günstigsten Station',
+    text: 'Detailansicht und Apple-Maps-Navigation in einem Schritt.',
+  },
+  {
+    title: 'Stabil bei schlechtem Netz',
+    text: 'Offline-Hinweis mit automatischem Wiederanlauf.',
+  },
+]
+
+const releaseChecklist = [
+  'Klarer Nutzen + Feature-Highlights für Store und Landing Page',
+  'Datenschutz-/Support-Infos direkt erreichbar',
+  'App-Store-Call-to-Action inkl. Preview-Screens',
+  'Technische SEO-Basis: Meta, OpenGraph, robots, sitemap, schema.org',
+]
+
+const faqItems = [
+  {
+    question: 'Welche Daten zeigt FuelNow?',
+    answer: 'Aktuelle Kraftstoffpreise, Öffnungsstatus und Distanz zur Station.',
+  },
+  {
+    question: 'Funktioniert die App nur in Deutschland?',
+    answer: 'Aktuell ist FuelNow auf den deutschen Markt und Tankerkönig-Daten ausgelegt.',
+  },
+  {
+    question: 'Wie starte ich die Navigation?',
+    answer: 'In der Stations-Detailansicht tippen und direkt in Apple Maps starten.',
+  },
+]
 
 function App() {
-  const style = {
-    '--bg-primary': tokens.color.pageBg,
-    '--bg-surface': tokens.color.surfacePrimary,
-    '--bg-surface-alt': tokens.color.surfaceSecondary,
-    '--text-primary': tokens.color.textPrimary,
-    '--text-secondary': tokens.color.textSecondary,
-    '--text-tertiary': tokens.color.textTertiary,
-    '--accent-brand': tokens.color.accentBrand,
-    '--accent-text': tokens.color.accentText,
-    '--accent-warm': tokens.color.accentWarm,
-    '--accent-warm-strong': tokens.color.accentWarmStrong,
-    '--accent-deep': tokens.color.accentDeep,
-    '--separator': tokens.color.separator,
-    '--warning': tokens.color.warning,
-    '--space-1': `${tokens.spacing.xs}px`,
-    '--space-2': `${tokens.spacing.s}px`,
-    '--space-3': `${tokens.spacing.m}px`,
-    '--space-4': `${tokens.spacing.l}px`,
-    '--space-5': `${tokens.spacing.xl}px`,
-    '--space-6': `${tokens.spacing.xxl}px`,
-    '--section-space': `${tokens.spacing.section}px`,
-    '--hero-space': `${tokens.spacing.hero}px`,
-    '--radius-0': `${tokens.radius.none}px`,
-    '--radius-soft': `${tokens.radius.soft}px`,
-    '--shadow-hover': tokens.shadow.hover,
-    '--shadow-elevated': tokens.shadow.elevated,
-    '--transition-smooth': tokens.motion.smooth,
-    '--container-max': `${tokens.container.maxWidth}px`,
-  } as CSSProperties
+  useEffect(() => {
+    document.title = 'FuelNow - Spritpreise App mit Live-Karte'
+  }, [])
 
   return (
-    <div className="pageShell" style={style}>
-      <a className="skipLink" href="#main-content">
-        Skip to content
+    <div className="siteRoot">
+      <a className="skipLink" href="#content">
+        Zum Inhalt springen
       </a>
-      <div className="atmosphere" aria-hidden="true">
-        <span className="orb orbOne" />
-        <span className="orb orbTwo" />
-        <span className="orb orbThree" />
-        <span className="gridVeil" />
-      </div>
-      <header className="topNav">
-        <a className="brandMark" href="#home" aria-label="FuelNow Home">
+
+      <header className="siteHeader">
+        <a className="brand" href="#top" aria-label="FuelNow Startseite">
           FuelNow
         </a>
-        <nav className="menuLinks" aria-label="Primary">
+        <nav className="siteNav" aria-label="Hauptnavigation">
           <a href="#features">Features</a>
-          <a href="#why">Warum FuelNow</a>
-          <a href="#cta">Starten</a>
+          <a href="#release">Release</a>
+          <a href="#faq">FAQ</a>
         </nav>
       </header>
 
-      <main id="main-content">
-        <HeroSection />
-        <ProofSection />
-        <FeatureShowcaseSection />
-        <ValueSection />
-        <CTASection />
+      <main id="content">
+        <section id="top" className="section hero">
+          <div className="container">
+            <p className="eyebrow">Spritpreise. Schnell gefunden.</p>
+            <h1>FuelNow zeigt dir die beste Tankstelle in deiner Nähe.</h1>
+            <p className="lead">
+              Ein klarer Flow für Endnutzer: Karte öffnen, Preis vergleichen, direkt
+              navigieren.
+            </p>
+            <div className="actions">
+              <a className="button buttonPrimary" href="#features">
+                Features ansehen
+              </a>
+              <a className="button buttonGhost" href="#release">
+                Release-Status
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <section id="features" className="section">
+          <div className="container">
+            <h2>Worauf Nutzer sofort achten</h2>
+            <div className="cardGrid">
+              {keyBenefits.map((item) => (
+                <article key={item.title} className="card">
+                  <h3>{item.title}</h3>
+                  <p>{item.text}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="section">
+          <div className="container">
+            <h2>App-Einblick</h2>
+            <div className="screenshotGrid">
+              <figure className="shotCard">
+                <img
+                  src="/appshots/map-view.png"
+                  alt="FuelNow Kartenansicht mit Preis-Pins"
+                  width={390}
+                  height={844}
+                  loading="eager"
+                  decoding="async"
+                />
+                <figcaption>Karte mit Live-Preisen</figcaption>
+              </figure>
+              <figure className="shotCard">
+                <img
+                  src="/appshots/station-detail.png"
+                  alt="FuelNow Stationsdetail mit Preisen und Navigation"
+                  width={390}
+                  height={844}
+                  loading="lazy"
+                  decoding="async"
+                />
+                <figcaption>Detailansicht mit Navigation</figcaption>
+              </figure>
+              <figure className="shotCard">
+                <img
+                  src="/appshots/area-search.png"
+                  alt="FuelNow Suche im aktuellen Kartengebiet"
+                  width={390}
+                  height={844}
+                  loading="lazy"
+                  decoding="async"
+                />
+                <figcaption>Gezielte Gebietssuche</figcaption>
+              </figure>
+            </div>
+          </div>
+        </section>
+
+        <section id="release" className="section">
+          <div className="container releaseBox">
+            <h2>Release-ready Seite</h2>
+            <ul>
+              {releaseChecklist.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+            <p className="smallInfo">
+              Kontakt: <a href="mailto:hello@fuelnow.app">hello@fuelnow.app</a> · Datenschutz:
+              {' '}
+              <a href="https://fuelnow.app/privacy" target="_blank" rel="noreferrer">
+                fuelnow.app/privacy
+              </a>
+            </p>
+          </div>
+        </section>
+
+        <section id="faq" className="section">
+          <div className="container">
+            <h2>FAQ</h2>
+            <div className="faqList">
+              {faqItems.map((item) => (
+                <details key={item.question}>
+                  <summary>{item.question}</summary>
+                  <p>{item.answer}</p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="section finalCta">
+          <div className="container">
+            <h2>FuelNow jetzt entdecken</h2>
+            <a
+              className="button buttonPrimary"
+              href="https://apps.apple.com/"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="FuelNow im App Store ansehen"
+            >
+              Im App Store ansehen
+            </a>
+          </div>
+        </section>
       </main>
     </div>
   )

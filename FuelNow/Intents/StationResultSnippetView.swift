@@ -1,68 +1,315 @@
 import AppIntents
-import MapKit
 import SwiftUI
 
-/// Siri-/Shortcuts-Ergebnis mit Karte, Preis (optional) und Aktionen (Apple Maps / FuelNow).
+/// Result-Snippet für Siri/Shortcuts (TAN-96): zweistufiges Layout im Stil des Apple
+/// WWDC25-Samples ([Design interactive snippets](https://developer.apple.com/videos/play/wwdc2025/281/))
+/// — dunkler Brand-Header mit Headline + Hero-Metrik, helle Detail-Sub-Card mit
+/// Stationsname/Adresse/Total-Row, Action-Footer mit zwei System-Buttons.
+///
+/// **Bewusst keine `Map`/`MKMapSnapshotter` und kein `glassEffect`**: SwiftUI
+/// `Map` rendert in der App-Intents-Sandbox nicht zuverlässig (Apple-Forum-Thread
+/// 711057, „Failed to serialize PlatformViewRepresentableAdaptor"); auch
+/// Liquid-Glass-Surfaces können in Snippets brüchig sein. Wir bleiben bewusst
+/// auf System-Surfaces (`RoundedRectangle` + `Color`) und System-Buttons
+/// (`.bordered` / `.borderedProminent`). Die Haupt-App nutzt weiter Liquid Glass.
 struct StationSearchResultSnippetView: View {
+    /// Welcher Intent das Snippet erzeugt — bestimmt Headline und Hero-Metrik.
+    enum Mode {
+        /// `FindNearestStationIntent`: Distanz wird Hero, Preis (falls vorhanden) wandert in die Sub-Card.
+        case nearest(preferredFuel: FuelType?)
+        /// `FindCheapestStationIntent`: Pumpstyle-Preis wird Hero, Distanz wandert in die Sub-Card.
+        case cheapest(fuel: FuelType)
+    }
+
     let station: Station
-    let fuel: FuelType?
+    let mode: Mode
     let distanceKm: Double
 
-    private var region: MKCoordinateRegion {
-        MKCoordinateRegion(
-            center: station.coordinate,
-            span: MKCoordinateSpan(latitudeDelta: 0.018, longitudeDelta: 0.018)
-        )
+    /// Brand-Header-Surface. `TRColors.accentText` flippt im Dark Mode auf hellen Teal
+    /// und scheidet als Surface aus — wir hardcoden den Light-Mode-Wert (`TRPaletteHex.accentText`)
+    /// als RGB, damit der Header in Light + Dark dunkel bleibt und der weiße Foreground AAA-Kontrast erfüllt.
+    private static let brandHeaderSurface = Color(red: 0.06, green: 0.34, blue: 0.31)
+
+    /// Marke wenn vorhanden, sonst voller Stationsname — analog `navigationBarBrandTitle` im
+    /// Detail-Sheet, damit Snippet und App dieselbe Heuristik nutzen.
+    private var brandTitle: String {
+        let trimmed = station.brand.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmed.isEmpty ? station.name : trimmed
+    }
+
+    private var statusLabel: String {
+        station.isOpen
+            ? String(localized: "station.status.open")
+            : String(localized: "station.status.closed")
+    }
+
+    private var statusColor: Color {
+        station.isOpen ? TRColors.success : TRColors.danger
+    }
+
+    private var distanceLabel: String {
+        StationDisplayFormatting.distanceString(kilometers: distanceKm)
+    }
+
+    private var sideCardPrice: Double? {
+        switch mode {
+        case .cheapest:
+            return nil
+        case let .nearest(preferredFuel):
+            guard let preferredFuel else { return nil }
+            return station.price(for: preferredFuel)
+        }
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: TRSpacing.s) {
-            Map(initialPosition: .region(region), interactionModes: []) {
-                Marker(station.name, coordinate: station.coordinate)
+        VStack(alignment: .leading, spacing: TRSpacing.m) {
+            brandHeader
+            detailCard
+            actionFooter
+        }
+        .padding(TRSpacing.l)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .containerShape(ContainerRelativeShape())
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel(combinedAccessibilityLabel)
+    }
+
+    // MARK: - Tier 1: Brand-Header
+
+    private var brandHeader: some View {
+        HStack(alignment: .top, spacing: TRSpacing.m) {
+            VStack(alignment: .leading, spacing: TRSpacing.xxs) {
+                Text(headerHeadline)
+                    .font(TRTypography.headline())
+                    .foregroundStyle(.white)
+                    .accessibilityAddTraits(.isHeader)
+
+                Text(headerSubtitle)
+                    .font(TRTypography.caption())
+                    .foregroundStyle(.white.opacity(0.75))
             }
-            .mapStyle(.standard)
-            .frame(height: 128)
-            .clipShape(RoundedRectangle(cornerRadius: TRRadius.md, style: .continuous))
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel(String(localized: "intent.snippet.mapAccessibility"))
+            .frame(maxWidth: .infinity, alignment: .leading)
 
-            Text(station.name)
-                .font(TRTypography.headline())
-                .foregroundStyle(TRColors.labelPrimary)
-
-            if let fuel {
-                HStack(alignment: .firstTextBaseline, spacing: TRSpacing.xs) {
-                    Text(fuel.displayName)
-                        .font(TRTypography.subheadline())
-                        .foregroundStyle(TRColors.labelSecondary)
-                    FuelPriceLabel(euros: station.price(for: fuel), prominence: .standard)
-                }
-                .accessibilityElement(children: .combine)
-            }
-
-            Text(String(format: String(localized: String.LocalizationValue("intent.snippet.distanceKm")), locale: .current, distanceKm))
-                .font(TRTypography.subheadline())
-                .foregroundStyle(TRColors.labelSecondary)
-
-            Text(station.fullAddress)
-                .font(TRTypography.caption())
-                .foregroundStyle(TRColors.labelTertiary)
-
-            Button(
-                intent: StartDrivingNavigationIntent(
-                    latitude: station.latitude,
-                    longitude: station.longitude,
-                    placeName: station.name
-                )
-            ) {
-                Text(LocalizedStringResource("intent.snippet.mapsNavigationButton"))
-            }
-
-            Button(intent: OpenStationIntent(station: StationEntity(station: station))) {
-                Text(LocalizedStringResource("intent.snippet.showInFuelNowButton"))
+            VStack(alignment: .trailing, spacing: TRSpacing.xxs) {
+                heroValue
+                Text(heroCaption)
+                    .font(TRTypography.captionSmall())
+                    .foregroundStyle(.white.opacity(0.75))
             }
         }
+        .padding(TRSpacing.l)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.vertical, TRSpacing.xxs)
+        .background(
+            RoundedRectangle(cornerRadius: TRRadius.lg, style: .continuous)
+                .fill(Self.brandHeaderSurface)
+        )
+    }
+
+    private var headerHeadline: String {
+        switch mode {
+        case let .cheapest(fuel):
+            let format = String(localized: "intent.snippet.cheapest.headline")
+            return String(format: format, locale: .current, fuel.displayName)
+        case .nearest:
+            return String(localized: "intent.snippet.nearest.headline")
+        }
+    }
+
+    private var headerSubtitle: String {
+        switch mode {
+        case .cheapest:
+            return String(localized: "intent.snippet.cheapest.headerSub")
+        case .nearest:
+            return statusLabel
+        }
+    }
+
+    @ViewBuilder
+    private var heroValue: some View {
+        switch mode {
+        case let .cheapest(fuel):
+            FuelPriceLabel(
+                euros: station.price(for: fuel),
+                prominence: .display,
+                foreground: .white
+            )
+        case .nearest:
+            Text(distanceLabel)
+                .font(TRTypography.title2())
+                .foregroundStyle(.white)
+        }
+    }
+
+    private var heroCaption: String {
+        switch mode {
+        case .cheapest:
+            String(localized: "intent.snippet.heroPriceCaption")
+        case .nearest:
+            String(localized: "intent.snippet.heroDistanceCaption")
+        }
+    }
+
+    // MARK: - Tier 2: Detail-Sub-Card
+
+    private var detailCard: some View {
+        HStack(alignment: .top, spacing: TRSpacing.s) {
+            Image(systemName: "fuelpump.fill")
+                .font(.title3.weight(.semibold))
+                .foregroundStyle(TRColors.accent)
+                .accessibilityHidden(true)
+
+            VStack(alignment: .leading, spacing: TRSpacing.xs) {
+                Text(brandTitle)
+                    .font(TRTypography.bodyBold())
+                    .foregroundStyle(TRColors.labelPrimary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.85)
+
+                if !station.fullAddress.isEmpty {
+                    Text(station.fullAddress)
+                        .font(TRTypography.caption())
+                        .foregroundStyle(TRColors.labelTertiary)
+                        .lineLimit(2)
+                }
+
+                Divider()
+                    .padding(.vertical, TRSpacing.xxs)
+
+                detailTotalRow
+            }
+        }
+        .padding(TRSpacing.m)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+            RoundedRectangle(cornerRadius: TRRadius.lg, style: .continuous)
+                .fill(TRColors.backgroundTertiary)
+        )
+    }
+
+    private var detailTotalRow: some View {
+        HStack(alignment: .firstTextBaseline, spacing: TRSpacing.s) {
+            switch mode {
+            case .cheapest:
+                statusBadge
+                Spacer(minLength: TRSpacing.xs)
+                HStack(spacing: TRSpacing.xxs) {
+                    Image(systemName: "location.fill")
+                        .font(TRTypography.subheadline())
+                        .foregroundStyle(TRColors.labelSecondary)
+                        .accessibilityHidden(true)
+                    Text(distanceLabel)
+                        .font(TRTypography.subheadline())
+                        .foregroundStyle(TRColors.labelSecondary)
+                }
+            case let .nearest(preferredFuel):
+                if let preferredFuel {
+                    Text(preferredFuel.displayName)
+                        .font(TRTypography.subheadline())
+                        .foregroundStyle(TRColors.labelSecondary)
+                    Spacer(minLength: TRSpacing.xs)
+                    FuelPriceLabel(
+                        euros: sideCardPrice,
+                        prominence: .standard,
+                        foreground: TRColors.labelPrimary
+                    )
+                } else {
+                    statusBadge
+                    Spacer(minLength: TRSpacing.xs)
+                }
+            }
+        }
+    }
+
+    private var statusBadge: some View {
+        HStack(spacing: TRSpacing.xs) {
+            Circle()
+                .fill(statusColor)
+                .frame(width: 12, height: 12)
+                .overlay(
+                    Circle()
+                        .strokeBorder(TRColors.labelPrimary.opacity(0.12), lineWidth: 1)
+                )
+                .accessibilityHidden(true)
+            Text(statusLabel)
+                .font(TRTypography.subheadline())
+                .foregroundStyle(TRColors.labelSecondary)
+        }
+    }
+
+    // MARK: - Action-Footer
+
+    /// `fuelnow://station/<uuid>` — wird von `FuelNowApp.onOpenURL` über `FuelNowDeepLink.parse(_:)`
+    /// aufgelöst und ruft `MapDeepLinkStore.enqueueStationFocus(id:)` auf.
+    private var openInAppURL: URL {
+        URL(string: "fuelnow://station/\(station.id.uuidString)")
+            ?? URL(string: "fuelnow://map")!
+    }
+
+    /// Apple Maps Web-URL für Turn-by-Turn-Routing — wird vom System direkt in Apple Maps geöffnet.
+    /// Reference: [Apple Maps URL Scheme — Map Links](https://developer.apple.com/library/archive/featuredarticles/iPhoneURLScheme_Reference/MapLinks/MapLinks.html).
+    private var drivingDirectionsURL: URL {
+        var components = URLComponents(string: "https://maps.apple.com/")!
+        components.queryItems = [
+            URLQueryItem(name: "daddr", value: "\(station.latitude),\(station.longitude)"),
+            URLQueryItem(name: "dirflg", value: "d"),
+            URLQueryItem(name: "q", value: station.name),
+        ]
+        return components.url ?? URL(string: "https://maps.apple.com/")!
+    }
+
+    /// Wir nutzen `Link` statt `Button(intent:)`: Static-Snippets (`ShowsSnippetView`) rendern
+    /// `Button(intent:)` zwar als Knopf, das System triggert den Intent in der Siri-UI-Sandbox aber
+    /// nicht zuverlässig. URL-Links werden vom System dagegen über den Standard-`openURL`-Pfad
+    /// aufgelöst (FuelNow-Scheme bzw. Apple Maps Web-URL) und sind dort robust.
+    private var actionFooter: some View {
+        HStack(spacing: TRSpacing.s) {
+            Link(destination: openInAppURL) {
+                Label(
+                    String(localized: "intent.snippet.showInFuelNowButton"),
+                    systemImage: "fuelpump.fill"
+                )
+                .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.bordered)
+
+            Link(destination: drivingDirectionsURL) {
+                Label(
+                    String(localized: "intent.snippet.mapsNavigationButton"),
+                    systemImage: "location.north.line.fill"
+                )
+                .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.borderedProminent)
+            .tint(TRColors.accent)
+        }
+    }
+
+    // MARK: - Accessibility
+
+    private var combinedAccessibilityLabel: String {
+        var parts: [String] = []
+        switch mode {
+        case let .cheapest(fuel):
+            parts.append(String(
+                format: String(localized: "intent.snippet.cheapest.headline"),
+                locale: .current,
+                fuel.displayName
+            ))
+            let voicePrice = FuelPriceFormatting.voiceOverString(euros: station.price(for: fuel))
+            parts.append(voicePrice)
+        case let .nearest(preferredFuel):
+            parts.append(String(localized: "intent.snippet.nearest.headline"))
+            if let preferredFuel {
+                let voicePrice = FuelPriceFormatting.voiceOverString(
+                    euros: station.price(for: preferredFuel)
+                )
+                parts.append("\(preferredFuel.displayName), \(voicePrice)")
+            }
+        }
+        parts.append(station.name)
+        parts.append(statusLabel)
+        let format = String(localized: "intent.snippet.distanceVoice")
+        parts.append(String(format: format, locale: .current, distanceKm))
+        return parts.joined(separator: ", ")
     }
 }

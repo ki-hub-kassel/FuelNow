@@ -1,5 +1,6 @@
 import SwiftUI
 import WhatsNewKit
+import WidgetKit
 
 @main
 struct FuelNowApp: App {
@@ -8,6 +9,7 @@ struct FuelNowApp: App {
     @State private var stationStore = StationStoreFactory.makeDefault()
     @State private var entitlementManager = EntitlementManager()
     @State private var networkMonitor = NetworkMonitor()
+    @State private var widgetSnapshotStore = WidgetSnapshotStore()
     @AppStorage(AppSettings.UserDefaultsKey.appearancePreference)
     private var appearanceRaw = AppSettings.AppearancePreference.system.rawValue
 
@@ -63,9 +65,23 @@ struct FuelNowApp: App {
                     FuelNowRuntimeRegistry.stationStore = stationStore
                     FuelNowRuntimeRegistry.locationService = locationService
                     networkMonitor.start()
+                    syncWidgetSnapshot()
                     Task {
                         await StationIntentResolution.shared.setResolver(StationStoreIntentResolver())
                     }
+                }
+                .onChange(of: stationStore.stations) { _, _ in
+                    syncWidgetSnapshot()
+                }
+                .onChange(of: stationStore.loadState) { _, _ in
+                    syncWidgetSnapshot()
+                }
+                .onReceive(NotificationCenter.default.publisher(for: UserDefaults.didChangeNotification)) { notification in
+                    // Only react to changes on the standard defaults. Without this guard, our own
+                    // write into the App-Group `sharedDefaults` re-fires the notification and we
+                    // recurse on the main thread until the UI freezes (black screen on launch).
+                    guard (notification.object as? UserDefaults) === UserDefaults.standard else { return }
+                    syncWidgetSnapshot()
                 }
                 .onOpenURL { url in
                     Task { @MainActor in
@@ -85,6 +101,23 @@ struct FuelNowApp: App {
                     #endif
                 }
         }
+    }
+
+    private func syncWidgetSnapshot() {
+        let sharedDefaults = WidgetSnapshotStore.sharedDefaults
+        if let preferredFuelRaw = UserDefaults.standard.string(forKey: AppSettings.UserDefaultsKey.preferredFuelType),
+           sharedDefaults.string(forKey: AppSettings.UserDefaultsKey.preferredFuelType) != preferredFuelRaw {
+            sharedDefaults.set(preferredFuelRaw, forKey: AppSettings.UserDefaultsKey.preferredFuelType)
+        }
+
+        let preferredFuel = AppSettings.preferredFuelFromStorage(defaults: sharedDefaults)
+        let snapshot = WidgetSnapshotBuilder.makeSnapshot(
+            stations: stationStore.stations,
+            preferredFuel: preferredFuel,
+            loadState: stationStore.loadState
+        )
+        widgetSnapshotStore.write(snapshot)
+        WidgetCenter.shared.reloadAllTimelines()
     }
 }
 
