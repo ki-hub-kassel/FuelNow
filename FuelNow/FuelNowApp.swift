@@ -63,6 +63,9 @@ struct FuelNowApp: App {
                     FuelNowRuntimeRegistry.stationStore = stationStore
                     FuelNowRuntimeRegistry.locationService = locationService
                     networkMonitor.start()
+                    Task {
+                        await StationIntentResolution.shared.setResolver(StationStoreIntentResolver())
+                    }
                 }
                 .onOpenURL { url in
                     Task { @MainActor in

@@ -406,6 +406,391 @@
         }
       }
     },
+    "fuelType.display.diesel" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diesel"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diesel"
+          }
+        }
+      }
+    },
+    "fuelType.display.e10" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Super E10"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Super E10"
+          }
+        }
+      }
+    },
+    "fuelType.display.e5" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Super E5"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Super E5"
+          }
+        }
+      }
+    },
+    "intent.error.bannerTitle" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FuelNow"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FuelNow"
+          }
+        }
+      }
+    },
+    "intent.error.locationDenied" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FuelNow hat keinen Zugriff auf den Standort. Bitte Ortung in den iOS-Einstellungen erlauben."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FuelNow does not have location access. Please allow location in iOS Settings."
+          }
+        }
+      }
+    },
+    "intent.error.noPriceForFuel" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kein Preis für %@ verfügbar."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No price available for %@."
+          }
+        }
+      }
+    },
+    "intent.error.noStationsInRadius" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Tankstelle im 25-km-Umkreis gefunden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No station found within 25 km."
+          }
+        }
+      }
+    },
+    "intent.error.noStationWithPrice" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Tankstelle mit Preis für diese Sorte im 25-km-Umkreis."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No station with a price for this fuel type within 25 km."
+          }
+        }
+      }
+    },
+    "intent.findCheapest.description" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sucht die günstigste Tankstelle in deiner Nähe für eine Kraftstoffsorte (25-km-Umkreis). Ohne Auswahl nutzt FuelNow deine Standard-Spritart."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finds the cheapest station near you for a fuel type (25 km radius). If you do not choose a type, FuelNow uses your default fuel."
+          }
+        }
+      }
+    },
+    "intent.findCheapest.dialog.success" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die günstigste Tankstelle für %1$@ ist %2$@ für %3$@."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The cheapest station for %1$@ is %2$@ at %3$@."
+          }
+        }
+      }
+    },
+    "intent.findCheapest.parameter.fuel" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kraftstoff"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fuel"
+          }
+        }
+      }
+    },
+    "intent.findCheapest.title" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Günstigste Tankstelle"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cheapest station"
+          }
+        }
+      }
+    },
+    "intent.findNearest.description" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sucht die nächste Tankstelle in deinem 25-km-Umkreis."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finds the nearest station within 25 km."
+          }
+        }
+      }
+    },
+    "intent.findNearest.dialog.success" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die nächste Tankstelle ist %@."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The nearest station is %@."
+          }
+        }
+      }
+    },
+    "intent.findNearest.title" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nächste Tankstelle"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nearest station"
+          }
+        }
+      }
+    },
+    "intent.snippet.distanceKm" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%.1f km"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%.1f km"
+          }
+        }
+      }
+    },
+    "intent.snippet.mapAccessibility" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Karte mit Tankstellenstandort"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Map showing station location"
+          }
+        }
+      }
+    },
+    "intent.snippet.mapsNavigationButton" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navigation in Apple Maps"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Directions in Apple Maps"
+          }
+        }
+      }
+    },
+    "intent.snippet.showInFuelNowButton" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In FuelNow anzeigen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show in FuelNow"
+          }
+        }
+      }
+    },
+    "intent.startDrivingNavigation.description" : {
+      "comment" : "Internal App Intent; not offered in Shortcuts library (isDiscoverable false).",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Startet die Autoroute in Apple Maps zum angegebenen Ort."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starts driving directions in Apple Maps to the given location."
+          }
+        }
+      }
+    },
+    "intent.startDrivingNavigation.parameter.latitude" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Breitengrad"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Latitude"
+          }
+        }
+      }
+    },
+    "intent.startDrivingNavigation.parameter.longitude" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Längengrad"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Longitude"
+          }
+        }
+      }
+    },
+    "intent.startDrivingNavigation.parameter.placeName" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name"
+          }
+        }
+      }
+    },
+    "intent.startDrivingNavigation.title" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Route in Apple Maps"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Maps directions"
+          }
+        }
+      }
+    },
     "iOS-Einstellungen öffnen" : {
       "comment" : "A button that opens the iOS settings app.",
       "isCommentAutoGenerated" : true

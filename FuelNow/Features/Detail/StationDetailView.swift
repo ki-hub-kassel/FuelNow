@@ -1,5 +1,4 @@
 import CoreLocation
-import MapKit
 import SwiftUI
 
 private enum StationDetailFetchPhase: Equatable {
@@ -271,17 +270,10 @@ struct StationDetailView: View {
     }
 
     private func startAppleMapsDrivingNavigation() {
-        let destinationLocation = CLLocation(
-            latitude: resolvedStation.latitude,
-            longitude: resolvedStation.longitude
-        )
-        let destination = MKMapItem(location: destinationLocation, address: nil)
-        destination.name = resolvedStation.name
-
-        let current = MKMapItem.forCurrentLocation()
-        MKMapItem.openMaps(
-            with: [current, destination],
-            launchOptions: [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving]
+        AppleMapsDrivingNavigation.openDrivingDirections(
+            toLatitude: resolvedStation.latitude,
+            longitude: resolvedStation.longitude,
+            placeName: resolvedStation.name
         )
     }
 }
