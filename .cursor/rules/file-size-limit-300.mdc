@@ -1,0 +1,50 @@
+---
+description: Quellcode-Dateien dürfen 300 Zeilen nicht überschreiten
+alwaysApply: true
+---
+
+# Datei-Limit: max. 300 Zeilen
+
+Quellcode-Dateien im Repo (TypeScript, Swift, CSS, Shell-Skripte etc.) sollen
+**≤ 300 Zeilen** pro Datei haben. Das hält Module fokussiert, reviewbar und
+testbar — und verhindert „God-Files".
+
+## Regeln
+
+- **Hartes Limit:** 300 Zeilen inkl. Imports/Whitespace/Kommentaren.
+- **Vor dem Hinzufügen** neuer Logik: erst prüfen, ob die Datei schon nahe am
+  Limit ist. Wenn ja: **vorher splitten**, dann erweitern.
+- **Wie splitten:**
+  - Sub-Komponenten / Sub-Views in eigene Datei (`Hero.tsx` → `Hero.tsx` +
+    `HeroVisual.tsx` + `HeroProof.tsx`).
+  - Typen/Models in `*.types.ts` bzw. eigene Swift-Datei.
+  - Helper/Formatter in `*.utils.ts` oder `Utilities/*.swift` neben dem Konsumenten.
+  - Lange CSS-Blöcke in pro-Section-Stylesheets, per `@import` zusammengeführt.
+- **Kein Workaround per Suppress-Kommentar.** Wenn das Limit unrealistisch
+  scheint (z. B. generierter Code, Strings-Bundle), die Datei explizit hier
+  in den Ausnahmen begründen statt das Limit aufzuweichen.
+
+## Beispiel
+
+```text
+✅ marketing-site/src/sections/HeroSection.tsx       (180 Zeilen, fokussiert)
+✅ marketing-site/src/sections/HeroSection.types.ts  (40 Zeilen, nur Typen)
+✅ FuelNow/Map/MapScreen.swift                       (220 Zeilen)
+✅ FuelNow/Map/MapClusterBuilder.swift               (140 Zeilen, ausgelagert)
+
+❌ FuelNow/Map/MapScreen.swift                       (640 Zeilen, gemischte Concerns)
+❌ marketing-site/src/theme/global.css               (1100 Zeilen)
+```
+
+## Ausnahmen (dokumentiert)
+
+- **Generierte Dateien** (Xcode-`*.pbxproj`, Build-Artefakte, generierte SDK-Clients,
+  Dist-Bundles) — nicht relevant, nicht splitten.
+- **Lokalisierungs-Bundles** (`*.xcstrings`, `messages.json`) — Inhalt ist
+  Datenmenge, kein Code; vom Limit ausgenommen.
+- **`Info.plist` / `package-lock.json` / `*.yaml` mit großen Listen** — vom Limit
+  ausgenommen.
+- **Test-Fixtures** (z. B. eingebettete JSON-Snapshots in Swift): wenn nötig
+  in `*.fixture.ts` / `*Fixtures.swift` auslagern, **bevor** geinlinet wird.
+
+Wenn eine echte Code-Datei das Limit reißt: **erst splitten**, dann committen.
