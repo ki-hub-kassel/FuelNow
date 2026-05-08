@@ -76,7 +76,11 @@ struct FuelNowApp: App {
                 .onChange(of: stationStore.loadState) { _, _ in
                     syncWidgetSnapshot()
                 }
-                .onReceive(NotificationCenter.default.publisher(for: UserDefaults.didChangeNotification)) { _ in
+                .onReceive(NotificationCenter.default.publisher(for: UserDefaults.didChangeNotification)) { notification in
+                    // Only react to changes on the standard defaults. Without this guard, our own
+                    // write into the App-Group `sharedDefaults` re-fires the notification and we
+                    // recurse on the main thread until the UI freezes (black screen on launch).
+                    guard (notification.object as? UserDefaults) === UserDefaults.standard else { return }
                     syncWidgetSnapshot()
                 }
                 .onOpenURL { url in
@@ -101,7 +105,8 @@ struct FuelNowApp: App {
 
     private func syncWidgetSnapshot() {
         let sharedDefaults = WidgetSnapshotStore.sharedDefaults
-        if let preferredFuelRaw = UserDefaults.standard.string(forKey: AppSettings.UserDefaultsKey.preferredFuelType) {
+        if let preferredFuelRaw = UserDefaults.standard.string(forKey: AppSettings.UserDefaultsKey.preferredFuelType),
+           sharedDefaults.string(forKey: AppSettings.UserDefaultsKey.preferredFuelType) != preferredFuelRaw {
             sharedDefaults.set(preferredFuelRaw, forKey: AppSettings.UserDefaultsKey.preferredFuelType)
         }
 
