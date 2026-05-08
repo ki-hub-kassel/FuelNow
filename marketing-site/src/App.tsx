@@ -1,5 +1,10 @@
 import type { CSSProperties } from 'react'
+import { useEffect } from 'react'
+import { motion, useReducedMotion } from 'framer-motion'
+import { AmbientField } from './components/AmbientField'
+import { ScrollProgress } from './components/ScrollProgress'
 import { CTASection } from './sections/CTASection'
+import { FAQSection } from './sections/FAQSection'
 import { FeatureShowcaseSection } from './sections/FeatureShowcaseSection'
 import { HeroSection } from './sections/HeroSection'
 import { ProofSection } from './sections/ProofSection'
@@ -7,6 +12,12 @@ import { ValueSection } from './sections/ValueSection'
 import { tokens } from './theme/tokens'
 
 function App() {
+  const prefersReducedMotion = useReducedMotion()
+
+  useEffect(() => {
+    document.title = 'FuelNow — Spritpreise live auf der Karte'
+  }, [])
+
   const style = {
     '--bg-primary': tokens.color.pageBg,
     '--bg-surface': tokens.color.surfacePrimary,
@@ -40,30 +51,38 @@ function App() {
   return (
     <div className="pageShell" style={style}>
       <a className="skipLink" href="#main-content">
-        Skip to content
+        Zum Inhalt springen
       </a>
-      <div className="atmosphere" aria-hidden="true">
-        <span className="orb orbOne" />
-        <span className="orb orbTwo" />
-        <span className="orb orbThree" />
-        <span className="gridVeil" />
-      </div>
-      <header className="topNav">
-        <a className="brandMark" href="#home" aria-label="FuelNow Home">
+
+      <ScrollProgress />
+      <AmbientField />
+
+      <motion.header
+        className="topNav"
+        initial={{ y: prefersReducedMotion ? 0 : -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <a className="brandMark" href="#home" aria-label="FuelNow Startseite">
+          <span className="brandMarkDot" aria-hidden="true" />
           FuelNow
         </a>
-        <nav className="menuLinks" aria-label="Primary">
+        <nav className="menuLinks" aria-label="Hauptnavigation">
           <a href="#features">Features</a>
           <a href="#why">Warum FuelNow</a>
-          <a href="#cta">Starten</a>
+          <a href="#faq">FAQ</a>
+          <a className="menuLinkCta" href="#cta">
+            App holen
+          </a>
         </nav>
-      </header>
+      </motion.header>
 
       <main id="main-content">
         <HeroSection />
         <ProofSection />
         <FeatureShowcaseSection />
         <ValueSection />
+        <FAQSection />
         <CTASection />
       </main>
     </div>

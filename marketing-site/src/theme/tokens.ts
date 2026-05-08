@@ -6,6 +6,8 @@ export type Feature = {
   bullets: string[]
   accent: string
   gradient: string
+  screenshot: string
+  alt: string
 }
 
 export const tokens = {
@@ -31,12 +33,12 @@ export const tokens = {
     l: 24,
     xl: 32,
     xxl: 40,
-    section: 52,
-    hero: 120,
+    section: 96,
+    hero: 96,
   },
   radius: {
     none: 0,
-    soft: 8.33,
+    soft: 14,
     full: 999,
   },
   shadow: {
@@ -47,45 +49,57 @@ export const tokens = {
     smooth: '360ms',
   },
   container: {
-    maxWidth: 1200,
+    maxWidth: 1240,
   },
 } as const
 
 export const productFeatures: Feature[] = [
   {
     id: 'map',
-    eyebrow: '01 Live Karte',
-    title: 'Preis-Pins auf der Karte',
-    description: 'Live-Daten mit Status direkt in der Kartenansicht.',
-    bullets: [],
+    eyebrow: '01 · Live-Karte',
+    title: 'Preise direkt am Pin',
+    description:
+      'Tankstellen mit aktuellem Preis, Status und Cluster-Logik je Zoomstufe — eine Karte, die den schnellsten Vergleich zeigt.',
+    bullets: ['Zoom-Cluster', 'Geöffnet/geschlossen', 'Schilder-Preisformat'],
     accent: '#48E0D2',
     gradient: 'linear-gradient(160deg, rgba(72,224,210,0.72), rgba(56,91,147,0.45))',
+    screenshot: '/appshots/map-view.png',
+    alt: 'FuelNow Kartenansicht mit Preis-Pins',
   },
   {
     id: 'search',
-    eyebrow: '02 Gebietssuche',
-    title: 'Search im Kartenausschnitt',
-    description: 'Neuer Kartenausschnitt, gezielter Abruf, klarer Fokus.',
-    bullets: [],
+    eyebrow: '02 · Gebietssuche',
+    title: '„In diesem Gebiet suchen“',
+    description:
+      'Karte verschoben? Ein Tap auf den Glas-Chip lädt Stationen für den neuen Ausschnitt — gezielt, ohne Auto-Refresh-Spam.',
+    bullets: ['Manueller Refresh', 'API-konform', 'Spar an Requests'],
     accent: '#7DE4D9',
     gradient: 'linear-gradient(160deg, rgba(125,228,217,0.78), rgba(56,91,147,0.42))',
+    screenshot: '/appshots/area-search.png',
+    alt: 'FuelNow Suche im aktuellen Kartengebiet',
   },
   {
     id: 'detail',
-    eyebrow: '03 Detailansicht',
+    eyebrow: '03 · Detailansicht',
     title: 'Detail mit Navigation',
-    description: 'Preise, Distanz und direkter Start in Apple Maps.',
-    bullets: [],
+    description:
+      'Marke, Status, Distanz, alle Sorten im Schilder-Format — und ein fixer Apple-Maps-Button für direkte Turn-by-turn-Navigation.',
+    bullets: ['Marke als Toolbar', 'Status-Punkt', 'Apple-Maps-Start'],
     accent: '#48E0D2',
     gradient: 'linear-gradient(160deg, rgba(56,91,147,0.84), rgba(72,224,210,0.46))',
+    screenshot: '/appshots/station-detail.png',
+    alt: 'FuelNow Stationsdetail mit Preisen und Navigation',
   },
   {
     id: 'settings',
-    eyebrow: '04 Einstellungen & Robustheit',
-    title: 'Settings & Offline-Handling',
-    description: 'FuelType-Auswahl und robuster Betrieb bei Netzproblemen.',
-    bullets: [],
+    eyebrow: '04 · Robust & persönlich',
+    title: 'FuelType & Offline-Modus',
+    description:
+      'Wähl deinen Standard-Sprit. Verbindung weg? Splash blendet sanft ein und löst beim ersten erfolgreichen Refresh wieder aus.',
+    bullets: ['FuelType-Auswahl', 'Offline-Splash', 'Auto-Recover'],
     accent: '#7DE4D9',
     gradient: 'linear-gradient(160deg, rgba(20,42,66,0.92), rgba(72,224,210,0.42))',
+    screenshot: '/appshots/settings-sheet.png',
+    alt: 'FuelNow Einstellungen mit FuelType-Auswahl',
   },
 ]
