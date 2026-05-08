@@ -1,0 +1,114 @@
+.legalPage {
+  padding-top: clamp(120px, 18vh, 200px);
+  padding-bottom: var(--section-space);
+  position: relative;
+  z-index: 1;
+}
+
+.legalContainer {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.legalTitle {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(40px, 6vw, 64px);
+  line-height: 1.05;
+  letter-spacing: -0.5px;
+  font-weight: 700;
+  margin: 12px 0 var(--space-4);
+  color: var(--text-primary);
+}
+
+.legalSection {
+  margin-top: var(--space-4);
+}
+
+.legalSection h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  margin: 0 0 12px;
+  color: var(--text-primary);
+}
+
+.legalSection h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  margin: 22px 0 8px;
+  color: var(--text-primary);
+}
+
+.legalSection p {
+  margin: 0 0 14px;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  font-size: 15.5px;
+}
+
+.legalSection p strong {
+  color: var(--text-primary);
+}
+
+.legalSection p em {
+  color: var(--text-tertiary);
+  font-style: normal;
+  font-size: 14px;
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: rgb(72 224 210 / 0.06);
+  border: 1px solid rgb(72 224 210 / 0.18);
+}
+
+.legalSection ul {
+  margin: 0 0 16px;
+  padding-left: 22px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  font-size: 15.5px;
+}
+
+.legalSection li {
+  margin-bottom: 6px;
+}
+
+.legalSection li::marker {
+  color: var(--accent-text);
+}
+
+.legalSection a {
+  color: var(--accent-text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgb(72 224 210 / 0.5);
+  transition: text-decoration-color var(--transition-smooth);
+}
+
+.legalSection a:hover {
+  text-decoration-color: var(--accent-text);
+}
+
+.legalUpdated {
+  margin-top: var(--space-5);
+  font-size: 13px;
+  color: var(--text-tertiary);
+  letter-spacing: 0.2px;
+}
+
+@media (max-width: 720px) {
+  .legalPage {
+    padding-top: clamp(96px, 14vh, 140px);
+  }
+
+  .legalSection h2 {
+    font-size: 20px;
+  }
+
+  .legalSection p,
+  .legalSection ul {
+    font-size: 15px;
+  }
+}

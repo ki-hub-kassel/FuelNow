@@ -2,21 +2,34 @@ import type { CSSProperties } from 'react'
 import { useEffect } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { AmbientField } from './components/AmbientField'
+import { Footer } from './components/Footer'
 import { ScrollProgress } from './components/ScrollProgress'
+import { useHashRoute } from './components/useHashRoute'
 import { CTASection } from './sections/CTASection'
+import { DatenschutzPage } from './sections/DatenschutzPage'
 import { FAQSection } from './sections/FAQSection'
 import { FeatureShowcaseSection } from './sections/FeatureShowcaseSection'
 import { HeroSection } from './sections/HeroSection'
+import { ImpressumPage } from './sections/ImpressumPage'
 import { ProofSection } from './sections/ProofSection'
-import { ValueSection } from './sections/ValueSection'
 import { tokens } from './theme/tokens'
+
+const TITLES: Record<'home' | 'impressum' | 'datenschutz', string> = {
+  home: 'FuelNow — Spritpreise live auf der Karte',
+  impressum: 'Impressum — FuelNow',
+  datenschutz: 'Datenschutz — FuelNow',
+}
 
 function App() {
   const prefersReducedMotion = useReducedMotion()
+  const route = useHashRoute()
 
   useEffect(() => {
-    document.title = 'FuelNow — Spritpreise live auf der Karte'
-  }, [])
+    document.title = TITLES[route]
+    if (route !== 'home') {
+      window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior })
+    }
+  }, [route])
 
   const style = {
     '--bg-primary': tokens.color.pageBg,
@@ -64,12 +77,18 @@ function App() {
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       >
         <a className="brandMark" href="#home" aria-label="FuelNow Startseite">
-          <span className="brandMarkDot" aria-hidden="true" />
+          <img
+            className="brandMarkLogo"
+            src="/fuelnow-logo.png"
+            alt=""
+            width="32"
+            height="32"
+            decoding="async"
+          />
           FuelNow
         </a>
         <nav className="menuLinks" aria-label="Hauptnavigation">
           <a href="#features">Features</a>
-          <a href="#why">Warum FuelNow</a>
           <a href="#faq">FAQ</a>
           <a className="menuLinkCta" href="#cta">
             App holen
@@ -78,13 +97,22 @@ function App() {
       </motion.header>
 
       <main id="main-content">
-        <HeroSection />
-        <ProofSection />
-        <FeatureShowcaseSection />
-        <ValueSection />
-        <FAQSection />
-        <CTASection />
+        {route === 'impressum' ? (
+          <ImpressumPage />
+        ) : route === 'datenschutz' ? (
+          <DatenschutzPage />
+        ) : (
+          <>
+            <HeroSection />
+            <ProofSection />
+            <FeatureShowcaseSection />
+            <FAQSection />
+            <CTASection />
+          </>
+        )}
       </main>
+
+      <Footer />
     </div>
   )
 }

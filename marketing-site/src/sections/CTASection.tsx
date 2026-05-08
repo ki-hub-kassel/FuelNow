@@ -1,3 +1,5 @@
+const APP_STORE_URL = 'https://apps.apple.com/de/app/id6766354442'
+
 export function CTASection() {
   return (
     <section id="cta" className="section ctaSection">
@@ -13,14 +15,21 @@ export function CTASection() {
           </a>
         </div>
         <a
-          className="appStoreButton"
-          href="https://apps.apple.com/"
+          className="appStoreBadgeLink"
+          href={APP_STORE_URL}
           target="_blank"
           rel="noreferrer"
-          aria-label="Open Apple App Store"
+          aria-label="FuelNow im App Store laden"
         >
-          <span aria-hidden="true"></span>
-          <span>Im App Store</span>
+          <img
+            className="appStoreBadgeImg"
+            src="/app-store-badge-de.svg"
+            alt="Laden im App Store"
+            width="180"
+            height="60"
+            loading="lazy"
+            decoding="async"
+          />
         </a>
       </div>
     </section>

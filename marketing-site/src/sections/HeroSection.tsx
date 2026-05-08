@@ -137,27 +137,9 @@ export function HeroSection() {
               <div className="heroPhoneScreen">
                 <MapPulse />
                 <PriceChip className="heroPriceChip" />
-                <motion.div
-                  className="heroLocateBadge"
-                  initial={{ opacity: 0, x: -8 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: 1.4, ease: 'easeOut' }}
-                >
-                  <span className="heroLocateDot" />
-                  Aktueller Standort
-                </motion.div>
               </div>
             </div>
           </PhoneTilt>
-          <motion.div
-            className="heroFloatStat"
-            initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 1.2, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <span className="heroFloatStatValue">−4,3 ¢</span>
-            <span className="heroFloatStatLabel">vs. Stadtmittel</span>
-          </motion.div>
         </motion.div>
 
         <motion.a

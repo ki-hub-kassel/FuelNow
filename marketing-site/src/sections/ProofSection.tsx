@@ -1,11 +1,18 @@
 import { motion, useReducedMotion } from 'framer-motion'
 import { AnimatedCounter } from '../components/AnimatedCounter'
 
-const stats = [
+type Stat = {
+  value: number
+  suffix: string
+  label: string
+  sub?: string
+}
+
+const stats: Stat[] = [
   { value: 16000, suffix: '+', label: 'Tankstellen Live abrufbar', sub: 'via Tankerkönig API' },
   { value: 5, suffix: ' min', label: 'Datenfrische', sub: 'aktualisiert dauernd' },
-  { value: 0, suffix: ' €', label: 'Abo-Pflicht', sub: 'kein Account nötig' },
-  { value: 25, suffix: ' km', label: 'Suchradius', sub: 'API-Maximum' },
+  { value: 0, suffix: ' €', label: 'Abo-Pflicht' },
+  { value: 25, suffix: ' km', label: 'Suchradius' },
 ]
 
 const marqueeItems = [
@@ -14,12 +21,13 @@ const marqueeItems = [
   'Diesel',
   'Super',
   'Cluster · Pins',
+  '„Hier suchen“-Chip',
   'Apple Maps',
   'Turn-by-turn',
+  'Siri & Shortcuts',
   'Offline-Splash',
   'Schilder-Format',
-  'Voice-Output',
-  'CarPlay-bereit',
+  'VoiceOver',
   'iOS 26+',
 ]
 
@@ -71,7 +79,7 @@ export function ProofSection() {
                 <AnimatedCounter to={stat.value} suffix={stat.suffix} />
               </p>
               <p className="proofLabel">{stat.label}</p>
-              <p className="proofSub">{stat.sub}</p>
+              {stat.sub ? <p className="proofSub">{stat.sub}</p> : null}
               <span className="proofGlow" aria-hidden="true" />
             </motion.article>
           ))}
