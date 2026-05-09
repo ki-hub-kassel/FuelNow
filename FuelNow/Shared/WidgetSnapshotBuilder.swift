@@ -1,6 +1,12 @@
 import Foundation
 
 enum WidgetSnapshotBuilder {
+    /// Engerer Radius fuer das `FuelNowCheapestNearbyWidget` — nur diese werden in
+    /// `cheapestNearby` aufgenommen, damit das Widget nicht bei einer 25-km-Suche eine
+    /// "guenstige" Tankstelle 18 km weg empfiehlt.
+    static let nearbyCheapestRadiusKm: Double = 5
+    static let nearbyCheapestMaxCount: Int = 2
+
     static func makeSnapshot(
         stations: [Station],
         preferredFuel: FuelType,
@@ -11,17 +17,28 @@ enum WidgetSnapshotBuilder {
             stationDistance(lhs) < stationDistance(rhs)
         }
 
-        let cheapestStation = stations.compactMap { station -> (Station, Double)? in
+        let pricedStations = stations.compactMap { station -> (Station, Double)? in
             guard let price = station.price(for: preferredFuel) else { return nil }
             return (station, price)
         }
-        .min { lhs, rhs in
+
+        let cheapestStation = pricedStations.min { lhs, rhs in
             if lhs.1 != rhs.1 {
                 return lhs.1 < rhs.1
             }
             return stationDistance(lhs.0) < stationDistance(rhs.0)
-        }?
-        .0
+        }?.0
+
+        let cheapestNearby = pricedStations
+            .filter { stationDistance($0.0) <= nearbyCheapestRadiusKm }
+            .sorted { lhs, rhs in
+                if lhs.1 != rhs.1 {
+                    return lhs.1 < rhs.1
+                }
+                return stationDistance(lhs.0) < stationDistance(rhs.0)
+            }
+            .prefix(nearbyCheapestMaxCount)
+            .map { makeStationSnapshot(station: $0.0, preferredFuel: preferredFuel) }
 
         return WidgetDataSnapshot(
             generatedAt: generatedAt,
@@ -29,7 +46,8 @@ enum WidgetSnapshotBuilder {
             preferredFuelRawValue: preferredFuel.rawValue,
             stationCount: stations.count,
             nearest: nearestStation.map { makeStationSnapshot(station: $0, preferredFuel: preferredFuel) },
-            cheapest: cheapestStation.map { makeStationSnapshot(station: $0, preferredFuel: preferredFuel) }
+            cheapest: cheapestStation.map { makeStationSnapshot(station: $0, preferredFuel: preferredFuel) },
+            cheapestNearby: cheapestNearby.isEmpty ? nil : Array(cheapestNearby)
         )
     }
 

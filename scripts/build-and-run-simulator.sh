@@ -57,14 +57,6 @@ fi
 
 xcrun simctl install "${UDID}" "${APP}"
 
-# TAN-90: Mit FUELNOW_DEMO_PLUS=1 startet die App im DEBUG-Build mit aktivem Plus
-# (kein echter Kauf nötig). Wirkt nur in Debug-Builds; Release ignoriert das Argument.
-LAUNCH_ARGS=()
-if [[ "${FUELNOW_DEMO_PLUS:-0}" == "1" ]]; then
-  LAUNCH_ARGS+=("--mock-plus-subscriber")
-  echo "FuelNow: Demo-Plus aktiv (--mock-plus-subscriber)."
-fi
-
 # TAN-92: Default-Pfad für Live-Daten ist der Vercel-Proxy aus `tankerkoenig-proxy/`.
 # Die Proxy-URL liegt in `FuelNow/Info.plist` (Schlüssel `TankerkoenigProxyBaseURL`) und
 # wird vom Build automatisch genutzt — kein Key auf dem Mac nötig.
@@ -88,6 +80,6 @@ if [[ "${FUELNOW_USE_MOCK_STATIONS:-0}" == "1" ]]; then
   echo "FuelNow: QA-Mock erzwungen (FUELNOW_USE_MOCK_STATIONS=1)."
 fi
 
-xcrun simctl launch "${UDID}" "${BUNDLE_ID}" ${LAUNCH_ARGS[@]+"${LAUNCH_ARGS[@]}"}
+xcrun simctl launch "${UDID}" "${BUNDLE_ID}"
 
 echo "FuelNow: Installiert und gestartet."

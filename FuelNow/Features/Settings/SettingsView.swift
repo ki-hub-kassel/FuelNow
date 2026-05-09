@@ -1,9 +1,11 @@
 import StoreKit
 import SwiftUI
+import UIKit
+import UserNotifications
 
 /// Einstellungen als nutzerzentrierte `Form` mit Sections — Liquid Glass nur auf primären Aktionen.
 ///
-/// Reihenfolge (TAN-78, angepasst durch TAN-79, TAN-86, TAN-88, TAN-89 und TAN-90):
+/// Reihenfolge (TAN-78, angepasst durch TAN-79, TAN-86, TAN-88, TAN-89):
 /// 1. **Kraftstoff** – große Karten-Auswahl (E5 / E10 / Diesel) mit aktiver Glas-Karte als visuellem Anker.
 ///    Seit TAN-86 ohne 1-Zeilen-Untertitel — nur Glyph + Sortenname; Untertitel bleibt VoiceOver-only.
 ///    Seit TAN-88 ohne Beschreibungs-Footer — die Karten sind selbsterklärend.
@@ -16,9 +18,6 @@ import SwiftUI
 ///    Seit 1.0-Release bewusst hinter `FuelNowFeatureFlags.isPlusUIEnabled` versteckt — Code bleibt
 ///    kompiliert, das Re-Enable ist ein Flag-Flip ohne strukturelle Änderung.
 /// 4. **Datenquellen-Footer** – unauffälliger Tankerkönig/MTS-K-Hinweis (CC BY 4.0).
-/// 5. **DEBUG (#if DEBUG-only)** – Toggle „Demo-Modus: FuelNow Plus aktiv" (TAN-90), schaltet
-///    `EntitlementManager.isPlusSubscriber` lokal ohne echten Kauf — für Simulator-/CarPlay-Tests
-///    ohne Sandbox-Apple-ID. Im Release-Build vollständig ausgeblendet.
 ///
 /// Der frühere „Suchradius"-Slider ist mit TAN-79 entfernt; die App nutzt fest das
 /// Tankerkönig-API-Maximum von 25 km (`AppSettings.SearchRadius.apiMaxKm`).
@@ -26,18 +25,20 @@ import SwiftUI
 /// die zugehörigen `settings.section.favorites.placeholder.*`-Strings bleiben im Catalog
 /// erhalten (vom Build automatisch als `extractionState: stale` markiert) und können bei
 /// Wiederaufnahme reaktiviert werden.
+/// Der frühere DEBUG-Toggle „Demo-Modus: FuelNow Plus aktiv" (TAN-90) ist entfernt — Plus-Status
+/// kommt ausschließlich aus `Transaction.currentEntitlements` (StoreKit, Sandbox, oder
+/// `FuelNowPlus.storekit` Local Testing).
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.openURL) private var openURL
     @Environment(EntitlementManager.self) private var entitlementManager
+    @Environment(FavoritesStore.self) private var favoritesStore
 
     @AppStorage(AppSettings.UserDefaultsKey.preferredFuelType) private var preferredFuelRaw = FuelType.e10.rawValue
     @AppStorage(AppSettings.UserDefaultsKey.appearancePreference)
     private var appearanceRaw = AppSettings.AppearancePreference.system.rawValue
-
-    #if DEBUG
-    @AppStorage(EntitlementManager.debugUnlockStorageKey) private var debugForcePlusUnlocked = false
-    #endif
+    @AppStorage(AppSettings.UserDefaultsKey.priceAlertsEnabled) private var priceAlertsEnabled = false
+    @AppStorage(AppSettings.UserDefaultsKey.priceAlertsThresholdEuros) private var priceAlertsThresholdEuros: Double = 0.05
 
     private var appearanceBinding: Binding<AppSettings.AppearancePreference> {
         Binding(
@@ -55,6 +56,11 @@ struct SettingsView: View {
 
     @State private var purchase = PlusPurchaseController()
     @State private var showPlusUpgradeSheet = false
+    /// System-Authorization-Status fuer Notifications. Wird beim Erscheinen geladen und bei
+    /// jedem Toggle-Anschalten aktualisiert, damit der Preis-Push-Toggle den realen Zustand
+    /// reflektiert (bei `denied` springt der Toggle zurueck und ein Hinweis erklaert den
+    /// Deep-Link in die Systemeinstellungen).
+    @State private var notificationAuthStatus: UNAuthorizationStatus = .notDetermined
 
     private var plusYearlyProduct: Product? {
         entitlementManager.products.first { $0.id == SubscriptionConstants.plusYearlyProductID }
@@ -65,13 +71,12 @@ struct SettingsView: View {
             Form {
                 fuelSection
                 appearanceSection
+                favoritesSection
+                priceAlertsSection
                 if FuelNowFeatureFlags.isPlusUIEnabled {
                     plusSection
                 }
                 dataSourceFooterSection
-                #if DEBUG
-                debugSection
-                #endif
             }
             .navigationTitle(Text("settings.title"))
             .navigationBarTitleDisplayMode(.inline)
@@ -97,6 +102,7 @@ struct SettingsView: View {
                 if let product = plusYearlyProduct {
                     await purchase.refreshTrialOffer(for: product)
                 }
+                notificationAuthStatus = await PriceAlertCoordinator.currentAuthorizationStatus()
             }
             .sheet(isPresented: $showPlusUpgradeSheet) {
                 PlusUpgradeView()
@@ -216,37 +222,129 @@ struct SettingsView: View {
         }
     }
 
-    #if DEBUG
-    /// DEBUG-only Demo-Toggle (TAN-90): schaltet `EntitlementManager.isPlusSubscriber`
-    /// lokal auf `true`, ohne echten Kauf — nützlich für Simulator-/CarPlay-Smoke-Tests
-    /// ohne Sandbox-Apple-ID. Die Section wird per `#if DEBUG` ausschließlich in
-    /// Debug-Builds eingehängt; im Release-Binär ist weder Code noch UI vorhanden.
-    private var debugSection: some View {
+    /// Lokale Favoriten (Roadmap Phase 2). Persistiert in `FavoritesStore` (`UserDefaults` / App-Group).
+    private var favoritesSection: some View {
         Section {
-            Toggle(isOn: debugPlusUnlockBinding) {
-                Label("settings.debug.plusUnlock.title", systemImage: "wrench.and.screwdriver")
+            if favoritesStore.favorites.isEmpty {
+                Text("Noch keine Favoriten — tippe in der Tankstellen-Detailansicht auf das Herz.")
+                    .font(TRTypography.caption())
+                    .foregroundStyle(TRColors.labelSecondary)
+            } else {
+                ForEach(favoritesStore.favorites) { favorite in
+                    HStack(alignment: .firstTextBaseline) {
+                        VStack(alignment: .leading, spacing: TRSpacing.xxs) {
+                            Text(favorite.displayTitle)
+                                .font(TRTypography.bodyBold())
+                            if !favorite.street.isEmpty {
+                                Text(favorite.street)
+                                    .font(TRTypography.caption())
+                                    .foregroundStyle(TRColors.labelSecondary)
+                            }
+                        }
+                        Spacer(minLength: TRSpacing.s)
+                        Button(role: .destructive) {
+                            favoritesStore.remove(stationID: favorite.id)
+                        } label: {
+                            Image(systemName: "trash")
+                                .foregroundStyle(TRColors.danger)
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel("\(favorite.displayTitle) als Favorit entfernen")
+                    }
+                }
+                .onDelete { offsets in
+                    for index in offsets {
+                        favoritesStore.remove(stationID: favoritesStore.favorites[index].id)
+                    }
+                }
             }
-            .tint(TRColors.accent)
-            .accessibilityHint(Text("settings.debug.plusUnlock.a11yHint"))
         } header: {
-            Text("settings.debug.section.header")
+            Text("Favoriten")
         } footer: {
-            Text("settings.debug.plusUnlock.footer")
+            Text("Lokale Liste — wird mit Widget und Watch geteilt, sobald Sync aktiviert ist.")
                 .font(TRTypography.caption())
                 .foregroundStyle(TRColors.labelSecondary)
         }
     }
 
-    private var debugPlusUnlockBinding: Binding<Bool> {
-        Binding(
-            get: { debugForcePlusUnlocked },
-            set: { newValue in
-                debugForcePlusUnlocked = newValue
-                entitlementManager.setDebugForcedPlusUnlock(newValue)
+    /// Preis-Pushes (Roadmap Phase 3). Lokal, ohne Server.
+    private var priceAlertsSection: some View {
+        Section {
+            Toggle(isOn: $priceAlertsEnabled) {
+                Label("Preis-Pushes (Beta)", systemImage: "bell.badge")
             }
-        )
+            .tint(TRColors.accent)
+            .accessibilityHint("Schickt eine Benachrichtigung, wenn ein Favorit deutlich guenstiger wird.")
+            .onChange(of: priceAlertsEnabled) { _, newValue in
+                guard newValue else { return }
+                Task { await handlePriceAlertsToggleEnabled() }
+            }
+
+            if priceAlertsEnabled {
+                Picker(selection: $priceAlertsThresholdEuros) {
+                    Text("3 Cent").tag(0.03)
+                    Text("5 Cent").tag(0.05)
+                    Text("10 Cent").tag(0.10)
+                } label: {
+                    Label("Schwelle", systemImage: "arrow.down.right")
+                }
+                .accessibilityHint("Mindestpreissturz, ab dem ein Push verschickt wird.")
+            }
+
+            if priceAlertsEnabled, notificationAuthStatus == .denied {
+                Button(role: .none) {
+                    openNotificationSystemSettings()
+                } label: {
+                    Label("Mitteilungen in Systemeinstellungen erlauben", systemImage: "gear")
+                        .foregroundStyle(TRColors.accent)
+                }
+                .accessibilityHint("Oeffnet die FuelNow-Seite in den iOS-Einstellungen.")
+            }
+        } header: {
+            Text("Preis-Pushes")
+        } footer: {
+            priceAlertsFooter
+        }
     }
-    #endif
+
+    private var priceAlertsFooter: some View {
+        Text(priceAlertsFooterText)
+            .font(TRTypography.caption())
+            .foregroundStyle(TRColors.labelSecondary)
+    }
+
+    private var priceAlertsFooterText: String {
+        let baseHint = "Beta — laeuft lokal im Hintergrund. iOS bestimmt, wie oft die App nachsehen darf."
+        guard priceAlertsEnabled else { return baseHint }
+        switch notificationAuthStatus {
+        case .denied:
+            let denied = "Mitteilungen sind fuer FuelNow in den Systemeinstellungen deaktiviert — "
+                + "Pushes kommen erst an, wenn du sie dort wieder erlaubst."
+            return baseHint + "\n\n" + denied
+        case .provisional:
+            let provisional = "Aktuell als „leise“ Mitteilungen aktiv (nur Mitteilungszentrale). "
+                + "Tippe in der ersten Mitteilung auf „Beibehalten“, damit sie auch im Sperrbildschirm erscheinen."
+            return baseHint + "\n\n" + provisional
+        default:
+            return baseHint
+        }
+    }
+
+    /// Holt — wenn der User den Toggle gerade auf an gestellt hat — das System-Permission-Sheet
+    /// (oder den aktuellen Status, wenn schon entschieden). Bei `denied`/Fehler springt der
+    /// Toggle zurueck und der Footer-Deep-Link in die Systemeinstellungen erscheint.
+    private func handlePriceAlertsToggleEnabled() async {
+        let granted = await PriceAlertCoordinator.requestNotificationAuthorizationIfNeeded()
+        notificationAuthStatus = await PriceAlertCoordinator.currentAuthorizationStatus()
+        if !granted {
+            await MainActor.run { priceAlertsEnabled = false }
+        }
+    }
+
+    private func openNotificationSystemSettings() {
+        guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+        openURL(url)
+    }
 
     /// Datenquellen-Hinweis am Listenende — bewusst klein und ohne eigene Glas-Karte.
     private var dataSourceFooterSection: some View {

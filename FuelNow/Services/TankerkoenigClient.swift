@@ -62,6 +62,114 @@ actor TankerkoenigClient {
         let message: String?
     }
 
+    typealias StationPrice = TankerkoenigStationPrice
+
+    /// Preisabfrage fuer mehrere Stationen aus `prices.php`. Tankerkoenig limitiert hier auf
+    /// **maximal 10 IDs pro Anfrage**; uebergibt der Aufrufer mehr, schneiden wir hart ab und
+    /// liefern in der Map nur die ersten 10. Anrufer (`FavoritesStore`-Refresh) sind dafuer
+    /// verantwortlich, ggf. zu chunked-en.
+    ///
+    /// Antwort-Form (`prices.php`): `{"ok":true,"prices":{"<id>":{"status":"open","e5":1.679,
+    /// "e10":1.659,"diesel":1.549}}}` — Preisfelder koennen `false` sein, wenn die Sorte
+    /// dort nicht angeboten wird; `false` wird wie `nil` behandelt.
+    func prices(ids: [UUID]) async throws -> [UUID: StationPrice] {
+        let limited = Array(ids.prefix(10))
+        guard !limited.isEmpty else { return [:] }
+
+        let url: URL
+        switch configuration {
+        case .direct(let apiKey):
+            let trimmedKey = apiKey.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard APIKeys.isConfiguredTankerkoenigKey(trimmedKey) else {
+                throw Failure.missingAPIKey
+            }
+            url = try Self.makePricesURL(host: "creativecommons.tankerkoenig.de", apiKey: trimmedKey, ids: limited)
+        case .proxy(let baseURL):
+            let pathURL = baseURL
+                .appendingPathComponent("api")
+                .appendingPathComponent("json")
+                .appendingPathComponent("prices")
+            url = try Self.makePricesURL(hostFromAbsoluteURL: pathURL, apiKey: nil, ids: limited)
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+
+        let data: Data
+        let response: URLResponse
+        do {
+            (data, response) = try await session.data(for: request)
+        } catch let urlError as URLError {
+            throw Failure.network(urlError)
+        } catch {
+            throw Failure.network(URLError(.unknown))
+        }
+
+        guard let http = response as? HTTPURLResponse else {
+            throw Failure.http(statusCode: -1)
+        }
+
+        switch http.statusCode {
+        case 200:
+            break
+        case 429:
+            throw Failure.rateLimited
+        default:
+            throw Failure.http(statusCode: http.statusCode)
+        }
+
+        let decoded: PricesResponse
+        do {
+            decoded = try JSONDecoder().decode(PricesResponse.self, from: data)
+        } catch let err as DecodingError {
+            throw Failure.decoding(err)
+        } catch {
+            throw Failure.decoding(
+                DecodingError.dataCorrupted(.init(codingPath: [], debugDescription: String(describing: error)))
+            )
+        }
+
+        guard decoded.ok else {
+            let msg = decoded.message.flatMap { raw -> String? in
+                let t = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+                return t.isEmpty ? nil : t
+            }
+            throw Failure.apiFailed(message: msg ?? "Tankerkönig API meldet ok=false ohne Nachricht.")
+        }
+
+        return Self.mapPrices(decoded.prices)
+    }
+
+    nonisolated private static func makePricesURL(host: String, apiKey: String?, ids: [UUID]) throws -> URL {
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = host
+        components.path = "/json/prices.php"
+        components.queryItems = pricesQueryItems(ids: ids, apiKey: apiKey)
+        guard let url = components.url else { throw Failure.invalidURL }
+        return url
+    }
+
+    nonisolated private static func makePricesURL(hostFromAbsoluteURL absolute: URL, apiKey: String?, ids: [UUID]) throws -> URL {
+        guard var components = URLComponents(url: absolute, resolvingAgainstBaseURL: false) else {
+            throw Failure.invalidURL
+        }
+        components.queryItems = pricesQueryItems(ids: ids, apiKey: apiKey)
+        guard let url = components.url else { throw Failure.invalidURL }
+        return url
+    }
+
+    nonisolated private static func pricesQueryItems(ids: [UUID], apiKey: String?) -> [URLQueryItem] {
+        var items: [URLQueryItem] = [
+            URLQueryItem(name: "ids", value: ids.map { $0.uuidString.lowercased() }.joined(separator: ",")),
+        ]
+        if let apiKey {
+            items.append(URLQueryItem(name: "apikey", value: apiKey))
+        }
+        return items
+    }
+
     private let configuration: TankerkoenigAPIConfiguration
     private let session: URLSession
 
@@ -321,6 +429,21 @@ actor TankerkoenigClient {
         return items
     }
 
+    /// Mappt einen `prices.php`-Eintrag auf die oeffentliche `StationPrice`-Form.
+    nonisolated fileprivate static func mapPrices(_ raw: [String: TankerkoenigPricesEntry]?) -> [UUID: StationPrice] {
+        var result: [UUID: StationPrice] = [:]
+        for (rawKey, entry) in raw ?? [:] {
+            guard let uuid = UUID(uuidString: rawKey) else { continue }
+            result[uuid] = StationPrice(
+                status: entry.status,
+                e5: entry.e5.value,
+                e10: entry.e10.value,
+                diesel: entry.diesel.value
+            )
+        }
+        return result
+    }
+
     /// Tankerkönig liefert u. a. deutschsprachige Key-Fehler; für Siri/Kurzbefehle klarere Hinweise.
     nonisolated private static func userFacingTankerkoenigApiMessage(_ message: String) -> String {
         let lower = message.lowercased()
@@ -332,5 +455,62 @@ actor TankerkoenigClient {
                 .trimmingCharacters(in: .whitespacesAndNewlines)
         }
         return message
+    }
+}
+
+// MARK: - Prices.php response types (Phase 2)
+
+/// Antwort des `prices.php`-Endpoints; auf Datei-Ebene definiert, damit der `Actor`-Body
+/// nicht das `type_body_length`-Limit reisst.
+private struct PricesResponse: Decodable {
+    let ok: Bool
+    let prices: [String: TankerkoenigPricesEntry]?
+    let message: String?
+}
+
+struct TankerkoenigPricesEntry: Decodable {
+    let status: String
+    let e5: TankerkoenigPriceField
+    let e10: TankerkoenigPriceField
+    let diesel: TankerkoenigPriceField
+}
+
+/// Preisfeld in `prices.php`: Zahl, `false` (nicht angeboten), `null` oder fehlend.
+struct TankerkoenigPriceField: Decodable {
+    let value: Double?
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if container.decodeNil() {
+            self.value = nil
+            return
+        }
+        if let number = try? container.decode(Double.self) {
+            self.value = number
+            return
+        }
+        if let flag = try? container.decode(Bool.self), flag == false {
+            self.value = nil
+            return
+        }
+        self.value = nil
+    }
+}
+
+/// Oeffentliches Ergebnis einer `prices.php`-Abfrage fuer eine einzelne Station.
+struct TankerkoenigStationPrice: Equatable, Sendable {
+    let status: String
+    let e5: Double?
+    let e10: Double?
+    let diesel: Double?
+
+    var isOpen: Bool { status.lowercased() == "open" }
+
+    func price(for fuel: FuelType) -> Double? {
+        switch fuel {
+        case .e5: return e5
+        case .e10: return e10
+        case .diesel: return diesel
+        }
     }
 }
