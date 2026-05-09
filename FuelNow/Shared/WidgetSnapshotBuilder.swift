@@ -5,7 +5,9 @@ enum WidgetSnapshotBuilder {
     /// `cheapestNearby` aufgenommen, damit das Widget nicht bei einer 25-km-Suche eine
     /// "guenstige" Tankstelle 18 km weg empfiehlt.
     static let nearbyCheapestRadiusKm: Double = 5
-    static let nearbyCheapestMaxCount: Int = 2
+    /// Wir liefern bis zu 4 Eintraege, damit das `.systemMedium`-Widget vier Reihen
+    /// fuellen kann; `.systemSmall` und Watch zeigen je nach Layout nur einen Teil davon.
+    static let nearbyCheapestMaxCount: Int = 4
 
     static func makeSnapshot(
         stations: [Station],

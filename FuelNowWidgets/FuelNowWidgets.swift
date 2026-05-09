@@ -233,6 +233,8 @@ struct FuelNowCheapestNearbyProvider: TimelineProvider {
                 cheapestNearby: [
                     placeholderStation(name: "FuelNow Süd", price: "1,54⁹", distance: "1,8 km"),
                     placeholderStation(name: "FuelNow Ost", price: "1,55⁹", distance: "2,3 km"),
+                    placeholderStation(name: "FuelNow West", price: "1,56⁹", distance: "3,1 km"),
+                    placeholderStation(name: "FuelNow Nord", price: "1,57⁹", distance: "4,2 km"),
                 ]
             )
         )
@@ -268,15 +270,21 @@ struct FuelNowCheapestNearbyProvider: TimelineProvider {
 }
 
 struct FuelNowCheapestNearbyEntryView: View {
+    @Environment(\.widgetFamily) private var family
+
     let entry: FuelNowCheapestNearbyEntry
 
     private var stations: [WidgetStationSnapshot] {
         entry.snapshot?.cheapestNearby ?? []
     }
 
+    private var maxStations: Int {
+        family == .systemMedium ? 4 : 2
+    }
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text("Günstig im 5-km-Umkreis")
+        VStack(alignment: .leading, spacing: family == .systemMedium ? 8 : 6) {
+            Text("Günstigste im 5-km-Umkreis")
                 .font(.caption2)
                 .foregroundStyle(.secondary)
             if stations.isEmpty {
@@ -285,8 +293,12 @@ struct FuelNowCheapestNearbyEntryView: View {
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             } else {
-                ForEach(Array(stations.prefix(2).enumerated()), id: \.offset) { _, station in
-                    cheapestRow(station: station)
+                ForEach(Array(stations.prefix(maxStations).enumerated()), id: \.offset) { _, station in
+                    if family == .systemMedium {
+                        mediumRow(station: station)
+                    } else {
+                        compactRow(station: station)
+                    }
                 }
             }
         }
@@ -295,7 +307,7 @@ struct FuelNowCheapestNearbyEntryView: View {
         .widgetURL(URL(string: "fuelnow://map"))
     }
 
-    private func cheapestRow(station: WidgetStationSnapshot) -> some View {
+    private func compactRow(station: WidgetStationSnapshot) -> some View {
         VStack(alignment: .leading, spacing: 2) {
             Text(station.brandTitle)
                 .font(.subheadline.bold())
@@ -311,6 +323,28 @@ struct FuelNowCheapestNearbyEntryView: View {
             }
         }
     }
+
+    private func mediumRow(station: WidgetStationSnapshot) -> some View {
+        HStack(spacing: 8) {
+            Circle()
+                .fill(station.isOpen ? Color.green : Color.red)
+                .frame(width: 8, height: 8)
+            Text(station.brandTitle)
+                .font(.subheadline)
+                .lineLimit(1)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            Text(station.pumpPriceText)
+                .font(.subheadline.bold())
+                .monospacedDigit()
+                .lineLimit(1)
+            Text(station.distanceText)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .monospacedDigit()
+                .lineLimit(1)
+                .frame(minWidth: 48, alignment: .trailing)
+        }
+    }
 }
 
 struct FuelNowCheapestNearbyWidget: Widget {
@@ -320,9 +354,9 @@ struct FuelNowCheapestNearbyWidget: Widget {
         StaticConfiguration(kind: kind, provider: FuelNowCheapestNearbyProvider()) { entry in
             FuelNowCheapestNearbyEntryView(entry: entry)
         }
-        .configurationDisplayName("Günstig 5 km")
-        .description("Die zwei guenstigsten Tankstellen im 5-km-Umkreis um deinen Standort.")
-        .supportedFamilies([.systemSmall])
+        .configurationDisplayName("Günstigste im 5-km-Umkreis")
+        .description("Die günstigsten Tankstellen im 5-km-Umkreis um deinen Standort.")
+        .supportedFamilies([.systemSmall, .systemMedium])
     }
 }
 
