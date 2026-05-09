@@ -49,10 +49,13 @@ final class PlusPurchaseController {
             return
         } catch EntitlementManagerError.pending {
             alertMessage = String(localized: "settings.plus.error.pending")
+            Haptics.notify(.warning)
         } catch EntitlementManagerError.unknownPurchaseResult {
             alertMessage = String(localized: "settings.plus.error.generic")
+            Haptics.notify(.error)
         } catch {
             alertMessage = error.localizedDescription
+            Haptics.notify(.error)
         }
     }
 
@@ -62,8 +65,10 @@ final class PlusPurchaseController {
         defer { isRestoring = false }
         do {
             try await entitlementManager.restorePurchases()
+            Haptics.notify(.success)
         } catch {
             alertMessage = error.localizedDescription
+            Haptics.notify(.error)
         }
     }
 
