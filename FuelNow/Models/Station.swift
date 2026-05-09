@@ -75,12 +75,20 @@ struct Station: Identifiable, Hashable, Sendable, Decodable {
         houseNumber = try Self.decodeTankerkoenigHouseNumber(from: c)
         place = try c.decode(String.self, forKey: .place)
 
-        if let code = try c.decodeIfPresent(Int.self, forKey: .postCode) {
+        if !c.contains(.postCode) {
+            postCode = ""
+        } else if try c.decodeNil(forKey: .postCode) {
+            postCode = ""
+        } else if let code = try? c.decode(Int.self, forKey: .postCode) {
             postCode = String(code)
-        } else if let code = try c.decodeIfPresent(String.self, forKey: .postCode) {
+        } else if let code = try? c.decode(String.self, forKey: .postCode) {
             postCode = code.trimmingCharacters(in: .whitespaces)
         } else {
-            postCode = ""
+            let context = DecodingError.Context(
+                codingPath: c.codingPath + [CodingKeys.postCode],
+                debugDescription: "Expected Int, String, or null for Tankerkönig postCode."
+            )
+            throw DecodingError.typeMismatch(String.self, context)
         }
 
         latitude = try c.decode(Double.self, forKey: .lat)

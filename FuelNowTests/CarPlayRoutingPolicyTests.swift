@@ -7,27 +7,81 @@ import Testing
 struct CarPlayRoutingPolicyTests {
     @Test("Plus aktiv → POI-Pfad (.plus)")
     func unlockedRoutesToPlus() {
-        #expect(CarPlayRoutingPolicy.route(forCarPlayUnlocked: true) == .plus)
+        #expect(
+            CarPlayRoutingPolicy.route(
+                forCarPlayUnlocked: true,
+                isPlusUIEnabled: true,
+                isCarPlayCapabilityEnabled: true
+            ) == .plus
+        )
     }
 
-    @Test("Kein Plus → ehrlicher Limited-Pfad (.limited)")
-    func lockedRoutesToLimited() {
-        #expect(CarPlayRoutingPolicy.route(forCarPlayUnlocked: false) == .limited)
+    @Test("Kein Plus → ehrlicher Limited-Pfad (.limited), wenn Plus-UI verkauft wird")
+    func lockedRoutesToLimitedWhenPlusUISellsSubscription() {
+        #expect(
+            CarPlayRoutingPolicy.route(
+                forCarPlayUnlocked: false,
+                isPlusUIEnabled: true,
+                isCarPlayCapabilityEnabled: true
+            ) == .limited
+        )
+    }
+
+    @Test("Ohne Plus-UI aber mit CarPlay-Capability → immer POI (.plus), auch ohne Abo")
+    func plusUIHiddenCarPlayEnabled_alwaysPlusForVerificationBuilds() {
+        #expect(
+            CarPlayRoutingPolicy.route(
+                forCarPlayUnlocked: false,
+                isPlusUIEnabled: false,
+                isCarPlayCapabilityEnabled: true
+            ) == .plus
+        )
+        #expect(
+            CarPlayRoutingPolicy.route(
+                forCarPlayUnlocked: true,
+                isPlusUIEnabled: false,
+                isCarPlayCapabilityEnabled: true
+            ) == .plus
+        )
     }
 
     @Test("Routing ist deterministisch & idempotent (kein Hidden State)")
     func routingIsPureFunction() {
         #expect(
-            CarPlayRoutingPolicy.route(forCarPlayUnlocked: true)
-                == CarPlayRoutingPolicy.route(forCarPlayUnlocked: true)
+            CarPlayRoutingPolicy.route(
+                forCarPlayUnlocked: true,
+                isPlusUIEnabled: true,
+                isCarPlayCapabilityEnabled: true
+            )
+                == CarPlayRoutingPolicy.route(
+                    forCarPlayUnlocked: true,
+                    isPlusUIEnabled: true,
+                    isCarPlayCapabilityEnabled: true
+                )
         )
         #expect(
-            CarPlayRoutingPolicy.route(forCarPlayUnlocked: false)
-                == CarPlayRoutingPolicy.route(forCarPlayUnlocked: false)
+            CarPlayRoutingPolicy.route(
+                forCarPlayUnlocked: false,
+                isPlusUIEnabled: true,
+                isCarPlayCapabilityEnabled: true
+            )
+                == CarPlayRoutingPolicy.route(
+                    forCarPlayUnlocked: false,
+                    isPlusUIEnabled: true,
+                    isCarPlayCapabilityEnabled: true
+                )
         )
         #expect(
-            CarPlayRoutingPolicy.route(forCarPlayUnlocked: true)
-                != CarPlayRoutingPolicy.route(forCarPlayUnlocked: false)
+            CarPlayRoutingPolicy.route(
+                forCarPlayUnlocked: true,
+                isPlusUIEnabled: true,
+                isCarPlayCapabilityEnabled: true
+            )
+                != CarPlayRoutingPolicy.route(
+                    forCarPlayUnlocked: false,
+                    isPlusUIEnabled: true,
+                    isCarPlayCapabilityEnabled: true
+                )
         )
     }
 }

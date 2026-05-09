@@ -34,6 +34,19 @@ enum StationCarPlayPOIMapper {
     /// Tankerkönig / Produkt: höchstens 12 POIs laut `CPPointOfInterestTemplate`.
     static let maxPointsOfInterest = 12
 
+    /// Letzter Eintrag gewinnt — vermeidet Crash von `Dictionary(uniqueKeysWithValues:)` bei doppelter `Station.id`.
+    static func stationsByIDReplacingDuplicates(_ stations: [Station]) -> [UUID: Station] {
+        var byID: [UUID: Station] = [:]
+        for station in stations {
+            byID[station.id] = station
+        }
+        return byID
+    }
+
+    static func isRenderableStationCoordinate(_ station: Station) -> Bool {
+        CLLocationCoordinate2DIsValid(station.coordinate)
+    }
+
     static func buildRows(stations: [Station], preferredFuel: FuelType) -> [StationCarPlayPOIRow] {
         Array(stations.prefix(maxPointsOfInterest)).map { makeRow(station: $0, preferredFuel: preferredFuel) }
     }

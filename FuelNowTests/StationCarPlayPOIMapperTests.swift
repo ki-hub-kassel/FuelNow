@@ -35,6 +35,39 @@ struct StationCarPlayPOIMapperTests {
         #expect(rowName.pickerTitle == "Freie Tankstelle")
     }
 
+    @Test("stationsByIDReplacingDuplicates behält den letzten Eintrag bei gleicher UUID")
+    func duplicateStationIDsLastWins() throws {
+        let first = try decodeStation(
+            """
+            {"id":"aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee","name":"First","brand":"A",
+            "street":"X","place":"P","lat":52.5,"lng":13.4,"dist":1,"diesel":1.5,"e5":1.6,
+            "e10":1.55,"isOpen":true,"houseNumber":"1","postCode":10407}
+            """
+        )
+        let second = try decodeStation(
+            """
+            {"id":"aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee","name":"Second","brand":"B",
+            "street":"Y","place":"P","lat":52.51,"lng":13.41,"dist":2,"diesel":1.4,"e5":1.5,
+            "e10":1.45,"isOpen":false,"houseNumber":"2","postCode":10407}
+            """
+        )
+        let map = StationCarPlayPOIMapper.stationsByIDReplacingDuplicates([first, second])
+        #expect(map.count == 1)
+        #expect(map[first.id]?.name == "Second")
+    }
+
+    @Test("isRenderableStationCoordinate lehnt ungültige Koordinaten ab")
+    func invalidCoordinatesNotRenderable() throws {
+        let invalidLat = try decodeStation(
+            """
+            {"id":"bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb","name":"Bad","brand":"X",
+            "street":"S","place":"P","lat":999,"lng":13.4,"dist":1,"diesel":1.5,"e5":1.6,
+            "e10":1.55,"isOpen":true,"houseNumber":"1","postCode":10407}
+            """
+        )
+        #expect(!StationCarPlayPOIMapper.isRenderableStationCoordinate(invalidLat))
+    }
+
     @Test("Detail-Zusammenfassung enthält Adresse und Kraftstoffzeile")
     func detailSummaryIncludesAddressAndFuels() throws {
         let station = try decodeStation(

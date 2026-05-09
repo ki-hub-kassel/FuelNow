@@ -45,9 +45,13 @@ final class FuelNowCarPlaySceneDelegate: UIResponder, CPTemplateApplicationScene
     @MainActor
     private func armEntitlementObservation() {
         didStartEntitlementObservation = true
-        guard let provider = entitlementProvider else { return }
+        guard let manager = entitlementProvider as? EntitlementManager else {
+            // Existenzials/protocol-property Tracking unter `@Observable` ist unzuverlässig — ohne konkretes
+            // EntitlementManager-Objekt (Tests mit Stub) reicht eine einmalige Aktualisierung nach Start.
+            return
+        }
         withObservationTracking {
-            _ = provider.isCarPlayUnlocked
+            _ = manager.isPlusSubscriber
         } onChange: { [weak self] in
             Task { @MainActor [weak self] in
                 guard let self, self.didStartEntitlementObservation else { return }
@@ -171,6 +175,12 @@ final class FuelNowCarPlaySceneDelegate: UIResponder, CPTemplateApplicationScene
                     body: String(localized: "carplay.plus.loading.body")
                 )
             }
+            guard !store.stations.isEmpty else {
+                return makeSimpleInfoTemplate(
+                    title: String(localized: "carplay.plus.loading.title"),
+                    body: String(localized: "carplay.plus.loading.body")
+                )
+            }
             return makeStationsTabBar(store: store)
         }
     }
@@ -186,12 +196,24 @@ final class FuelNowCarPlaySceneDelegate: UIResponder, CPTemplateApplicationScene
     }
 
     @MainActor
-    private func makeStationsTabBar(store: StationStore) -> CPTabBarTemplate {
+    private func makeStationsTabBar(store: StationStore) -> CPTemplate {
         let fuel = AppSettings.preferredFuelFromStorage()
-        let stations = store.stations
+        let stations = store.stations.filter { StationCarPlayPOIMapper.isRenderableStationCoordinate($0) }
+        guard !stations.isEmpty else {
+            return makeSimpleInfoTemplate(
+                title: String(localized: "carplay.plus.empty.title"),
+                body: String(localized: "carplay.plus.empty.body")
+            )
+        }
         let rows = StationCarPlayPOIMapper.buildRows(stations: stations, preferredFuel: fuel)
-        let byID = Dictionary(uniqueKeysWithValues: stations.map { ($0.id, $0) })
+        let byID = StationCarPlayPOIMapper.stationsByIDReplacingDuplicates(stations)
         let points = StationCarPlayPOIMapper.makePointsOfInterest(rows: rows, stationsByID: byID)
+        guard !points.isEmpty else {
+            return makeSimpleInfoTemplate(
+                title: String(localized: "carplay.plus.error.title"),
+                body: String(localized: "carplay.plus.error.generic")
+            )
+        }
         let poiTemplate = StationCarPlayPOIMapper.makePointsTemplate(points: points, delegate: self)
         let listTemplate = StationCarPlayPOIMapper.makeNearbyListTemplate(rows: rows, stationsByID: byID)
         return CPTabBarTemplate(templates: [poiTemplate, listTemplate])

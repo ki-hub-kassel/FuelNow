@@ -125,6 +125,7 @@
 		F70110000000000000000005 /* StationCarPlayPOIMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70100000000000000000005 /* StationCarPlayPOIMapper.swift */; };
 		F70110000000000000000006 /* FuelNowFeatureFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70100000000000000000006 /* FuelNowFeatureFlags.swift */; };
 		F70110000000000000000007 /* ShortcutSuggestionDonation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70100000000000000000007 /* ShortcutSuggestionDonation.swift */; };
+		F70110000000000000000008 /* FuelNowLifecycleCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70100000000000000000008 /* FuelNowLifecycleCoordinator.swift */; };
 		F70610000000000000000001 /* StationCarPlayPOIMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70600000000000000000001 /* StationCarPlayPOIMapperTests.swift */; };
 		F80100000000000000000001 /* TRColorContrastAAATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80000000000000000000001 /* TRColorContrastAAATests.swift */; };
 		F92E00000000000000000001 /* TankerkoenigAPIConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92E00000000000000000002 /* TankerkoenigAPIConfigurationTests.swift */; };
@@ -296,6 +297,7 @@
 		F70100000000000000000004 /* CarPlayDrivingNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlayDrivingNavigation.swift; sourceTree = "<group>"; };
 		F70100000000000000000005 /* StationCarPlayPOIMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationCarPlayPOIMapper.swift; sourceTree = "<group>"; };
 		F70100000000000000000006 /* FuelNowFeatureFlags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelNowFeatureFlags.swift; sourceTree = "<group>"; };
+		F70100000000000000000008 /* FuelNowLifecycleCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelNowLifecycleCoordinator.swift; sourceTree = "<group>"; };
 		F70100000000000000000007 /* ShortcutSuggestionDonation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutSuggestionDonation.swift; sourceTree = "<group>"; };
 		F70600000000000000000001 /* StationCarPlayPOIMapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationCarPlayPOIMapperTests.swift; sourceTree = "<group>"; };
 		F80000000000000000000001 /* TRColorContrastAAATests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRColorContrastAAATests.swift; sourceTree = "<group>"; };
@@ -476,6 +478,7 @@
 				F70100000000000000000003 /* AppSettings+PreferredFuel.swift */,
 				F70100000000000000000002 /* FuelNowRuntimeRegistry.swift */,
 				F70100000000000000000007 /* ShortcutSuggestionDonation.swift */,
+				F70100000000000000000008 /* FuelNowLifecycleCoordinator.swift */,
 				F70100000000000000000001 /* StationDisplayFormatting.swift */,
 				F93000000000000000000002 /* FuelPriceLabel.swift */,
 				F52300000000000000000002 /* StationVoiceOverCopy.swift */,
@@ -888,6 +891,7 @@
 				F70010000000000000000004 /* FuelNowCarPlaySceneDelegate.swift in Sources */,
 				F70110000000000000000001 /* StationDisplayFormatting.swift in Sources */,
 				F93000000000000000000001 /* FuelPriceLabel.swift in Sources */,
+				F70110000000000000000008 /* FuelNowLifecycleCoordinator.swift in Sources */,
 				F70110000000000000000002 /* FuelNowRuntimeRegistry.swift in Sources */,
 				F70110000000000000000007 /* ShortcutSuggestionDonation.swift in Sources */,
 				F70110000000000000000003 /* AppSettings+PreferredFuel.swift in Sources */,

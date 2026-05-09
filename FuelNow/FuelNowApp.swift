@@ -5,12 +5,13 @@ import WidgetKit
 
 @main
 struct FuelNowApp: App {
-    @State private var locationService = LocationService(snapshotStore: UserDefaultsLocationSnapshotStore())
-    @State private var stationDetailFetcher = TankerkoenigStationDetailFetcher(client: TankerkoenigClient())
-    @State private var stationStore = StationStoreFactory.makeDefault()
-    @State private var entitlementManager = EntitlementManager()
-    @State private var networkMonitor = NetworkMonitor()
-    @State private var widgetSnapshotStore = WidgetSnapshotStore()
+    @State private var coordinator: FuelNowLifecycleCoordinator
+
+    init() {
+        let initialCoordinator = FuelNowLifecycleCoordinator()
+        _coordinator = State(initialValue: initialCoordinator)
+    }
+
     @AppStorage(AppSettings.UserDefaultsKey.appearancePreference)
     private var appearanceRaw = AppSettings.AppearancePreference.system.rawValue
 
@@ -55,32 +56,30 @@ struct FuelNowApp: App {
         WindowGroup {
             ContentView()
                 .preferredColorScheme(appearancePreference.preferredSwiftUIColorScheme)
-                .environment(locationService)
-                .environment(stationStore)
-                .environment(\.stationDetailFetcher, stationDetailFetcher)
-                .environment(entitlementManager)
-                .environment(networkMonitor)
+                .environment(coordinator.locationService)
+                .environment(coordinator.stationStore)
+                .environment(\.stationDetailFetcher, coordinator.stationDetailFetcher)
+                .environment(coordinator.entitlementManager)
+                .environment(coordinator.networkMonitor)
                 .environment(MapDeepLinkStore.shared)
                 .environment(\.whatsNew, whatsNewEnvironment)
                 .onAppear {
-                    FuelNowRuntimeRegistry.stationStore = stationStore
-                    FuelNowRuntimeRegistry.locationService = locationService
-                    networkMonitor.start()
+                    coordinator.networkMonitor.start()
                     syncWidgetSnapshot()
                     Task {
                         await StationIntentResolution.shared.setResolver(StationStoreIntentResolver())
                     }
                 }
-                .onChange(of: stationStore.stations) { _, _ in
+                .onChange(of: coordinator.stationStore.stations) { _, _ in
                     syncWidgetSnapshot()
                 }
-                .onChange(of: stationStore.loadState) { _, newState in
+                .onChange(of: coordinator.stationStore.loadState) { _, newState in
                     syncWidgetSnapshot()
                     ShortcutSuggestionDonation.donateAfterStationsLoadedIfNeeded(
                         loadState: newState,
-                        stationCount: stationStore.stations.count
+                        stationCount: coordinator.stationStore.stations.count
                     )
-                    if case .loaded = newState, !stationStore.stations.isEmpty {
+                    if case .loaded = newState, !coordinator.stationStore.stations.isEmpty {
                         FuelNowAppShortcuts.updateAppShortcutParameters()
                     }
                 }
@@ -103,7 +102,7 @@ struct FuelNowApp: App {
                     }
                 }
                 .task {
-                    await entitlementManager.start()
+                    await coordinator.entitlementManager.start()
                     #if DEBUG
                     APIKeys.warnIfPlaceholderActive()
                     #endif
@@ -120,11 +119,11 @@ struct FuelNowApp: App {
 
         let preferredFuel = AppSettings.preferredFuelFromStorage(defaults: sharedDefaults)
         let snapshot = WidgetSnapshotBuilder.makeSnapshot(
-            stations: stationStore.stations,
+            stations: coordinator.stationStore.stations,
             preferredFuel: preferredFuel,
-            loadState: stationStore.loadState
+            loadState: coordinator.stationStore.loadState
         )
-        widgetSnapshotStore.write(snapshot)
+        coordinator.widgetSnapshotStore.write(snapshot)
         WidgetCenter.shared.reloadAllTimelines()
     }
 }

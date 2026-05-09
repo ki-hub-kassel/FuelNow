@@ -21,7 +21,18 @@ enum CarPlayRoute: Equatable, Sendable {
 /// CarPlay-Pfad-Wahl wird. Bewusst frei von `CarPlay`/`UIKit`-Imports, damit sie
 /// sich ohne Scene-Setup unit-testen lässt (TAN-62-Style).
 enum CarPlayRoutingPolicy {
-    static func route(forCarPlayUnlocked isCarPlayUnlocked: Bool) -> CarPlayRoute {
-        isCarPlayUnlocked ? .plus : .limited
+    /// Während Plus nur als Backend aktiv ist (`isPlusUIEnabled == false`), soll CarPlay in TestFlight
+    /// trotzdem die POI-Erfahrung zeigen — ohne echtes StoreKit-Abo (siehe `FuelNowFeatureFlags`).
+    ///
+    /// `isPlusUIEnabled` / `isCarPlayCapabilityEnabled` sind nur für Unit-Tests parametrisiert.
+    static func route(
+        forCarPlayUnlocked isCarPlayUnlocked: Bool,
+        isPlusUIEnabled: Bool = FuelNowFeatureFlags.isPlusUIEnabled,
+        isCarPlayCapabilityEnabled: Bool = FuelNowFeatureFlags.isCarPlayCapabilityEnabled
+    ) -> CarPlayRoute {
+        if isCarPlayCapabilityEnabled, !isPlusUIEnabled {
+            return .plus
+        }
+        return isCarPlayUnlocked ? .plus : .limited
     }
 }

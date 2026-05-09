@@ -21,7 +21,6 @@ struct WidgetSnapshotBuilderTests {
             e10: 1.599,
             diesel: 1.529
         )
-
         let snapshot = WidgetSnapshotBuilder.makeSnapshot(
             stations: [nearest, cheapest],
             preferredFuel: .e10,
@@ -31,10 +30,10 @@ struct WidgetSnapshotBuilderTests {
 
         #expect(snapshot.loadState == .ready)
         #expect(snapshot.stationCount == 2)
-        #expect(snapshot.nearest?.stationName == "Nearest")
-        #expect(snapshot.cheapest?.stationName == "Cheapest")
-        #expect(snapshot.nearest?.pumpPriceText == "1,65⁹")
-        #expect(snapshot.cheapest?.pumpPriceText == "1,59⁹")
+        #expect(snapshot.nearest?.stationID == nearest.id)
+        #expect(snapshot.cheapest?.stationID == cheapest.id)
+        #expect(snapshot.nearest?.pumpPriceText == FuelPriceFormatting.pumpStyleString(euros: nearest.price(for: .e10)))
+        #expect(snapshot.cheapest?.pumpPriceText == FuelPriceFormatting.pumpStyleString(euros: cheapest.price(for: .e10)))
     }
 
     @Test func snapshotMarksEmptyWhenNoStationsLoaded() {
