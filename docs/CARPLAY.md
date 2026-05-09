@@ -130,6 +130,10 @@ Konfiguration **„FuelNow CarPlay Scene“**, die auf
 Der Delegate (`FuelNow/Features/CarPlay/FuelNowCarPlaySceneDelegate.swift`) ist
 die einzige Stelle, die `CPInterfaceController.setRootTemplate` aufruft.
 
+Bei Plus (`CPTabBarTemplate`): **`CPListTemplate` zuerst**, danach
+`CPPointOfInterestTemplate` — damit Preis/Zeile ohne Karten-Pan sofort erreichbar
+ist; Karte bleibt ein Tap entfernt.
+
 ### 2.3 Plus-Gating & Routing ([TAN-56](https://linear.app/tankradar-app/issue/TAN-56))
 
 Vor dem ersten `setRootTemplate` lädt die Scene **asynchron**

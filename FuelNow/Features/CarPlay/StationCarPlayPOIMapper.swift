@@ -119,7 +119,7 @@ enum StationCarPlayPOIMapper {
         }
     }
 
-    /// Zweites Tab: sortierte Liste — dieselben Stationen wie die POI-Karte (kein zweites Datenmodell).
+    /// Sortierte Liste — dieselben Stationen wie die POI-Karte (kein zweites Datenmodell). Im Tab-Bar **erster** Tab.
     @MainActor
     static func makeNearbyListTemplate(
         rows: [StationCarPlayPOIRow],

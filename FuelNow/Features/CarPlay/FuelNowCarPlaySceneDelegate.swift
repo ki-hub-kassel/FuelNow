@@ -216,7 +216,8 @@ final class FuelNowCarPlaySceneDelegate: UIResponder, CPTemplateApplicationScene
         }
         let poiTemplate = StationCarPlayPOIMapper.makePointsTemplate(points: points, delegate: self)
         let listTemplate = StationCarPlayPOIMapper.makeNearbyListTemplate(rows: rows, stationsByID: byID)
-        return CPTabBarTemplate(templates: [poiTemplate, listTemplate])
+        // Liste zuerst: nächste Tankstelle ohne Karten-Pan sichtbar; POI-Tab als zweites.
+        return CPTabBarTemplate(templates: [listTemplate, poiTemplate])
     }
 
     @MainActor
