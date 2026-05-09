@@ -11,6 +11,7 @@
 		12BC2204D41AAFAE82C71157 /* DrivingToStationActivityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E331DB3BF3DEA638EDC799A3 /* DrivingToStationActivityController.swift */; };
 		150B75D0E6593BF70173026B /* FavoritesStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760DA3144597E55A4C0C60C7 /* FavoritesStore.swift */; };
 		2D6290433BDBFA86D1DD04D1 /* PriceAlertCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBD09E0F4FC84E16C854D4E1 /* PriceAlertCoordinator.swift */; };
+		36A4E2C8B7013A28344653FF /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 907F97B8A7B1B0D42E5FFD63 /* Haptics.swift */; };
 		46D7319EBD657134E0A3F267 /* DrivingToStationActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B298D24FE64E1D6D692B71 /* DrivingToStationActivityAttributes.swift */; };
 		4CACC92E0C79C5D2A1F63AB4 /* DrivingToStationActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B298D24FE64E1D6D692B71 /* DrivingToStationActivityAttributes.swift */; };
 		4CCD909614B686234D8A8B1C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1720D70B1BCBD16002001B60 /* Assets.xcassets */; };
@@ -22,6 +23,7 @@
 		8C34A26389F0B76469EDB8FD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB6916EECB4E1B3C2ABFB3AE /* Foundation.framework */; };
 		8E933569020BC2307B9218DC /* FuelNowWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30853CD67C4E339AF5E8D7BD /* FuelNowWatchApp.swift */; };
 		9EBBB10B408B1EB76966E794 /* WidgetSnapshotStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96A9A26AC911821D9433665 /* WidgetSnapshotStore.swift */; };
+		A8FC803FA31CA1C81B2DF72D /* MapScreen+Previews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491F61A9BB2718A70D9CA351 /* MapScreen+Previews.swift */; };
 		AC86F7B392CE20719A88F688 /* WidgetSnapshotStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96A9A26AC911821D9433665 /* WidgetSnapshotStore.swift */; };
 		AD7773331292C5888A27AA36 /* FuelNowWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29EF13678B417327854B6A5F /* FuelNowWidgets.swift */; };
 		B3814888CFA594192E88DACA /* PriceAlertCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D94403D6ECDE0DC11FEE26 /* PriceAlertCoordinatorTests.swift */; };
@@ -218,11 +220,13 @@
 		300000000000000000000003 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		30853CD67C4E339AF5E8D7BD /* FuelNowWatchApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FuelNowWatchApp.swift; sourceTree = "<group>"; };
 		3F4367A3544918D24974D7BF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS11.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		491F61A9BB2718A70D9CA351 /* MapScreen+Previews.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "MapScreen+Previews.swift"; sourceTree = "<group>"; };
 		500000000000000000000001 /* FuelNowUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelNowUITests.swift; sourceTree = "<group>"; };
 		654B45CE068FA57784C38C4E /* FuelNowWidgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FuelNowWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		754B638BC4ADE7EA9FB728FF /* FuelNowWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FuelNowWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		760DA3144597E55A4C0C60C7 /* FavoritesStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FavoritesStore.swift; sourceTree = "<group>"; };
 		7B815600953C21C7E3E4B3C0 /* FuelNowWatchRootView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FuelNowWatchRootView.swift; sourceTree = "<group>"; };
+		907F97B8A7B1B0D42E5FFD63 /* Haptics.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
 		A96A9A26AC911821D9433665 /* WidgetSnapshotStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WidgetSnapshotStore.swift; path = Shared/WidgetSnapshotStore.swift; sourceTree = "<group>"; };
 		AB6916EECB4E1B3C2ABFB3AE /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		B7B298D24FE64E1D6D692B71 /* DrivingToStationActivityAttributes.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DrivingToStationActivityAttributes.swift; path = Shared/DrivingToStationActivityAttributes.swift; sourceTree = "<group>"; };
@@ -563,6 +567,7 @@
 				F52300000000000000000006 /* StationDetailFetching.swift */,
 				F52300000000000000000007 /* StationOpeningHoursPresenter.swift */,
 				F64000000000000000000002 /* SubscriptionConstants.swift */,
+				907F97B8A7B1B0D42E5FFD63 /* Haptics.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -588,6 +593,7 @@
 				F60800000000000000000006 /* LocationDeniedCallout.swift */,
 				F60800000000000000000011 /* StationMapClustering.swift */,
 				F60800000000000000000012 /* OfflineSplashView.swift */,
+				491F61A9BB2718A70D9CA351 /* MapScreen+Previews.swift */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -1016,6 +1022,8 @@
 				46D7319EBD657134E0A3F267 /* DrivingToStationActivityAttributes.swift in Sources */,
 				12BC2204D41AAFAE82C71157 /* DrivingToStationActivityController.swift in Sources */,
 				09C53D0CB0437E290922F3A0 /* WatchConnectivityCoordinator.swift in Sources */,
+				36A4E2C8B7013A28344653FF /* Haptics.swift in Sources */,
+				A8FC803FA31CA1C81B2DF72D /* MapScreen+Previews.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

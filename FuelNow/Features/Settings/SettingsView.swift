@@ -78,6 +78,10 @@ struct SettingsView: View {
                 }
                 dataSourceFooterSection
             }
+            .adaptiveSensoryFeedback(.selection, trigger: preferredFuelRaw)
+            .adaptiveSensoryFeedback(.selection, trigger: appearanceRaw)
+            .adaptiveSensoryFeedback(.impact(weight: .light), trigger: priceAlertsEnabled)
+            .adaptiveSensoryFeedback(.selection, trigger: priceAlertsThresholdEuros)
             .navigationTitle(Text("settings.title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -243,6 +247,7 @@ struct SettingsView: View {
                         }
                         Spacer(minLength: TRSpacing.s)
                         Button(role: .destructive) {
+                            Haptics.tap(.medium)
                             favoritesStore.remove(stationID: favorite.id)
                         } label: {
                             Image(systemName: "trash")
@@ -342,6 +347,7 @@ struct SettingsView: View {
     }
 
     private func openNotificationSystemSettings() {
+        Haptics.tap(.light)
         guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
         openURL(url)
     }

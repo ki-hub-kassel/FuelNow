@@ -130,6 +130,7 @@ struct StationDetailView: View {
 
     private var favoriteToggleButton: some View {
         Button {
+            Haptics.tap(.light)
             favoritesStore.toggle(resolvedStation)
         } label: {
             Image(systemName: isFavorited ? "heart.fill" : "heart")
@@ -200,6 +201,7 @@ struct StationDetailView: View {
 
                     if showsOpeningHoursInfo {
                         Button {
+                            Haptics.tap(.light)
                             showOpeningHoursPopover = true
                         } label: {
                             Image(systemName: "info.circle")
@@ -296,6 +298,7 @@ struct StationDetailView: View {
     }
 
     private func startAppleMapsDrivingNavigation() {
+        Haptics.tap(.medium)
         Task {
             await DrivingToStationActivityController.startActivity(
                 station: resolvedStation,

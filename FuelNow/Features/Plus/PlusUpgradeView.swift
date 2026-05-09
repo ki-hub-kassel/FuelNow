@@ -209,6 +209,7 @@ struct PlusUpgradeView: View {
                 .accessibilityElement(children: .combine)
 
                 Button {
+                    Haptics.tap(.medium)
                     Task { await purchase.subscribe(to: product, via: entitlementManager) }
                 } label: {
                     Group {
@@ -311,6 +312,7 @@ struct PlusUpgradeView: View {
     private var secondaryActionsSection: some View {
         VStack(alignment: .leading, spacing: TRSpacing.s) {
             Button {
+                Haptics.tap(.light)
                 Task { await purchase.restore(via: entitlementManager) }
             } label: {
                 Label("settings.plus.restore", systemImage: "arrow.clockwise")
@@ -322,6 +324,7 @@ struct PlusUpgradeView: View {
             .accessibilityHint("Synchronisiert Käufe mit deinem Apple-ID-Konto.")
 
             Button {
+                Haptics.tap(.light)
                 openURL(Self.manageSubscriptionsURL)
             } label: {
                 Label("settings.plus.manage", systemImage: "creditcard")
