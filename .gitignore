@@ -14,6 +14,7 @@ playground.xcworkspace
 .derived-data-ios/
 .derived-data-ios-check/
 .derived-data-ios-verify/
+.derived-*/
 
 # Bundler — Gems lokal (bundle install); Konfiguration in .bundle/config ist committed
 vendor/bundle/
