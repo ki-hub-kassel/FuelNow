@@ -1,0 +1,27 @@
+---
+description: Push/Merge auf `main` triggert automatisch einen neuen TestFlight-Build
+alwaysApply: true
+---
+
+# TestFlight-Build nach Merge/Push auf `main`
+
+**Pflicht:** Sobald ein Feature-/Fix-/Chore-Branch via Squash-Merge in `main` landet (oder direkt auf `main` gepusht wird), **direkt im Anschluss** einen neuen TestFlight-Build via `./scripts/asc-upload.sh` bauen und hochladen — ohne separate Nachfrage.
+
+## Ablauf
+
+1. Squash-Merge in `main` ist abgeschlossen, lokales `main` ist auf neuestem Stand (`git pull --ff-only origin main`), Feature-Branch ist gelöscht.
+2. **Direkt** `./scripts/asc-upload.sh` ausführen.
+   - Build-Nummer wird via `asc builds next-build-number` automatisch hochgezogen — kein manuelles Bumpen.
+   - Artefakte landen in `.asc/artifacts/` (gitignored), `project.pbxproj` wird nach dem Upload restauriert.
+   - Skript wartet via `asc builds upload --wait` auf den ASC-Processing-Status.
+3. Im Statusbericht den neuen TestFlight-Build (Versions-/Build-Nummer + ASC-Status `VALID`/Processing) erwähnen.
+
+## Ausnahmen
+
+- **Reine Tooling-/Doc-/Marketing-Merges** (Änderungen ausschließlich unter `marketing-site/`, `docs/`, `tankerkoenig-proxy/`, `.github/workflows/`, `.cursor/`, `AGENTS.md`) beeinflussen die iOS-Binary nicht — Build überspringen und im Statusbericht kurz erklären.
+- **Hotfix-Stop:** Wenn der User explizit „kein TestFlight" oder „später" sagt, Build überspringen.
+- **Build-/Auth-Fehler:** Wenn `asc-upload.sh` scheitert (Apple-Auth abgelaufen, Validation-Error, Notarization), das Problem berichten und den User entscheiden lassen — nicht blind retry'n.
+
+## Hintergrund
+
+Hält TestFlight kontinuierlich frisch — iOS-Features/Fixes erreichen Beta-Tester innerhalb weniger Minuten nach Merge, ohne dass der User nachträglich „Bau einen neuen TestFlight-Build" sagen muss. Voraussetzungen (asc-CLI, Keychain-Auth, Apple-Team `FNXU97S3QK`, App-ID `6766354442`) sind in `docs/AppStoreConnectUpload.md` dokumentiert.
