@@ -1,3 +1,4 @@
+import AppIntents
 import SwiftUI
 import WhatsNewKit
 import WidgetKit
@@ -73,8 +74,15 @@ struct FuelNowApp: App {
                 .onChange(of: stationStore.stations) { _, _ in
                     syncWidgetSnapshot()
                 }
-                .onChange(of: stationStore.loadState) { _, _ in
+                .onChange(of: stationStore.loadState) { _, newState in
                     syncWidgetSnapshot()
+                    ShortcutSuggestionDonation.donateAfterStationsLoadedIfNeeded(
+                        loadState: newState,
+                        stationCount: stationStore.stations.count
+                    )
+                    if case .loaded = newState, !stationStore.stations.isEmpty {
+                        FuelNowAppShortcuts.updateAppShortcutParameters()
+                    }
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UserDefaults.didChangeNotification)) { notification in
                     // Only react to changes on the standard defaults. Without this guard, our own

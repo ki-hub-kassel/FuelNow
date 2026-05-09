@@ -15,6 +15,12 @@ struct OpenFuelNowIntent: AppIntent {
 
     static var openAppWhenRun: Bool { true }
 
+    static var isDiscoverable: Bool { true }
+
+    static var supportedModes: IntentModes {
+        [.foreground(.dynamic), .background]
+    }
+
     func perform() async throws -> some IntentResult {
         await MainActor.run {
             MapDeepLinkStore.shared.clearPendingStationFocus()
@@ -36,6 +42,12 @@ struct OpenStationIntent: AppIntent {
     }
 
     static var openAppWhenRun: Bool { true }
+
+    static var isDiscoverable: Bool { true }
+
+    static var supportedModes: IntentModes {
+        [.foreground(.dynamic), .background]
+    }
 
     @Parameter(title: LocalizedStringResource("intent.openStation.parameter.station"))
     var station: StationEntity

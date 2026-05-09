@@ -88,6 +88,13 @@ struct FindNearestStationIntent: AppIntent {
 
     static var openAppWhenRun: Bool { false }
 
+    static var isDiscoverable: Bool { true }
+
+    /// Siri/Kurzbefehle ohne geöffnete App: Hintergrundausführung + ggf. Übergang ins UI (iOS 26).
+    static var supportedModes: IntentModes {
+        [.background, .foreground(.dynamic)]
+    }
+
     func perform() async throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
         do {
             guard let pair = try await StationIntentLookup.shared.findNearestStation() else {
@@ -135,6 +142,12 @@ struct FindCheapestStationIntent: AppIntent {
     }
 
     static var openAppWhenRun: Bool { false }
+
+    static var isDiscoverable: Bool { true }
+
+    static var supportedModes: IntentModes {
+        [.background, .foreground(.dynamic)]
+    }
 
     @Parameter(title: LocalizedStringResource("intent.findCheapest.parameter.fuel"))
     var fuel: FuelType?

@@ -15,6 +15,10 @@ struct StartDrivingNavigationIntent: AppIntent {
 
     static var isDiscoverable: Bool { false }
 
+    static var supportedModes: IntentModes {
+        [.background, .foreground(.dynamic)]
+    }
+
     @Parameter(title: LocalizedStringResource("intent.startDrivingNavigation.parameter.latitude"))
     var latitude: Double
 
