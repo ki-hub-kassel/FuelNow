@@ -12,17 +12,17 @@ struct FuelNowWatchRootView: View {
             List {
                 if let snapshot = provider.snapshot {
                     if let nearest = snapshot.nearest {
-                        Section("Naechste") {
+                        Section("Nächste") {
                             FuelNowWatchStationRow(station: nearest)
                         }
                     }
                     if let cheapest = snapshot.cheapest, cheapest.stationID != snapshot.nearest?.stationID {
-                        Section("Guenstigste") {
+                        Section("Günstigste") {
                             FuelNowWatchStationRow(station: cheapest)
                         }
                     }
                     if let cheapestNearby = snapshot.cheapestNearby, !cheapestNearby.isEmpty {
-                        Section("Guenstig im 5-km-Umkreis") {
+                        Section("Günstigste im 5-km-Umkreis") {
                             ForEach(cheapestNearby) { station in
                                 FuelNowWatchStationRow(station: station)
                             }
