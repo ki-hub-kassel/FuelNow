@@ -50,16 +50,18 @@ asc builds test-notes create --app 6766354442 --build-number 21 --version 1.0 --
 
 (jeweils analog für `en-US`)
 
-## Permission-Hinweis (wichtig)
+## API-Keys (Status)
 
-Der aktuell hinterlegte API-Key `FuelNow CLI` (`JDM5T6H3UH`) hat **nur Lese-/Build-Upload-Rechte**.
-Alle obigen Schreib-Operationen für Listing- oder TestFlight-Localizations brechen mit
-„This request is forbidden for security reasons" ab, bis dem Key in
-**App Store Connect → Users and Access → Integrations → Team Keys**
-mindestens die Rolle **App Manager** zugewiesen ist (oder ein zweiter Key mit dieser
-Rolle angelegt und via `asc auth login` registriert wird).
+- `FuelNow CLI` (`JDM5T6H3UH`) — Build-Upload-Rolle (Developer/App Manager-light), reicht **nicht** für Listing-Writes.
+- `FuelNow App Manager` (`45DX4AC669`) — **App-Manager-Rolle**, derzeit Default. Damit wurden die Listing-Texte und TestFlight-Localizations am 2026-05-09 erstmals nach ASC gepusht.
 
-Sobald die Berechtigung steht, werden die `metadata/`-Files 1:1 nach ASC übernommen.
+`asc auth switch --name "FuelNow App Manager"` macht ihn zum Default; `asc auth status` zeigt den aktiven Key.
+
+## Apple-Eigenheiten beim 1.0-Push (gelernt)
+
+- **App-Name pro Locale ist pro Account eindeutig:** „FuelNow" war in `en-US` schon woanders belegt. Lösung war ein abweichender Name `FuelNow — Fuel Prices` für `en-US`. Sobald der echte App-Name finalisiert wird, bei Trademark-Konflikt entweder Trademark-Claim oder Locale-spezifischen Namen behalten.
+- **`whatsNew` für Erstveröffentlichung 1.0 ist gesperrt:** Apple liefert „Attribute 'whatsNew' cannot be edited at this time" — das Feld ist erst ab 1.0.1+ relevant. Lokale JSONs enthalten daher kein `whatsNew` mehr.
+- **Bekannte Ablehnungsgründe** treten oft erst beim Push auf. Validate ist nur ein Schema-Check, kein Apple-seitiger Vorab-Check.
 
 ## Was ist Platzhalter?
 
