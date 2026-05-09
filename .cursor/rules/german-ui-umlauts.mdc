@@ -1,0 +1,13 @@
+---
+description: Deutsche UI-Texte mit echten Umlauten (ä, ö, ü) schreiben
+globs: FuelNow*/**/*.swift
+alwaysApply: false
+---
+
+# Deutsche Anzeigetexte: Umlaute
+
+Für **nutzersichtbaren** deutschen Text in Swift (Labels, Hints, Notification-`body`, Widget-`description`, `Localizable.xcstrings`-Keys als Entwicklungs-String) **echte Umlaute** verwenden: **ä, ö, ü** (und **ß** wo sachlich nötig).
+
+- **Nicht** ASCII-Ersatz wie `ae`/`oe`/`ue` in UI-Strings (`guenstiger`, `laeuft`, `Oeffnet`, `fuer`, `Naechste` …), außer technische Einschränkungen (z. B. URL-Fragmente) erzwingen es.
+- `Localizable.xcstrings`: Wenn der Entwicklungs-String der Schlüssel ist, Schlüssel **und** alle `String(…)`/`Text(…)`-Verweise **gemeinsam** auf dieselbe Schreibweise mit Umlauten bringen.
+- Codekommentare dürfen weiterhin ohne Umlaute sein, wenn das Lesen in ASCII-Umgebungen wichtig ist — Priorität hat konsistente **UI**.

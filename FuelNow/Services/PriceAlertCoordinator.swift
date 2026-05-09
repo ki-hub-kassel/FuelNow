@@ -209,7 +209,7 @@ final class PriceAlertCoordinator {
         content.title = "Preis gefallen: \(favorite.displayTitle)"
         let centsDrop = Int(round(dropEuros * 100))
         let formatted = FuelPriceFormatting.pumpStyleString(euros: newPrice)
-        content.body = "\(fuel.displayName) jetzt \(formatted) — \(centsDrop) Cent guenstiger als zuletzt."
+        content.body = "\(fuel.displayName) jetzt \(formatted) — \(centsDrop) Cent günstiger als zuletzt."
         content.sound = .default
         content.userInfo = [
             "deepLink": "fuelnow://station/\(favorite.id.uuidString)",

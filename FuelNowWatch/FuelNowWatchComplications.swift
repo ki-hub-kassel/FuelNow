@@ -131,7 +131,7 @@ struct FuelNowComplicationWidget: Widget {
                 .containerBackground(.fill.tertiary, for: .widget)
         }
         .configurationDisplayName("FuelNow")
-        .description("Naechste Tankstelle inklusive Pump-Style-Preis.")
+        .description("Nächste Tankstelle inklusive Pump-Style-Preis.")
         .supportedFamilies([.accessoryCircular, .accessoryCorner, .accessoryInline, .accessoryRectangular])
     }
 }
