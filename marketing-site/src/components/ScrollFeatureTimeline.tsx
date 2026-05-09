@@ -18,9 +18,12 @@ export function ScrollFeatureTimeline({ features }: ScrollFeatureTimelineProps) 
       return undefined
     }
 
-    const onScroll = () => {
+    let pendingFrame: number | null = null
+
+    const recomputeActive = () => {
+      pendingFrame = null
       const viewportCenter = window.innerHeight * 0.45
-      let nearest = activeIndex
+      let nearest = -1
       let smallestDistance = Number.POSITIVE_INFINITY
 
       cardRefs.current.forEach((card, index) => {
@@ -38,20 +41,32 @@ export function ScrollFeatureTimeline({ features }: ScrollFeatureTimelineProps) 
         }
       })
 
-      if (nearest !== activeIndex) {
-        setActiveIndex(nearest)
+      if (nearest === -1) {
+        return
       }
+
+      setActiveIndex((current) => (nearest === current ? current : nearest))
     }
 
-    onScroll()
+    const onScroll = () => {
+      if (pendingFrame !== null) {
+        return
+      }
+      pendingFrame = window.requestAnimationFrame(recomputeActive)
+    }
+
+    recomputeActive()
     window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', onScroll)
 
     return () => {
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onScroll)
+      if (pendingFrame !== null) {
+        window.cancelAnimationFrame(pendingFrame)
+      }
     }
-  }, [activeIndex, safeFeatures.length])
+  }, [safeFeatures.length])
 
   if (safeFeatures.length === 0) {
     return null

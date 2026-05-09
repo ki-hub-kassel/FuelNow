@@ -78,10 +78,7 @@ export function FAQSection() {
                 >
                   <span>{item.q}</span>
                   <span className="faqIcon" aria-hidden="true">
-                    <motion.span
-                      className="faqIconBar faqIconBarH"
-                      animate={isOpen ? { scaleX: 1 } : { scaleX: 1 }}
-                    />
+                    <span className="faqIconBar faqIconBarH" />
                     <motion.span
                       className="faqIconBar faqIconBarV"
                       animate={{ scaleY: isOpen ? 0 : 1 }}

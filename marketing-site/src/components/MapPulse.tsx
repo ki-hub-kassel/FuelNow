@@ -38,7 +38,7 @@ export function MapPulse({ className }: MapPulseProps) {
           strokeLinecap="round"
           strokeDasharray="6 6"
           initial={{ pathLength: 0, opacity: 0 }}
-          animate={prefersReducedMotion ? { pathLength: 1, opacity: 0.7 } : { pathLength: 1, opacity: 0.7 }}
+          animate={{ pathLength: 1, opacity: 0.7 }}
           transition={{ duration: prefersReducedMotion ? 0 : 2.4, ease: 'easeInOut' }}
         />
         <defs>
