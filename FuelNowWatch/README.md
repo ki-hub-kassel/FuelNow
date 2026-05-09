@@ -84,4 +84,4 @@ IPHONE_SIM_NAME="iPhone 17 Pro" WATCH_SIM_NAME="Apple Watch Ultra 3 (49mm)" \
 - **Komplikations-Widget-Extension** als eigenes Target — separates Watch-WidgetBundle,
   Folge-Ticket **TAN-110**.
 - **Reichhaltigere Watch-UI** (Detail-Sheet, App-Intents, Map-Snippet) — heute nur eine
-  scrollbare Liste mit „Naechste" / „Guenstigste" / „Top-2 in der Naehe".
+  scrollbare Liste mit „Nächste" / „Günstigste" / „Top-2 in der Nähe".

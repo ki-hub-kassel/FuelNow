@@ -279,7 +279,7 @@ struct SettingsView: View {
                 Label("Preis-Pushes (Beta)", systemImage: "bell.badge")
             }
             .tint(TRColors.accent)
-            .accessibilityHint("Schickt eine Benachrichtigung, wenn ein Favorit deutlich guenstiger wird.")
+            .accessibilityHint("Schickt eine Benachrichtigung, wenn ein Favorit deutlich günstiger wird.")
             .onChange(of: priceAlertsEnabled) { _, newValue in
                 guard newValue else { return }
                 Task { await handlePriceAlertsToggleEnabled() }
@@ -303,7 +303,7 @@ struct SettingsView: View {
                     Label("Mitteilungen in Systemeinstellungen erlauben", systemImage: "gear")
                         .foregroundStyle(TRColors.accent)
                 }
-                .accessibilityHint("Oeffnet die FuelNow-Seite in den iOS-Einstellungen.")
+                .accessibilityHint("Öffnet die FuelNow-Seite in den iOS-Einstellungen.")
             }
         } header: {
             Text("Preis-Pushes")
@@ -319,11 +319,11 @@ struct SettingsView: View {
     }
 
     private var priceAlertsFooterText: String {
-        let baseHint = "Beta — laeuft lokal im Hintergrund. iOS bestimmt, wie oft die App nachsehen darf."
+        let baseHint = "Beta — läuft lokal im Hintergrund. iOS bestimmt, wie oft die App nachsehen darf."
         guard priceAlertsEnabled else { return baseHint }
         switch notificationAuthStatus {
         case .denied:
-            let denied = "Mitteilungen sind fuer FuelNow in den Systemeinstellungen deaktiviert — "
+            let denied = "Mitteilungen sind für FuelNow in den Systemeinstellungen deaktiviert — "
                 + "Pushes kommen erst an, wenn du sie dort wieder erlaubst."
             return baseHint + "\n\n" + denied
         default:
