@@ -1,0 +1,8 @@
+{
+  "description": "Fuel up at the best price — without detours.\n\nFuelNow shows you every fuel station nearby with live prices for Super E5, Super E10, and Diesel. Data comes straight from the official German Market Transparency Unit for Fuels (MTS-K) via Tankerkönig — second-by-second, covering all of Germany.\n\nWHAT YOU GET\n• Map with every station within 25 km\n• Live prices for Super, Super E10, and Diesel\n• Open / closed status at a glance\n• Station detail with brand, distance, and pump-style prices\n• One tap — Apple Maps starts turn-by-turn navigation\n\nSIRI & SHORTCUTS\n„Hey Siri, where's the cheapest gas station?\" — FuelNow tells you the price and distance, and offers an instant navigation button.\n\nDATA & PRIVACY\n• Source: Tankerkönig (MTS-K), CC BY 4.0\n• Your location only leaves your device for the price lookup\n• No ads, no trackers\n\nFREE TO USE\nMap, prices, and search are completely free.\n\nNote: FuelNow only covers fuel stations in Germany (data source: MTS-K).",
+  "keywords": "gas,fuel,diesel,super,e10,e5,gasoline,price,cheap,navigation,siri,germany",
+  "marketingUrl": "https://fuelnow.app/",
+  "promotionalText": "New: ask Siri for the cheapest gas station — including price, distance, and instant Apple Maps navigation. Now with WCAG-AAA contrast and Liquid Glass design.",
+  "supportUrl": "https://fuelnow.app/#/impressum",
+  "whatsNew": "Welcome to FuelNow!\n\n• Live fuel prices for all of Germany\n• Map with cluster pins and station details\n• Siri shortcuts for „nearest\" and „cheapest gas station\"\n• Tankerkönig (MTS-K) as the official data source\n• WCAG-AAA contrast, Liquid Glass design"
+}

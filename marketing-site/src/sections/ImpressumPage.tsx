@@ -7,14 +7,21 @@ export function ImpressumPage() {
           Impressum
         </h1>
 
+        <aside className="legalNotice" role="note">
+          <strong>Hinweis:</strong> Diese Seite enthält derzeit
+          <strong> Platzhalter-Daten</strong> für TestFlight-Vorbereitung. Vor
+          App-Store-Submission werden alle § 5 TMG-Pflichtangaben durch die
+          finalen Werte ersetzt.
+        </aside>
+
         <section className="legalSection">
           <h2>Angaben gemäß § 5 TMG</h2>
           <p>
-            <strong>[BITTE ERGÄNZEN: Name / Inhaber bzw. Firmenname]</strong>
+            <strong>FuelNow Team (Platzhalter)</strong>
             <br />
-            [Straße und Hausnummer]
+            Musterstraße 1
             <br />
-            [Postleitzahl] [Ort]
+            12345 Berlin
             <br />
             Deutschland
           </p>
@@ -23,18 +30,18 @@ export function ImpressumPage() {
         <section className="legalSection">
           <h2>Kontakt</h2>
           <p>
-            E-Mail: <a href="mailto:[BITTE-ERGAENZEN]@example.com">[BITTE ERGÄNZEN]</a>
+            E-Mail: <a href="mailto:support@fuelnow.app">support@fuelnow.app</a>
             <br />
-            Telefon (optional): [BITTE ERGÄNZEN]
+            Telefon: +49 30 1234567 (Platzhalter)
           </p>
         </section>
 
         <section className="legalSection">
           <h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
           <p>
-            [BITTE ERGÄNZEN: Name]
+            FuelNow Team (Platzhalter)
             <br />
-            [Anschrift wie oben]
+            Anschrift wie oben
           </p>
         </section>
 
@@ -119,7 +126,7 @@ export function ImpressumPage() {
           </p>
         </section>
 
-        <p className="legalUpdated">Stand: [BITTE ERGÄNZEN: Monat Jahr]</p>
+        <p className="legalUpdated">Stand: Mai 2026 (Platzhalter-Version)</p>
       </div>
     </article>
   )

@@ -1,0 +1,8 @@
+{
+  "_comment": "TestFlight Beta-Localization (de-DE) — wird via 'asc testflight app-localizations create/update' nach ASC gepusht, sobald der API-Key App-Manager-Rechte hat.",
+  "locale": "de-DE",
+  "description": "FuelNow Beta — zeigt dir alle Tankstellen in deiner Nähe mit Live-Preisen für Super, E10 und Diesel. Tanke zum besten Preis ohne Umwege. Daten von Tankerkönig (MTS-K).",
+  "feedbackEmail": "beta@fuelnow.app",
+  "marketingUrl": "https://fuelnow.app/",
+  "privacyPolicyUrl": "https://fuelnow.app/#/datenschutz"
+}

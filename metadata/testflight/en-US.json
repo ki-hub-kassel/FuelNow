@@ -1,0 +1,8 @@
+{
+  "_comment": "TestFlight Beta-Localization (en-US) — pushed via 'asc testflight app-localizations create/update' once the API key has App Manager rights.",
+  "locale": "en-US",
+  "description": "FuelNow Beta — shows every fuel station nearby with live prices for Super, E10 and Diesel. Fuel up at the best price without detours. Data from Tankerkönig (MTS-K, Germany).",
+  "feedbackEmail": "beta@fuelnow.app",
+  "marketingUrl": "https://fuelnow.app/",
+  "privacyPolicyUrl": "https://fuelnow.app/#/datenschutz"
+}

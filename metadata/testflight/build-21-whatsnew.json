@@ -1,0 +1,10 @@
+{
+  "_comment": "What-to-Test-Notizen für Build 21 — werden via 'asc builds test-notes create' gesetzt, sobald der API-Key App-Manager-Rechte hat.",
+  "buildNumber": "21",
+  "version": "1.0",
+  "platform": "IOS",
+  "locales": {
+    "de-DE": "Was diese Beta neu hat:\n\n• Home-Widget umbenannt zu „Günstigste im 5-km-Umkreis\" + neue Medium-Größe (4 Stationen)\n• Sanftes Haptik-Feedback an allen wichtigen Aktionen (Karten-Tap, Navigation, Plus-Kauf)\n• Einstellungen: Push-Hinweis aufgeräumt, Umlaute korrigiert\n\nBitte testen:\n• Widget hinzufügen, Medium-Größe wählen, prüfen ob 4 Tankstellen angezeigt werden\n• Karte: Cluster antippen, Tankstelle wählen, Navigation in Apple Maps starten\n• Einstellungen → Preis-Pushes aktivieren und Schwelle ändern\n• Apple Watch (am iPhone gepairt): Daten und Komplikation prüfen\n\nFeedback bitte direkt aus TestFlight per Screenshot — danke!",
+    "en-US": "What's new in this beta:\n\n• Home widget renamed to „Günstigste im 5-km-Umkreis\" + new Medium size (4 stations)\n• Subtle haptic feedback across key actions (map tap, navigation, Plus purchase)\n• Settings: cleaned up the push hint, fixed German umlauts\n\nPlease test:\n• Add the widget, pick Medium, confirm 4 stations show up\n• Map: tap a cluster, pick a station, start Apple Maps navigation\n• Settings → toggle Price Pushes and change the threshold\n• Apple Watch (paired): check data and complication\n\nFeedback via TestFlight screenshot — thanks!"
+  }
+}

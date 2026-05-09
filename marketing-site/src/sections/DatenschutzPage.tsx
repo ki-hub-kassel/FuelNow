@@ -7,6 +7,13 @@ export function DatenschutzPage() {
           Datenschutzerklärung
         </h1>
 
+        <aside className="legalNotice" role="note">
+          <strong>Hinweis:</strong> Diese Seite enthält derzeit
+          <strong> Platzhalter-Daten</strong> für TestFlight-Vorbereitung. Vor
+          App-Store-Submission werden Inhaber, Anschrift und Kontaktdaten
+          durch die finalen Werte ersetzt.
+        </aside>
+
         <section className="legalSection">
           <h2>1. Verantwortlicher</h2>
           <p>
@@ -14,11 +21,13 @@ export function DatenschutzPage() {
             anderer nationaler Datenschutzgesetze ist:
           </p>
           <p>
-            <strong>[BITTE ERGÄNZEN: Name / Inhaber]</strong>
+            <strong>FuelNow Team (Platzhalter)</strong>
             <br />
-            [Anschrift]
+            Musterstraße 1
             <br />
-            E-Mail: <a href="mailto:[BITTE-ERGAENZEN]@example.com">[BITTE ERGÄNZEN]</a>
+            12345 Berlin, Deutschland
+            <br />
+            E-Mail: <a href="mailto:privacy@fuelnow.app">privacy@fuelnow.app</a>
           </p>
         </section>
 
@@ -66,7 +75,18 @@ export function DatenschutzPage() {
             professionellen Anbieter (Art. 6 Abs. 1 lit. f DSGVO).
           </p>
           <p>
-            <em>[BITTE ERGÄNZEN: Hosting-Anbieter, Anschrift, Link zur DPA.]</em>
+            <em>
+              Hosting-Anbieter (Platzhalter): Vercel Inc., 340 S Lemon Ave
+              #4133, Walnut, CA 91789, USA. DPA:{' '}
+              <a
+                href="https://vercel.com/legal/dpa"
+                target="_blank"
+                rel="noreferrer noopener"
+              >
+                vercel.com/legal/dpa
+              </a>
+              .
+            </em>
           </p>
         </section>
 
@@ -171,7 +191,7 @@ export function DatenschutzPage() {
           </p>
         </section>
 
-        <p className="legalUpdated">Stand: [BITTE ERGÄNZEN: Monat Jahr]</p>
+        <p className="legalUpdated">Stand: Mai 2026 (Platzhalter-Version)</p>
       </div>
     </article>
   )
