@@ -326,10 +326,6 @@ struct SettingsView: View {
             let denied = "Mitteilungen sind fuer FuelNow in den Systemeinstellungen deaktiviert — "
                 + "Pushes kommen erst an, wenn du sie dort wieder erlaubst."
             return baseHint + "\n\n" + denied
-        case .provisional:
-            let provisional = "Aktuell als „leise“ Mitteilungen aktiv (nur Mitteilungszentrale). "
-                + "Tippe in der ersten Mitteilung auf „Beibehalten“, damit sie auch im Sperrbildschirm erscheinen."
-            return baseHint + "\n\n" + provisional
         default:
             return baseHint
         }
