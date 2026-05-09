@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: SwiftLint + SwiftFormat
+    runs-on: macos-15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show toolchain
+        run: |
+          xcodebuild -version
+          swift --version
+
+      - name: Install SwiftLint and SwiftFormat
+        run: |
+          brew update
+          brew install swiftlint swiftformat
+
+      - name: SwiftLint (strict)
+        run: ./scripts/lint.sh --strict
+
+      - name: SwiftFormat (lint only)
+        run: ./scripts/format.sh --lint
+
+  test:
+    name: xcodebuild test (iOS Simulator)
+    runs-on: macos-15
+    needs: lint
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show toolchain
+        run: xcodebuild -version
+
+      - name: Resolve simulator runtime
+        id: simulator
+        run: |
+          DEVICE="iPhone 16"
+          echo "device=$DEVICE" >> "$GITHUB_OUTPUT"
+
+      - name: Run unit tests
+        env:
+          DERIVED_DATA: .derived-data-ios-ci
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project FuelNow.xcodeproj \
+            -scheme FuelNow \
+            -configuration Debug \
+            -destination "platform=iOS Simulator,name=${{ steps.simulator.outputs.device }}" \
+            -derivedDataPath "$DERIVED_DATA" \
+            -skipPackagePluginValidation \
+            -resultBundlePath "$DERIVED_DATA/TestResults.xcresult" \
+            test | xcpretty --color || exit_status=$?
+          if [ -n "${exit_status:-}" ]; then exit "$exit_status"; fi
+
+      - name: Upload xcresult on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TestResults
+          path: .derived-data-ios-ci/TestResults.xcresult
+          if-no-files-found: ignore
+          retention-days: 7

@@ -16,6 +16,7 @@ struct StationDetailView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.stationDetailFetcher) private var stationDetailFetcher
     @Environment(LocationService.self) private var locationService
+    @Environment(FavoritesStore.self) private var favoritesStore
 
     @State private var detailStation: Station?
     @State private var detailFetchPhase: StationDetailFetchPhase = .idle
@@ -88,6 +89,9 @@ struct StationDetailView: View {
                 await refreshStationDetail()
             }
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    favoriteToggleButton
+                }
                 ToolbarItem(placement: .principal) {
                     Text(navigationBarBrandTitle)
                         .font(.headline)
@@ -118,6 +122,28 @@ struct StationDetailView: View {
             )
             .presentationCompactAdaptation(.popover)
         }
+    }
+
+    private var isFavorited: Bool {
+        favoritesStore.contains(stationID: resolvedStation.id)
+    }
+
+    private var favoriteToggleButton: some View {
+        Button {
+            favoritesStore.toggle(resolvedStation)
+        } label: {
+            Image(systemName: isFavorited ? "heart.fill" : "heart")
+                .font(.title3.weight(.medium))
+                .foregroundStyle(isFavorited ? TRColors.danger : TRColors.labelSecondary)
+                .symbolRenderingMode(.hierarchical)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(isFavorited ? "Favorit entfernen" : "Als Favorit speichern")
+        .accessibilityHint(
+            isFavorited
+                ? "Entfernt diese Tankstelle aus deinen Favoriten."
+                : "Speichert diese Tankstelle in deinen Favoriten und meldet Preissturz-Pushes."
+        )
     }
 
     private func refreshStationDetail() async {
@@ -270,6 +296,13 @@ struct StationDetailView: View {
     }
 
     private func startAppleMapsDrivingNavigation() {
+        Task {
+            await DrivingToStationActivityController.startActivity(
+                station: resolvedStation,
+                preferredFuel: preferredFuel,
+                userLocation: locationService.currentLocation
+            )
+        }
         AppleMapsDrivingNavigation.openDrivingDirections(
             toLatitude: resolvedStation.latitude,
             longitude: resolvedStation.longitude,

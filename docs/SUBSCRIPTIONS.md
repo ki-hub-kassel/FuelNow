@@ -127,7 +127,7 @@ audiences:
   *Settings → FuelNow Plus* and the *„FuelNow Plus ansehen"* sheet to see
   the trial badge / headline.
 
-## Local testing & demo mode (TAN-90)
+## Local testing fallbacks (TAN-90)
 
 Three layered failure modes can leave the Settings price spinner running
 forever — TAN-90 hardens each one:
@@ -147,35 +147,17 @@ forever — TAN-90 hardens each one:
    after **8 s** of empty product state. Restore and Manage actions stay
    reachable.
 
-### Debug demo toggle
-
-`EntitlementManager.applyDebugUnlockIfRequested()` honors two inputs in
-DEBUG builds (the entire mechanism is excluded from Release via
-`#if DEBUG`):
-
-- Launch argument `--mock-plus-subscriber` — convenient for scripted
-  smoke flows that go through `xcrun simctl launch`.
-- `UserDefaults` key `__debug__forcePlusUnlocked` — toggled via the new
-  *Settings → DEBUG → "Demo-Modus: FuelNow Plus aktiv"* switch. The
-  toggle calls `EntitlementManager.setDebugForcedPlusUnlock(_:)` so the
-  UI flips synchronously (Plus-Active section, CarPlay routing).
-
-To launch the simulator with Plus pre-unlocked:
-
-```bash
-xcrun simctl launch "$UDID" com.vibecoding.fuelnow --mock-plus-subscriber
-```
-
-Production safety:
-
-- Apple Review forbids paid-feature gating bypasses in shipping builds;
-  the toggle, the launch-arg branch, and `EntitlementManager.setDebugForcedPlusUnlock(_:)`
-  are all wrapped in `#if DEBUG` and therefore stripped from Release
-  binaries.
-- Sandbox testers (App Store Connect) remain the source of truth for the
-  full StoreKit purchase / restore loop and live in
-  [TAN-46](https://linear.app/tankradar-app/issue/TAN-46) /
-  [TAN-59](https://linear.app/tankradar-app/issue/TAN-59).
+> The original TAN-90 ticket also shipped a DEBUG-only **„Demo-Modus:
+> FuelNow Plus aktiv"** toggle (Launch-Arg `--mock-plus-subscriber` plus
+> a Settings switch) that flipped `EntitlementManager.isPlusSubscriber`
+> without a real purchase. That toggle was removed once the StoreKit
+> Local Testing path stabilised — Plus state now comes exclusively from
+> `Transaction.currentEntitlements` (Sandbox Apple ID, ASC promo codes,
+> or `FuelNowPlus.storekit` Local Testing in Xcode `Cmd+R`).
+> Sandbox testers (App Store Connect) remain the source of truth for the
+> full StoreKit purchase / restore loop and live in
+> [TAN-46](https://linear.app/tankradar-app/issue/TAN-46) /
+> [TAN-59](https://linear.app/tankradar-app/issue/TAN-59).
 
 ## Sources
 

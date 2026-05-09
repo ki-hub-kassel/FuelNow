@@ -57,6 +57,21 @@ struct MapScreen: View {
         return stationStore.stations.isEmpty
     }
 
+    /// „Aktualisiert vor X Min“-Text für die Karten-Footer-Pill.
+    /// Liefert `nil`, solange noch kein Fetch durchgelaufen ist, der Wert „in der Zukunft“
+    /// liegt (Clock-Skew), oder der letzte Abruf **unter 30 s** liegt — dann keine Pill
+    /// („soeben aktualisiert“ soll nicht erscheinen). Granularitaet ist bewusst grob.
+    private var lastUpdatedRelativeText: String? {
+        guard let date = stationStore.lastFetchAt else { return nil }
+        let interval = max(0, Date().timeIntervalSince(date))
+        if interval < 30 { return nil }
+        let minutes = Int(interval / 60)
+        if minutes < 1 { return "vor wenigen Sekunden" }
+        if minutes < 60 { return "aktualisiert vor \(minutes) Min" }
+        let hours = minutes / 60
+        return "aktualisiert vor \(hours) Std"
+    }
+
     /// Nutzer hat die Karte vom letzten `list.php`-Zentrum weggeschoben — expliziter Abruf um die Kartenmitte.
     private var shouldOfferSearchInVisibleRegion: Bool {
         guard stationStore.loadState != .loading else { return false }
@@ -128,15 +143,25 @@ struct MapScreen: View {
                     .transition(reduceMotion ? .opacity : .move(edge: .bottom).combined(with: .opacity))
                 }
 
-                HStack {
+                HStack(alignment: .center, spacing: TRSpacing.s) {
+                    if let lastUpdated = lastUpdatedRelativeText {
+                        Label(lastUpdated, systemImage: "arrow.clockwise")
+                            .labelStyle(.titleAndIcon)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .padding(.horizontal, TRSpacing.s)
+                            .padding(.vertical, 6)
+                            .background(.thinMaterial, in: Capsule())
+                            .accessibilityLabel("Tankstellen \(lastUpdated)")
+                    }
                     Spacer()
                     LocateMeButton {
                         centerMapOnUser()
                     }
                     .disabled(locationService.currentLocation == nil)
                     .opacity(locationService.currentLocation == nil ? 0.45 : 1)
-                    .padding(.trailing, TRSpacing.m)
                 }
+                .padding(.horizontal, TRSpacing.m)
             }
             .padding(.bottom, TRSpacing.m)
         }

@@ -23,6 +23,13 @@ enum AppSettings {
         static let pendingMapStationFocusID = "tr.pendingMapStationFocusID"
         /// First-run Onboarding wurde abgeschlossen/übersprungen.
         static let hasCompletedOnboarding = "tr.hasCompletedOnboarding"
+        /// JSON-codierte Liste der Favoriten-Tankstellen (Roadmap Phase 2).
+        /// Wird in der App-Group gespeichert, damit Widget/Watch denselben Stand sehen.
+        static let favoritesJSON = "tr.favoritesJSON"
+        /// Boolesches User-Setting "Preis-Pushes (Beta)" (Roadmap Phase 3).
+        static let priceAlertsEnabled = "tr.priceAlerts.enabled"
+        /// Schwellenwert in Euro fuer Preis-Pushes; Default 0.05 (5 Cent).
+        static let priceAlertsThresholdEuros = "tr.priceAlerts.thresholdEuros"
     }
 
     /// Suchradius für Tankerkönig-`list.php` (TAN-79).

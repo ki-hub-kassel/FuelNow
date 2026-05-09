@@ -30,6 +30,29 @@ struct WidgetDataSnapshot: Codable, Sendable, Equatable {
     let stationCount: Int
     let nearest: WidgetStationSnapshot?
     let cheapest: WidgetStationSnapshot?
+    /// Top-N (Default: 2) guenstigste Tankstellen im engen Radius (Default: 5 km) fuer das
+    /// `FuelNowCheapestNearbyWidget` (Roadmap Phase 4). Als optional kodiert, damit alte
+    /// Snapshots (vor diesem Feld) weiter dekodiert werden koennen — JSONDecoder springt
+    /// auf `nil`, ohne den `WidgetDataSnapshot`-Decode zu brechen.
+    let cheapestNearby: [WidgetStationSnapshot]?
+
+    init(
+        generatedAt: Date,
+        loadState: WidgetSnapshotLoadState,
+        preferredFuelRawValue: String,
+        stationCount: Int,
+        nearest: WidgetStationSnapshot?,
+        cheapest: WidgetStationSnapshot?,
+        cheapestNearby: [WidgetStationSnapshot]? = nil
+    ) {
+        self.generatedAt = generatedAt
+        self.loadState = loadState
+        self.preferredFuelRawValue = preferredFuelRawValue
+        self.stationCount = stationCount
+        self.nearest = nearest
+        self.cheapest = cheapest
+        self.cheapestNearby = cheapestNearby
+    }
 }
 
 struct WidgetSnapshotStore {

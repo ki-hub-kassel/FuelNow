@@ -10,6 +10,22 @@ struct FuelNowApp: App {
     init() {
         let initialCoordinator = FuelNowLifecycleCoordinator()
         _coordinator = State(initialValue: initialCoordinator)
+
+        // BGTask-Handler MUSS in der App-Init registriert werden — vor `body` Aufbau —
+        // sonst lehnt iOS den Handler ab. Wir behalten eine schwache Coordinator-Referenz,
+        // damit der Handler beim Aufruf an die aktuelle Instanz delegieren kann.
+        let coordinatorRef = UnsafeFuelNowCoordinatorReference(coordinator: initialCoordinator)
+        PriceAlertCoordinator.registerBackgroundHandler { coordinatorRef.coordinator?.priceAlertCoordinator }
+    }
+
+    /// Indirektion fuer den `@Sendable`-Closure des `BGTaskScheduler.register`-Aufrufs.
+    /// Eine direkte Capture von `coordinator` waere nicht `Sendable`, aber wir lesen den
+    /// Wert nur auf dem Main Actor (siehe `Task { @MainActor in ... }` im Handler).
+    private final class UnsafeFuelNowCoordinatorReference: @unchecked Sendable {
+        weak var coordinator: FuelNowLifecycleCoordinator?
+        init(coordinator: FuelNowLifecycleCoordinator) {
+            self.coordinator = coordinator
+        }
     }
 
     @AppStorage(AppSettings.UserDefaultsKey.appearancePreference)
@@ -61,11 +77,13 @@ struct FuelNowApp: App {
                 .environment(\.stationDetailFetcher, coordinator.stationDetailFetcher)
                 .environment(coordinator.entitlementManager)
                 .environment(coordinator.networkMonitor)
+                .environment(coordinator.favoritesStore)
                 .environment(MapDeepLinkStore.shared)
                 .environment(\.whatsNew, whatsNewEnvironment)
                 .onAppear {
                     coordinator.networkMonitor.start()
                     syncWidgetSnapshot()
+                    coordinator.priceAlertCoordinator.scheduleNextRefresh()
                     Task {
                         await StationIntentResolution.shared.setResolver(StationStoreIntentResolver())
                     }
@@ -125,6 +143,9 @@ struct FuelNowApp: App {
         )
         coordinator.widgetSnapshotStore.write(snapshot)
         WidgetCenter.shared.reloadAllTimelines()
+        // App-Group ist iPhone-only; die Watch-Companion-App holt sich denselben Snapshot
+        // via WatchConnectivity (updateApplicationContext) — siehe WatchConnectivityCoordinator.
+        WatchConnectivityCoordinator.shared.publish(snapshot)
     }
 }
 

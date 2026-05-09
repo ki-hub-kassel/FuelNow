@@ -1,3 +1,4 @@
+import ActivityKit
 import AppIntents
 import SwiftUI
 import WidgetKit
@@ -111,8 +112,6 @@ struct FuelNowWidgetEntryView: View {
         switch family {
         case .systemSmall:
             smallView
-        case .systemMedium:
-            mediumView
         case .accessoryInline:
             inlineView
         case .accessoryRectangular:
@@ -147,50 +146,6 @@ struct FuelNowWidgetEntryView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                 .widgetURL(URL(string: station.openInAppURL))
-            } else {
-                fallbackView
-            }
-        }
-        .containerBackground(.fill.tertiary, for: .widget)
-    }
-
-    private var mediumView: some View {
-        Group {
-            if let station {
-                VStack(alignment: .leading, spacing: 10) {
-                    HStack {
-                        Text(modeTitle).font(.caption).foregroundStyle(.secondary)
-                        Spacer()
-                        Text(station.statusText).font(.caption)
-                    }
-                    Text(station.brandTitle).font(.headline).lineLimit(1)
-                    Text(station.address).font(.caption).foregroundStyle(.secondary).lineLimit(2)
-                    HStack(alignment: .lastTextBaseline) {
-                        Text(station.pumpPriceText).font(.title.bold()).lineLimit(1)
-                        Text(station.fuelTypeDisplayName).font(.caption).foregroundStyle(.secondary)
-                        Spacer()
-                        Text(station.distanceText).font(.subheadline)
-                    }
-                    HStack(spacing: 8) {
-                        if let openURL = URL(string: station.openInAppURL) {
-                            Link(destination: openURL) {
-                                Label("In FuelNow", systemImage: "fuelpump.fill")
-                            }
-                            .buttonStyle(.bordered)
-                        }
-                        if let mapsURL = URL(string: station.mapsDirectionsURL) {
-                            Link(destination: mapsURL) {
-                                Label("Navigation", systemImage: "location.north.line.fill")
-                            }
-                            .buttonStyle(.borderedProminent)
-                        }
-                        Button(intent: FuelNowWidgetRefreshIntent()) {
-                            Image(systemName: "arrow.clockwise")
-                        }
-                        .buttonStyle(.bordered)
-                    }
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             } else {
                 fallbackView
             }
@@ -249,7 +204,213 @@ struct FuelNowWidget: Widget {
         }
         .configurationDisplayName("FuelNow")
         .description("Zeigt die nächste oder günstigste Tankstelle aus den zuletzt geladenen App-Daten.")
-        .supportedFamilies([.systemSmall, .systemMedium, .accessoryInline, .accessoryRectangular])
+        .supportedFamilies([.systemSmall, .accessoryInline, .accessoryRectangular])
+    }
+}
+
+// MARK: - FuelNowCheapestNearbyWidget (Roadmap Phase 4)
+
+struct FuelNowCheapestNearbyEntry: TimelineEntry {
+    let date: Date
+    let snapshot: WidgetDataSnapshot?
+}
+
+struct FuelNowCheapestNearbyProvider: TimelineProvider {
+    typealias Entry = FuelNowCheapestNearbyEntry
+
+    private let store = WidgetSnapshotStore()
+
+    func placeholder(in context: Context) -> FuelNowCheapestNearbyEntry {
+        FuelNowCheapestNearbyEntry(
+            date: .now,
+            snapshot: WidgetDataSnapshot(
+                generatedAt: .now,
+                loadState: .ready,
+                preferredFuelRawValue: "e10",
+                stationCount: 5,
+                nearest: nil,
+                cheapest: nil,
+                cheapestNearby: [
+                    placeholderStation(name: "FuelNow Süd", price: "1,54⁹", distance: "1,8 km"),
+                    placeholderStation(name: "FuelNow Ost", price: "1,55⁹", distance: "2,3 km"),
+                ]
+            )
+        )
+    }
+
+    func getSnapshot(in context: Context, completion: @escaping (FuelNowCheapestNearbyEntry) -> Void) {
+        completion(FuelNowCheapestNearbyEntry(date: .now, snapshot: store.read()))
+    }
+
+    func getTimeline(in context: Context, completion: @escaping (Timeline<FuelNowCheapestNearbyEntry>) -> Void) {
+        let entry = FuelNowCheapestNearbyEntry(date: .now, snapshot: store.read())
+        let refreshDate = Calendar.current.date(byAdding: .minute, value: 30, to: .now) ?? .now.addingTimeInterval(1_800)
+        completion(Timeline(entries: [entry], policy: .after(refreshDate)))
+    }
+
+    private func placeholderStation(name: String, price: String, distance: String) -> WidgetStationSnapshot {
+        WidgetStationSnapshot(
+            stationID: UUID(),
+            brandTitle: name,
+            stationName: name,
+            address: "Musterstraße 1, 12345 Stadt",
+            statusText: "Geöffnet",
+            isOpen: true,
+            distanceText: distance,
+            distanceKilometers: 1.8,
+            fuelTypeDisplayName: "Super E10",
+            pumpPriceText: price,
+            voicePriceText: "1 Euro 54,9 Cent",
+            openInAppURL: "fuelnow://map",
+            mapsDirectionsURL: "https://maps.apple.com/"
+        )
+    }
+}
+
+struct FuelNowCheapestNearbyEntryView: View {
+    let entry: FuelNowCheapestNearbyEntry
+
+    private var stations: [WidgetStationSnapshot] {
+        entry.snapshot?.cheapestNearby ?? []
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Günstig im 5-km-Umkreis")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+            if stations.isEmpty {
+                Text("App öffnen — keine aktuellen Preise.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            } else {
+                ForEach(Array(stations.prefix(2).enumerated()), id: \.offset) { _, station in
+                    cheapestRow(station: station)
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .containerBackground(.fill.tertiary, for: .widget)
+        .widgetURL(URL(string: "fuelnow://map"))
+    }
+
+    private func cheapestRow(station: WidgetStationSnapshot) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(station.brandTitle)
+                .font(.subheadline.bold())
+                .lineLimit(1)
+            HStack(spacing: 6) {
+                Text(station.pumpPriceText)
+                    .font(.caption)
+                    .bold()
+                Text("·").font(.caption2).foregroundStyle(.secondary)
+                Text(station.distanceText)
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+            }
+        }
+    }
+}
+
+struct FuelNowCheapestNearbyWidget: Widget {
+    private let kind = "com.vibecoding.fuelnow.widget.cheapest5km"
+
+    var body: some WidgetConfiguration {
+        StaticConfiguration(kind: kind, provider: FuelNowCheapestNearbyProvider()) { entry in
+            FuelNowCheapestNearbyEntryView(entry: entry)
+        }
+        .configurationDisplayName("Günstig 5 km")
+        .description("Die zwei guenstigsten Tankstellen im 5-km-Umkreis um deinen Standort.")
+        .supportedFamilies([.systemSmall])
+    }
+}
+
+// MARK: - DrivingToStationLiveActivity (Roadmap Phase 5)
+
+struct DrivingToStationLiveActivity: Widget {
+    var body: some WidgetConfiguration {
+        ActivityConfiguration(for: DrivingToStationActivityAttributes.self) { context in
+            DrivingToStationLockScreenView(context: context)
+                .activityBackgroundTint(Color.black.opacity(0.85))
+                .activitySystemActionForegroundColor(.white)
+        } dynamicIsland: { context in
+            DynamicIsland {
+                DynamicIslandExpandedRegion(.leading) {
+                    Image(systemName: "fuelpump.fill")
+                        .foregroundStyle(.white)
+                }
+                DynamicIslandExpandedRegion(.trailing) {
+                    Text(context.state.distanceText)
+                        .font(.headline)
+                        .foregroundStyle(.white)
+                }
+                DynamicIslandExpandedRegion(.center) {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(context.attributes.brandTitle)
+                            .font(.headline)
+                            .foregroundStyle(.white)
+                            .lineLimit(1)
+                        Text("\(context.attributes.fuelDisplayName) · \(context.attributes.pumpPriceText)")
+                            .font(.caption)
+                            .foregroundStyle(.white.opacity(0.85))
+                    }
+                }
+                DynamicIslandExpandedRegion(.bottom) {
+                    if let eta = context.state.etaText {
+                        Text(eta)
+                            .font(.caption)
+                            .foregroundStyle(.white.opacity(0.85))
+                    }
+                }
+            } compactLeading: {
+                Image(systemName: "fuelpump.fill")
+                    .foregroundStyle(.white)
+            } compactTrailing: {
+                Text(context.state.distanceText)
+                    .foregroundStyle(.white)
+            } minimal: {
+                Image(systemName: "fuelpump.fill")
+                    .foregroundStyle(.white)
+            }
+            .keylineTint(.green)
+        }
+    }
+}
+
+private struct DrivingToStationLockScreenView: View {
+    let context: ActivityViewContext<DrivingToStationActivityAttributes>
+
+    var body: some View {
+        HStack(alignment: .center, spacing: 12) {
+            Image(systemName: "fuelpump.fill")
+                .font(.title2)
+                .foregroundStyle(.white)
+            VStack(alignment: .leading, spacing: 4) {
+                Text(context.attributes.brandTitle)
+                    .font(.headline)
+                    .foregroundStyle(.white)
+                    .lineLimit(1)
+                Text("\(context.attributes.fuelDisplayName) · \(context.attributes.pumpPriceText)")
+                    .font(.caption)
+                    .foregroundStyle(.white.opacity(0.85))
+                    .lineLimit(1)
+            }
+            Spacer()
+            VStack(alignment: .trailing, spacing: 2) {
+                Text(context.state.distanceText)
+                    .font(.headline)
+                    .foregroundStyle(.white)
+                if let eta = context.state.etaText {
+                    Text(eta)
+                        .font(.caption)
+                        .foregroundStyle(.white.opacity(0.85))
+                }
+            }
+        }
+        .padding()
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Fahrt zu \(context.attributes.stationName), \(context.state.distanceText)")
     }
 }
 
@@ -257,5 +418,7 @@ struct FuelNowWidget: Widget {
 struct FuelNowWidgetsBundle: WidgetBundle {
     var body: some Widget {
         FuelNowWidget()
+        FuelNowCheapestNearbyWidget()
+        DrivingToStationLiveActivity()
     }
 }

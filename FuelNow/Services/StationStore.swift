@@ -76,6 +76,12 @@ final class StationStore {
         lastFetchReference?.coordinate
     }
 
+    /// Zeitstempel des letzten abgeschlossenen Fetch-Versuchs (Erfolg oder Fehler).
+    /// Wird von der Karten-Footer-Pill „Aktualisiert vor X Min“ konsumiert.
+    var lastFetchAt: Date? {
+        lastFetchFinishedAt
+    }
+
     deinit {
         fetchTask?.cancel()
     }
