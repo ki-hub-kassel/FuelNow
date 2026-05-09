@@ -1,0 +1,113 @@
+---
+description: >-
+  Strukturierte Linear-/Engineering-Tickets formulieren (Titel, Kontext, Umsetzung,
+  testbare Akzeptanzkriterien, Tests, Dependencies, optional Aufwand/Priorität) —
+  angelehnt an awesome-cursorrules Engineering-Ticket-Template.
+alwaysApply: false
+---
+
+# Engineering-Ticket-Vorlage (FuelNow / Linear)
+
+Quelle inspiriert durch [PatrickJS/awesome-cursorrules — engineering-ticket-template](https://github.com/PatrickJS/awesome-cursorrules/blob/main/rules/engineering-ticket-template-cursorrules-prompt-file/.cursorrules).
+
+**Rolle:** Du formulierst Tickets wie ein erfahrener Technical PM: genug Kontext zum Umsetzen, ohne Implementierung vorzuschreiben.
+
+## Repo-spezifisch (FuelNow)
+
+- **Issue-ID:** `TAN-XX` (Linear). Branch: **`feature/TAN-XX-kurz-slug`** — siehe `.cursor/rules/ticket-branch-workflow.mdc`.
+- **Nach Merge / Done:** Issue aktualisieren, Kommentar mit PR — siehe `.cursor/rules/linear-ticket-sync-complete-merge.mdc`.
+- **Tankerkönig/API-Umfang:** vor Spez `.cursor/rules/tankerkoenig-ticket-precheck.mdc` und `.cursor/skills/tankerkoenig-api/SKILL.md`.
+- **Estimation / Sprint:** in Linear optional (**Priority**, **Cycle**, **Labels**, Story Points nach Teamgewohnheit).
+
+## Vorlage — Listenformat
+
+Nutze dieses Gerüst für neue Issues oder zur Überarbeitung bestehender:
+
+```markdown
+# Engineering Ticket: [kurzer, aktiver Titel]
+
+## Description
+[Was soll erreicht werden und warum — Nutzen / Problem]
+
+## Technical Context
+[Architektur, Constraints, betroffene Targets/Module, Risiken]
+
+## Implementation Details
+[Vorschlag in Stichpunkten — nicht micromanagen; Alternativen ok]
+
+## Acceptance Criteria
+1. [Messbar / testbar]
+2. […]
+3. […]
+
+## Testing Considerations
+- [Unit/UI/manuell, Simulator, Edge Cases]
+
+## Dependencies
+- [Blocker, andere Issues, externe API/Releases]
+
+## Resources
+- [Design, Doku, verwandte PRs/Issues]
+
+## Estimation (optional)
+Story Points: [1, 2, 3, 5, 8, 13]
+
+## Priority (optional)
+[Critical / High / Medium / Low]
+
+## Sprint / Cycle (optional)
+[Linear Cycle oder Zielzeitfenster]
+```
+
+## Vorlage — Given / When / Then
+
+```markdown
+# Engineering Ticket: [Titel]
+
+## Description
+[…]
+
+## Technical Context
+[…]
+
+## Implementation Details
+[…]
+
+## Acceptance Criteria
+
+### Scenario 1: [Name]
+Given [Voraussetzung]
+When [Aktion]
+Then [erwartetes Ergebnis]
+And [optional weiteres Ergebnis]
+
+### Scenario 2: [Name]
+Given …
+When …
+Then …
+
+## Testing Considerations
+- […]
+
+## Dependencies
+- […]
+
+## Resources
+- […]
+
+## Estimation / Priority / Sprint (optional)
+[siehe Listenformat]
+```
+
+## Best Practices (kurz)
+
+1. Titel: Arbeit klar benennen, nicht nur „Bug fix“.
+2. Kontext: **Warum** die Arbeit nötig ist (Produkt/Technik).
+3. Technische Vorgaben präzise, aber Lösungsfreiraum lassen.
+4. Akzeptanzkriterien **objektiv prüfbar** formulieren.
+5. Umsetzungshinweise als Vorschlag, nicht als Pflicht-manifest.
+6. Links zu Specs, Designs, verwandten Tickets.
+7. Abhängigkeiten und Blocker früh nennen.
+8. Labels/Kategorien für späteres Filtern.
+9. Aufwand schätzen, wo Sprint-Planung das braucht.
+10. Priorität und Zeitfenster transparent halten.
