@@ -29,8 +29,8 @@ struct OpenFuelNowIntent: AppIntent {
     }
 }
 
-/// Öffnet die App und fokussiert die gewählte Tankstelle auf der Karte.
-struct OpenStationIntent: AppIntent {
+/// Öffnet die App und fokussiert die gewählte Tankstelle auf der Karte (Spotlight-tauglich via `OpenIntent`).
+struct OpenStationIntent: OpenIntent {
     static var title: LocalizedStringResource {
         LocalizedStringResource("intent.openStation.title")
     }
@@ -50,17 +50,17 @@ struct OpenStationIntent: AppIntent {
     }
 
     @Parameter(title: LocalizedStringResource("intent.openStation.parameter.station"))
-    var station: StationEntity
+    var target: StationEntity
 
     init() {}
 
-    init(station: StationEntity) {
-        self.station = station
+    init(target: StationEntity) {
+        self.target = target
     }
 
     func perform() async throws -> some IntentResult {
         await MainActor.run {
-            MapDeepLinkStore.shared.enqueueStationFocus(id: station.id)
+            MapDeepLinkStore.shared.enqueueStationFocus(id: target.id)
         }
         return .result()
     }

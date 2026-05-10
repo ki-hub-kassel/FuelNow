@@ -28,6 +28,9 @@
 		A8FC803FA31CA1C81B2DF72D /* MapScreen+Previews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491F61A9BB2718A70D9CA351 /* MapScreen+Previews.swift */; };
 		AC86F7B392CE20719A88F688 /* WidgetSnapshotStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96A9A26AC911821D9433665 /* WidgetSnapshotStore.swift */; };
 		AD7773331292C5888A27AA36 /* FuelNowWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29EF13678B417327854B6A5F /* FuelNowWidgets.swift */; };
+		E99000020000000000000005 /* FuelNowControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99000010000000000000005 /* FuelNowControls.swift */; };
+		F60710000000000000000003 /* StationSpotlightIndexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60700000000000000000003 /* StationSpotlightIndexer.swift */; };
+		F65710000000000000000007 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = F65700000000000000000003 /* Localizable.xcstrings */; };
 		E99000020000000000000001 /* FuelNowWidgetGlanceHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99000010000000000000001 /* FuelNowWidgetGlanceHelpers.swift */; };
 		E99000020000000000000002 /* FuelNowStationWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99000010000000000000002 /* FuelNowStationWidget.swift */; };
 		E99000020000000000000003 /* FuelNowCheapestNearbyWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99000010000000000000003 /* FuelNowCheapestNearbyWidget.swift */; };
@@ -91,6 +94,14 @@
 		F60810000000000000000010 /* AppearanceIconPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60800000000000000000010 /* AppearanceIconPicker.swift */; };
 		F60810000000000000000011 /* StationMapClustering.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60800000000000000000011 /* StationMapClustering.swift */; };
 		F60810000000000000000012 /* OfflineSplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60800000000000000000012 /* OfflineSplashView.swift */; };
+		F32541000000000000000001 /* FuelNowTipEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32531000000000000000001 /* FuelNowTipEvents.swift */; };
+		F32541000000000000000002 /* MapSearchAreaTip.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32531000000000000000002 /* MapSearchAreaTip.swift */; };
+		F32541000000000000000003 /* FavoriteStationTip.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32531000000000000000003 /* FavoriteStationTip.swift */; };
+		F32541000000000000000004 /* FuelNowTipsBootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32531000000000000000004 /* FuelNowTipsBootstrap.swift */; };
+		F32541000000000000000005 /* OnboardingFlowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32532000000000000000001 /* OnboardingFlowView.swift */; };
+		F32541000000000000000006 /* OnboardingPages.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32532000000000000000002 /* OnboardingPages.swift */; };
+		F32541000000000000000007 /* AnimatedLaunchOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32532000000000000000003 /* AnimatedLaunchOverlay.swift */; };
+		F37611000000000000000014 /* TRMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37600000000000000000014 /* TRMotion.swift */; };
 		F62A10000000000000000001 /* mock-stations.json in Resources */ = {isa = PBXBuildFile; fileRef = F62A00000000000000000001 /* mock-stations.json */; };
 		F62B10000000000000000001 /* BundledMockStationFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = F62B00000000000000000001 /* BundledMockStationFetcher.swift */; };
 		F62C10000000000000000001 /* StationStoreFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F62C00000000000000000001 /* StationStoreFactory.swift */; };
@@ -225,6 +236,7 @@
 		E99000010000000000000002 /* FuelNowStationWidget.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FuelNowStationWidget.swift; sourceTree = "<group>"; };
 		E99000010000000000000003 /* FuelNowCheapestNearbyWidget.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FuelNowCheapestNearbyWidget.swift; sourceTree = "<group>"; };
 		E99000010000000000000004 /* FuelNowDrivingToStationLiveActivity.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FuelNowDrivingToStationLiveActivity.swift; sourceTree = "<group>"; };
+		E99000010000000000000005 /* FuelNowControls.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FuelNowControls.swift; sourceTree = "<group>"; };
 		300000000000000000000001 /* FuelNowApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelNowApp.swift; sourceTree = "<group>"; };
 		300000000000000000000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		300000000000000000000003 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -289,6 +301,7 @@
 		F60500000000000000000002 /* TankerkoenigAPIConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TankerkoenigAPIConfiguration.swift; sourceTree = "<group>"; };
 		F60700000000000000000001 /* StationFetching.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationFetching.swift; sourceTree = "<group>"; };
 		F60700000000000000000002 /* StationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationStore.swift; sourceTree = "<group>"; };
+		F60700000000000000000003 /* StationSpotlightIndexer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationSpotlightIndexer.swift; sourceTree = "<group>"; };
 		F60800000000000000000001 /* MapScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapScreen.swift; sourceTree = "<group>"; };
 		F60800000000000000000002 /* StationDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationDetailView.swift; sourceTree = "<group>"; };
 		F60800000000000000000003 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -301,6 +314,14 @@
 		F60800000000000000000010 /* AppearanceIconPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceIconPicker.swift; sourceTree = "<group>"; };
 		F60800000000000000000011 /* StationMapClustering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationMapClustering.swift; sourceTree = "<group>"; };
 		F60800000000000000000012 /* OfflineSplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineSplashView.swift; sourceTree = "<group>"; };
+		F32531000000000000000001 /* FuelNowTipEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelNowTipEvents.swift; sourceTree = "<group>"; };
+		F32531000000000000000002 /* MapSearchAreaTip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSearchAreaTip.swift; sourceTree = "<group>"; };
+		F32531000000000000000003 /* FavoriteStationTip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteStationTip.swift; sourceTree = "<group>"; };
+		F32531000000000000000004 /* FuelNowTipsBootstrap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelNowTipsBootstrap.swift; sourceTree = "<group>"; };
+		F32532000000000000000001 /* OnboardingFlowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFlowView.swift; sourceTree = "<group>"; };
+		F32532000000000000000002 /* OnboardingPages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPages.swift; sourceTree = "<group>"; };
+		F32532000000000000000003 /* AnimatedLaunchOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedLaunchOverlay.swift; sourceTree = "<group>"; };
+		F37600000000000000000014 /* TRMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRMotion.swift; sourceTree = "<group>"; };
 		F61100000000000000000001 /* LocationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationServiceTests.swift; sourceTree = "<group>"; };
 		F62A00000000000000000001 /* mock-stations.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "mock-stations.json"; sourceTree = "<group>"; };
 		F62B00000000000000000001 /* BundledMockStationFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundledMockStationFetcher.swift; sourceTree = "<group>"; };
@@ -539,6 +560,7 @@
 				E99000010000000000000002 /* FuelNowStationWidget.swift */,
 				E99000010000000000000003 /* FuelNowCheapestNearbyWidget.swift */,
 				E99000010000000000000004 /* FuelNowDrivingToStationLiveActivity.swift */,
+				E99000010000000000000005 /* FuelNowControls.swift */,
 				29EF13678B417327854B6A5F /* FuelNowWidgets.swift */,
 				0EFF8C993D01E0D843AD75F2 /* Info.plist */,
 				CCCAF6F904C31BD56BD3B36F /* FuelNowWidgets.entitlements */,
@@ -591,6 +613,9 @@
 		F31000000000000000000001 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				F32530000000000000000003 /* Launch */,
+				F32530000000000000000002 /* Onboarding */,
+				F32530000000000000000001 /* Tips */,
 				F32000000000000000000001 /* Map */,
 				F33000000000000000000001 /* Detail */,
 				F34000000000000000000001 /* Settings */,
@@ -598,6 +623,34 @@
 				F71000000000000000000001 /* CarPlay */,
 			);
 			path = Features;
+			sourceTree = "<group>";
+		};
+		F32530000000000000000001 /* Tips */ = {
+			isa = PBXGroup;
+			children = (
+				F32531000000000000000004 /* FuelNowTipsBootstrap.swift */,
+				F32531000000000000000001 /* FuelNowTipEvents.swift */,
+				F32531000000000000000003 /* FavoriteStationTip.swift */,
+				F32531000000000000000002 /* MapSearchAreaTip.swift */,
+			);
+			path = Tips;
+			sourceTree = "<group>";
+		};
+		F32530000000000000000002 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				F32532000000000000000001 /* OnboardingFlowView.swift */,
+				F32532000000000000000002 /* OnboardingPages.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		F32530000000000000000003 /* Launch */ = {
+			isa = PBXGroup;
+			children = (
+				F32532000000000000000003 /* AnimatedLaunchOverlay.swift */,
+			);
+			path = Launch;
 			sourceTree = "<group>";
 		};
 		F32000000000000000000001 /* Map */ = {
@@ -645,6 +698,7 @@
 				F60500000000000000000002 /* TankerkoenigAPIConfiguration.swift */,
 				F60700000000000000000001 /* StationFetching.swift */,
 				F60700000000000000000002 /* StationStore.swift */,
+				F60700000000000000000003 /* StationSpotlightIndexer.swift */,
 				F62B00000000000000000001 /* BundledMockStationFetcher.swift */,
 				F62C00000000000000000001 /* StationStoreFactory.swift */,
 				F62E00000000000000000001 /* NetworkMonitor.swift */,
@@ -680,6 +734,7 @@
 				F37500000000000000000012 /* TRSectionCard.swift */,
 				F37500000000000000000013 /* TRSettingsChrome.swift */,
 				F37500000000000000000003 /* TRTypography.swift */,
+				F37600000000000000000014 /* TRMotion.swift */,
 				F37100000000000000000001 /* TRDesignAssets.xcassets */,
 				F37200000000000000000001 /* TRDesignPaletteNotes.swift */,
 				F37500000000000000000009 /* TRDesignSystemPreview.swift */,
@@ -900,6 +955,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F65710000000000000000007 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -948,6 +1004,7 @@
 				E99000020000000000000003 /* FuelNowCheapestNearbyWidget.swift in Sources */,
 				E99000020000000000000004 /* FuelNowDrivingToStationLiveActivity.swift in Sources */,
 				AD7773331292C5888A27AA36 /* FuelNowWidgets.swift in Sources */,
+				E99000020000000000000005 /* FuelNowControls.swift in Sources */,
 				4CACC92E0C79C5D2A1F63AB4 /* DrivingToStationActivityAttributes.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -976,6 +1033,7 @@
 				F60600000000000000000003 /* TankerkoenigAPIConfiguration.swift in Sources */,
 				F60710000000000000000001 /* StationFetching.swift in Sources */,
 				F60710000000000000000002 /* StationStore.swift in Sources */,
+				F60710000000000000000003 /* StationSpotlightIndexer.swift in Sources */,
 				F65410000000000000000001 /* QueryService.swift in Sources */,
 				F62B10000000000000000001 /* BundledMockStationFetcher.swift in Sources */,
 				F62C10000000000000000001 /* StationStoreFactory.swift in Sources */,
@@ -986,6 +1044,13 @@
 				F60810000000000000000006 /* LocationDeniedCallout.swift in Sources */,
 				F60810000000000000000011 /* StationMapClustering.swift in Sources */,
 				F60810000000000000000012 /* OfflineSplashView.swift in Sources */,
+				F32541000000000000000003 /* FavoriteStationTip.swift in Sources */,
+				F32541000000000000000004 /* FuelNowTipsBootstrap.swift in Sources */,
+				F32541000000000000000001 /* FuelNowTipEvents.swift in Sources */,
+				F32541000000000000000002 /* MapSearchAreaTip.swift in Sources */,
+				F32541000000000000000005 /* OnboardingFlowView.swift in Sources */,
+				F32541000000000000000006 /* OnboardingPages.swift in Sources */,
+				F32541000000000000000007 /* AnimatedLaunchOverlay.swift in Sources */,
 				F60810000000000000000002 /* StationDetailView.swift in Sources */,
 				F60810000000000000000003 /* SettingsView.swift in Sources */,
 				F66010000000000000000002 /* PlusPurchaseController.swift in Sources */,
@@ -1008,6 +1073,7 @@
 				F37600000000000000000011 /* TRAdaptiveGlass.swift in Sources */,
 				F37600000000000000000012 /* TRSectionCard.swift in Sources */,
 				F37600000000000000000013 /* TRSettingsChrome.swift in Sources */,
+				F37611000000000000000014 /* TRMotion.swift in Sources */,
 				F65010000000000000000001 /* FuelType+AppEnum.swift in Sources */,
 				F65010000000000000000002 /* StationIntentResolving.swift in Sources */,
 				F65010000000000000000003 /* StationIntentResolution.swift in Sources */,

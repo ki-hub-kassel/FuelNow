@@ -1,6 +1,7 @@
 import CoreLocation
 import MapKit
 import SwiftUI
+import TipKit
 import UIKit
 
 private enum MapScreenDefaults {
@@ -58,21 +59,6 @@ struct MapScreen: View {
         guard locationService.currentLocation != nil else { return false }
         guard case .loaded = stationStore.loadState else { return false }
         return stationStore.stations.isEmpty
-    }
-
-    /// „Aktualisiert vor X Min“-Text für die Karten-Footer-Pill.
-    /// Liefert `nil`, solange noch kein Fetch durchgelaufen ist, der Wert „in der Zukunft“
-    /// liegt (Clock-Skew), oder der letzte Abruf **unter 30 s** liegt — dann keine Pill
-    /// („soeben aktualisiert“ soll nicht erscheinen). Granularitaet ist bewusst grob.
-    private var lastUpdatedRelativeText: String? {
-        guard let date = stationStore.lastFetchAt else { return nil }
-        let interval = max(0, Date().timeIntervalSince(date))
-        if interval < 30 { return nil }
-        let minutes = Int(interval / 60)
-        if minutes < 1 { return "vor wenigen Sekunden" }
-        if minutes < 60 { return "aktualisiert vor \(minutes) Min" }
-        let hours = minutes / 60
-        return "aktualisiert vor \(hours) Std"
     }
 
     /// Nutzer hat die Karte vom letzten `list.php`-Zentrum weggeschoben — expliziter Abruf um die Kartenmitte.
@@ -137,9 +123,14 @@ struct MapScreen: View {
 
             VStack(spacing: TRSpacing.m) {
                 if shouldOfferSearchInVisibleRegion {
+                    TipView(MapSearchAreaTip(), arrowEdge: .bottom)
+                        .padding(.bottom, TRSpacing.xxs)
                     Button {
                         searchAreaTrigger &+= 1
                         searchStationsForVisibleMapCenter()
+                        Task {
+                            await FuelNowTipEvents.didUseSearchThisArea.donate()
+                        }
                     } label: {
                         Label(String(localized: "map.searchThisArea"), systemImage: "magnifyingglass")
                     }
@@ -151,16 +142,6 @@ struct MapScreen: View {
                 }
 
                 HStack(alignment: .center, spacing: TRSpacing.s) {
-                    if let lastUpdated = lastUpdatedRelativeText {
-                        Label(lastUpdated, systemImage: "arrow.clockwise")
-                            .labelStyle(.titleAndIcon)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .padding(.horizontal, TRSpacing.s)
-                            .padding(.vertical, 6)
-                            .background(.thinMaterial, in: Capsule())
-                            .accessibilityLabel("Tankstellen \(lastUpdated)")
-                    }
                     Spacer()
                     LocateMeButton {
                         centerMapOnUser()
@@ -230,7 +211,7 @@ struct MapScreen: View {
         .animation(reduceMotion ? nil : .default, value: isLocationAccessDenied)
         .animation(reduceMotion ? nil : .default, value: showEmptyStationsState)
         .animation(reduceMotion ? nil : .default, value: shouldOfferSearchInVisibleRegion)
-        .animation(reduceMotion ? nil : .easeInOut(duration: 0.35), value: networkMonitor.shouldShowOfflineSplash)
+        .animation(reduceMotion ? nil : TRMotion.overlayFade, value: networkMonitor.shouldShowOfflineSplash)
         .modifier(MapScreenHapticsModifier(
             selectedStationID: selectedStation?.id,
             clusterTrigger: clusterTapTrigger,
@@ -263,8 +244,12 @@ struct MapScreen: View {
         .onChange(of: deepLinks.pendingStationFocusID) { _, _ in
             applyPendingStationFocusFromDeepLink()
         }
+        .onChange(of: deepLinks.pendingControlAction) { _, _ in
+            applyPendingMapControlActionIfNeeded()
+        }
         .onChange(of: stationStore.stations) { _, _ in
             applyPendingStationFocusFromDeepLink()
+            applyPendingMapControlActionIfNeeded()
         }
         .onChange(of: stationStore.loadState) { _, newState in
             switch newState {
@@ -335,7 +320,7 @@ struct MapScreen: View {
         if reduceMotion {
             cameraPosition = .region(region)
         } else {
-            withAnimation(.easeInOut(duration: 0.35)) {
+            withAnimation(TRMotion.mapRegionEase) {
                 cameraPosition = .region(region)
             }
         }
@@ -376,7 +361,7 @@ struct MapScreen: View {
         if reduceMotion {
             cameraPosition = .region(region)
         } else {
-            withAnimation(.easeInOut(duration: 0.45)) {
+            withAnimation(TRMotion.mapLocateEase) {
                 cameraPosition = .region(region)
             }
         }
@@ -427,6 +412,42 @@ struct MapScreen: View {
         mapVisibleRegion = region
         cameraPosition = .region(region)
         deepLinks.clearPendingStationFocus()
+    }
+}
+
+// MARK: - Control Center / map?action (TAN-110)
+
+extension MapScreen {
+    private func applyPendingMapControlActionIfNeeded() {
+        guard let action = deepLinks.pendingControlAction else { return }
+        switch action {
+        case .focusCheapest:
+            guard !stationStore.stations.isEmpty else { return }
+            guard let station = cheapestStationForPreferredFuel() else {
+                deepLinks.clearPendingMapControl()
+                return
+            }
+            selectedStation = station
+            let region = MKCoordinateRegion(
+                center: station.coordinate,
+                latitudinalMeters: 3_500,
+                longitudinalMeters: 3_500
+            )
+            mapVisibleRegion = region
+            cameraPosition = .region(region)
+            deepLinks.clearPendingMapControl()
+        case .refreshVisibleRegion:
+            searchStationsForVisibleMapCenter()
+            deepLinks.clearPendingMapControl()
+        }
+    }
+
+    private func cheapestStationForPreferredFuel() -> Station? {
+        let priced: [(Station, Double)] = stationStore.stations.compactMap { station in
+            guard let price = station.price(for: preferredFuel) else { return nil }
+            return (station, price)
+        }
+        return priced.min(by: { $0.1 < $1.1 })?.0
     }
 }
 

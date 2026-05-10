@@ -1,5 +1,6 @@
 import CoreLocation
 import SwiftUI
+import TipKit
 
 private enum StationDetailFetchPhase: Equatable {
     case idle
@@ -132,6 +133,9 @@ struct StationDetailView: View {
         Button {
             Haptics.tap(.light)
             favoritesStore.toggle(resolvedStation)
+            Task {
+                await FuelNowTipEvents.didUseFavoriteHeart.donate()
+            }
         } label: {
             Image(systemName: isFavorited ? "heart.fill" : "heart")
                 .font(.title3.weight(.medium))
@@ -139,6 +143,7 @@ struct StationDetailView: View {
                 .symbolRenderingMode(.hierarchical)
         }
         .buttonStyle(.plain)
+        .popoverTip(FavoriteStationTip(), arrowEdge: .leading)
         .accessibilityLabel(isFavorited ? "Favorit entfernen" : "Als Favorit speichern")
         .accessibilityHint(
             isFavorited

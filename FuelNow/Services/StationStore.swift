@@ -47,7 +47,6 @@ final class StationStore {
 
     /// Mittelpunkt des letzten `list.php`-Aufrufs (für „In diesem Gebiet suchen“ / letzte Daten).
     private var lastFetchReference: CLLocation?
-    private var lastFetchFinishedAt: Date?
     /// Bezug nur für `handleLocationUpdate`-Debounce (unabhängig von kartenzentrierter Suche).
     private var lastLocationLedFetchReference: CLLocation?
     private var lastLocationLedFetchFinishedAt: Date?
@@ -74,12 +73,6 @@ final class StationStore {
     /// Mittelpunkt des letzten abgeschlossenen `list.php`-Abrufs (Erfolg oder Fehler). `nil`, bis ein erster Versuch beendet ist.
     var lastFetchCenter: CLLocationCoordinate2D? {
         lastFetchReference?.coordinate
-    }
-
-    /// Zeitstempel des letzten abgeschlossenen Fetch-Versuchs (Erfolg oder Fehler).
-    /// Wird von der Karten-Footer-Pill „Aktualisiert vor X Min“ konsumiert.
-    var lastFetchAt: Date? {
-        lastFetchFinishedAt
     }
 
     deinit {
@@ -158,7 +151,6 @@ final class StationStore {
         loadState = .loaded
         lastError = nil
         lastFetchReference = reference
-        lastFetchFinishedAt = clock()
         if trigger.updatesLocationDebounceBaseline {
             lastLocationLedFetchReference = reference
             lastLocationLedFetchFinishedAt = clock()
@@ -171,7 +163,6 @@ final class StationStore {
         let message = (error as? LocalizedError)?.errorDescription ?? String(describing: error)
         loadState = .failed(message: message)
         lastFetchReference = reference
-        lastFetchFinishedAt = clock()
         if trigger.updatesLocationDebounceBaseline {
             lastLocationLedFetchReference = reference
             lastLocationLedFetchFinishedAt = clock()

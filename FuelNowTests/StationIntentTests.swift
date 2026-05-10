@@ -30,6 +30,7 @@ struct StationIntentTests {
         let entity = StationEntity(station: station)
         #expect(entity.id == station.id)
         #expect(entity.title == station.name)
+        #expect(entity.indexingDetailLine == nil)
     }
 
     @Test func stationQueryResolvesViaInjectedResolver() async throws {

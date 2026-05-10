@@ -10,6 +10,8 @@ import SwiftUI
 /// nichts „Glas-auf-Glas" stapelt (HIG iOS 26).
 struct FuelTypeCardPicker: View {
     @Binding var selection: FuelType
+    /// VoiceOver-Gruppentitel für die drei Karten (z. B. Einstellungen vs. Ersteinrichtung).
+    var groupAccessibilityLabel: LocalizedStringResource = "settings.fuel.row.title"
 
     var body: some View {
         GlassEffectContainer(spacing: TRSpacing.s) {
@@ -24,7 +26,7 @@ struct FuelTypeCardPicker: View {
             }
         }
         .accessibilityElement(children: .contain)
-        .accessibilityLabel(Text("settings.fuel.row.title"))
+        .accessibilityLabel(Text(groupAccessibilityLabel))
         .accessibilityValue(Text(selection.displayName))
     }
 }

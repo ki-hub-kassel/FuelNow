@@ -31,6 +31,8 @@ struct FuelNowApp: App {
     @AppStorage(AppSettings.UserDefaultsKey.appearancePreference)
     private var appearanceRaw = AppSettings.AppearancePreference.system.rawValue
 
+    @State private var showLaunchOverlay = true
+
     private var appearancePreference: AppSettings.AppearancePreference {
         AppSettings.AppearancePreference.resolved(storedRaw: appearanceRaw)
     }
@@ -70,64 +72,92 @@ struct FuelNowApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .preferredColorScheme(appearancePreference.preferredSwiftUIColorScheme)
-                .environment(coordinator.locationService)
-                .environment(coordinator.stationStore)
-                .environment(\.stationDetailFetcher, coordinator.stationDetailFetcher)
-                .environment(coordinator.entitlementManager)
-                .environment(coordinator.networkMonitor)
-                .environment(coordinator.favoritesStore)
-                .environment(MapDeepLinkStore.shared)
-                .environment(\.whatsNew, whatsNewEnvironment)
-                .onAppear {
-                    coordinator.networkMonitor.start()
-                    syncWidgetSnapshot()
-                    coordinator.priceAlertCoordinator.scheduleNextRefresh()
-                    Task {
-                        await StationIntentResolution.shared.setResolver(StationStoreIntentResolver())
+            ZStack {
+                rootContent
+                if showLaunchOverlay {
+                    AnimatedLaunchOverlay {
+                        showLaunchOverlay = false
                     }
+                    .zIndex(1)
                 }
-                .onChange(of: coordinator.stationStore.stations) { _, _ in
-                    syncWidgetSnapshot()
-                }
-                .onChange(of: coordinator.stationStore.loadState) { _, newState in
-                    syncWidgetSnapshot()
-                    ShortcutSuggestionDonation.donateAfterStationsLoadedIfNeeded(
-                        loadState: newState,
-                        stationCount: coordinator.stationStore.stations.count
-                    )
-                    if case .loaded = newState, !coordinator.stationStore.stations.isEmpty {
-                        FuelNowAppShortcuts.updateAppShortcutParameters()
-                    }
-                }
-                .onReceive(NotificationCenter.default.publisher(for: UserDefaults.didChangeNotification)) { notification in
-                    // Only react to changes on the standard defaults. Without this guard, our own
-                    // write into the App-Group `sharedDefaults` re-fires the notification and we
-                    // recurse on the main thread until the UI freezes (black screen on launch).
-                    guard (notification.object as? UserDefaults) === UserDefaults.standard else { return }
-                    syncWidgetSnapshot()
-                }
-                // WidgetKit (`widgetURL`): FuelNow-Widgets und Live-Activities nutzen `fuelnow://map` bzw.
-                // `fuelnow://station/<uuid>` — bei CarPlay öffnet ein Tap die App-CarPlay-Session, wenn das Fahrzeug Touch unterstützt.
-                .onOpenURL { url in
-                    Task { @MainActor in
-                        guard let link = FuelNowDeepLink.parse(url) else { return }
-                        switch link {
-                        case .map:
-                            MapDeepLinkStore.shared.clearPendingStationFocus()
-                        case let .station(id):
-                            MapDeepLinkStore.shared.enqueueStationFocus(id: id)
-                        }
-                    }
-                }
-                .task {
-                    await coordinator.entitlementManager.start()
-                    #if DEBUG
-                    APIKeys.warnIfPlaceholderActive()
-                    #endif
-                }
+            }
         }
+    }
+
+    private var rootContent: some View {
+        ContentView()
+            .preferredColorScheme(appearancePreference.preferredSwiftUIColorScheme)
+            .environment(coordinator.locationService)
+            .environment(coordinator.stationStore)
+            .environment(\.stationDetailFetcher, coordinator.stationDetailFetcher)
+            .environment(coordinator.entitlementManager)
+            .environment(coordinator.networkMonitor)
+            .environment(coordinator.favoritesStore)
+            .environment(MapDeepLinkStore.shared)
+            .environment(\.whatsNew, whatsNewEnvironment)
+            .onAppear {
+                coordinator.networkMonitor.start()
+                syncWidgetSnapshot()
+                coordinator.priceAlertCoordinator.scheduleNextRefresh()
+                Task {
+                    await StationIntentResolution.shared.setResolver(StationStoreIntentResolver())
+                }
+            }
+            .onChange(of: coordinator.stationStore.stations) { _, newStations in
+                syncWidgetSnapshot()
+                let fuel = AppSettings.preferredFuelFromStorage(defaults: UserDefaults.standard)
+                StationSpotlightIndexer.scheduleReindex(stations: newStations, preferredFuel: fuel)
+            }
+            .onChange(of: coordinator.stationStore.loadState) { _, newState in
+                syncWidgetSnapshot()
+                ShortcutSuggestionDonation.donateAfterStationsLoadedIfNeeded(
+                    loadState: newState,
+                    stationCount: coordinator.stationStore.stations.count
+                )
+                if case .loaded = newState, !coordinator.stationStore.stations.isEmpty {
+                    FuelNowAppShortcuts.updateAppShortcutParameters()
+                }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UserDefaults.didChangeNotification)) { notification in
+                // Only react to changes on the standard defaults. Without this guard, our own
+                // write into the App-Group `sharedDefaults` re-fires the notification and we
+                // recurse on the main thread until the UI freezes (black screen on launch).
+                guard (notification.object as? UserDefaults) === UserDefaults.standard else { return }
+                syncWidgetSnapshot()
+                let fuel = AppSettings.preferredFuelFromStorage(defaults: UserDefaults.standard)
+                StationSpotlightIndexer.scheduleReindex(
+                    stations: coordinator.stationStore.stations,
+                    preferredFuel: fuel
+                )
+            }
+            // WidgetKit (`widgetURL`): FuelNow-Widgets und Live-Activities nutzen `fuelnow://map` bzw.
+            // `fuelnow://station/<uuid>` — bei CarPlay öffnet ein Tap die App-CarPlay-Session, wenn das Fahrzeug Touch unterstützt.
+            .onOpenURL { url in
+                Task { @MainActor in
+                    guard let link = FuelNowDeepLink.parse(url) else { return }
+                    switch link {
+                    case .map:
+                        MapDeepLinkStore.shared.clearPendingStationFocus()
+                        MapDeepLinkStore.shared.clearPendingMapControl()
+                    case .mapFocusCheapest:
+                        MapDeepLinkStore.shared.clearPendingStationFocus()
+                        MapDeepLinkStore.shared.enqueuePendingMapControl(.focusCheapest)
+                    case .mapRefreshVisibleRegion:
+                        MapDeepLinkStore.shared.clearPendingStationFocus()
+                        MapDeepLinkStore.shared.enqueuePendingMapControl(.refreshVisibleRegion)
+                    case let .station(id):
+                        MapDeepLinkStore.shared.clearPendingMapControl()
+                        MapDeepLinkStore.shared.enqueueStationFocus(id: id)
+                    }
+                }
+            }
+            .task {
+                FuelNowTipsBootstrap.configure()
+                await coordinator.entitlementManager.start()
+                #if DEBUG
+                APIKeys.warnIfPlaceholderActive()
+                #endif
+            }
     }
 
     private func syncWidgetSnapshot() {

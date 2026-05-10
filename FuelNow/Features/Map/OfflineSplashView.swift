@@ -94,7 +94,7 @@ struct OfflineSplashView: View {
             Image(systemName: iconSymbol)
                 .font(.system(size: 40, weight: .semibold))
                 .foregroundStyle(TRColors.accentText)
-                .modifier(IconBreathingEffect(active: !reduceMotion))
+                .modifier(OfflineSplashSymbolPulse(reduceMotion: reduceMotion))
         }
         .frame(width: 160, height: 160)
     }
@@ -114,20 +114,18 @@ struct OfflineSplashView: View {
     }
 }
 
-/// Sanfte „Atmung" auf dem zentralen Symbol — auf 1.0 bleibt es bei `accessibilityReduceMotion`.
-private struct IconBreathingEffect: ViewModifier {
-    let active: Bool
-    @State private var inhale = false
+/// SF-Symbol-Puls nur ohne Reduce Motion; sonst statisches Icon (WCAG / Ruhe).
+private struct OfflineSplashSymbolPulse: ViewModifier {
+    let reduceMotion: Bool
 
     func body(content: Content) -> some View {
-        content
-            .scaleEffect(active && inhale ? 1.06 : 1.0)
-            .onAppear {
-                guard active else { return }
-                withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
-                    inhale = true
-                }
+        Group {
+            if reduceMotion {
+                content
+            } else {
+                content.symbolEffect(.pulse, options: .repeating.speed(0.45))
             }
+        }
     }
 }
 

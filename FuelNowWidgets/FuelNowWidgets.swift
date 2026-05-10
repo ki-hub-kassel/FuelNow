@@ -7,5 +7,7 @@ struct FuelNowWidgetsBundle: WidgetBundle {
         FuelNowWidget()
         FuelNowCheapestNearbyWidget()
         DrivingToStationLiveActivity()
+        FuelNowCheapestStationControl()
+        FuelNowRefreshMapRegionControl()
     }
 }

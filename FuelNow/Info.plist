@@ -104,8 +104,15 @@
 	</dict>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<!--
+		Statischer System-Launch: nur App-Hintergrund. Logo + Animation folgen in
+		`AnimatedLaunchOverlay` (SwiftUI), weil `UILaunchScreen` nicht animierbar ist.
+	-->
 	<key>UILaunchScreen</key>
-	<dict/>
+	<dict>
+		<key>UIColorName</key>
+		<string>TRBackground</string>
+	</dict>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

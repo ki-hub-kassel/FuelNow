@@ -1,8 +1,12 @@
 import AppIntents
+import CoreSpotlight
 import Foundation
 
 /// Siri/Shortcuts-Darstellung einer Tankstelle; `id` entspricht dem Domänen-`Station.id`.
-struct StationEntity: AppEntity {
+///
+/// **Spotlight:** Konformität zu `IndexedEntity` indexiert freiwillig Kurzinfos (Adresse + Pumpenpreis),
+/// ohne Koordinaten im sichtbaren Snippet — siehe ``StationSpotlightIndexer``.
+struct StationEntity: AppEntity, IndexedEntity {
     typealias DefaultQuery = StationQuery
 
     static var defaultQuery: StationQuery { StationQuery() }
@@ -12,19 +16,39 @@ struct StationEntity: AppEntity {
     }
 
     var displayRepresentation: DisplayRepresentation {
-        DisplayRepresentation(title: LocalizedStringResource(stringLiteral: title))
+        if let line = indexingDetailLine, !line.isEmpty {
+            return DisplayRepresentation(
+                title: LocalizedStringResource(stringLiteral: title),
+                subtitle: LocalizedStringResource(stringLiteral: line)
+            )
+        }
+        return DisplayRepresentation(title: LocalizedStringResource(stringLiteral: title))
     }
 
     let id: Station.ID
     let title: String
+    /// Zeileninhalt für Spotlight/`contentDescription`; bei Siri-Queries i. d. R. `nil`.
+    let indexingDetailLine: String?
 
-    init(station: Station) {
-        id = station.id
-        title = station.name
+    var attributeSet: CSSearchableItemAttributeSet {
+        let attributes = CSSearchableItemAttributeSet()
+        if let line = indexingDetailLine, !line.isEmpty {
+            attributes.contentDescription = line
+        } else {
+            attributes.contentDescription = title
+        }
+        return attributes
     }
 
-    init(id: Station.ID, title: String) {
+    init(station: Station, indexingDetailLine: String? = nil) {
+        id = station.id
+        title = station.name
+        self.indexingDetailLine = indexingDetailLine
+    }
+
+    init(id: Station.ID, title: String, indexingDetailLine: String? = nil) {
         self.id = id
         self.title = title
+        self.indexingDetailLine = indexingDetailLine
     }
 }

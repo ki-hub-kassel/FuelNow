@@ -55,9 +55,16 @@ struct WidgetDataSnapshot: Codable, Sendable, Equatable {
     }
 }
 
+/// Steuerzentrum-Controls schreiben eine Pending-Aktion in die App-Group; die Haupt-App liest sie bei `scenePhase == .active`.
+enum FuelNowPendingMapControlAction: String, Sendable {
+    case focusCheapest
+    case refreshVisibleRegion
+}
+
 struct WidgetSnapshotStore {
     static let fileName = "widget-snapshot-v1.json"
     static let appGroupIdentifier = "group.com.vibecoding.fuelnow"
+    static let pendingControlMapActionKey = "tr.pendingControlMapAction"
 
     private let fileManager: FileManager
     private let encoder: JSONEncoder
