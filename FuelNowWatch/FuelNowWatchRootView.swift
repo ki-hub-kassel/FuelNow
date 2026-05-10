@@ -1,15 +1,26 @@
 import SwiftUI
 
 /// Watch-Root: zeigt naechste Tankstelle, guenstigste Tankstelle und (sofern befuellt) eine
-/// kurze "guenstig im 5-km-Umkreis"-Liste. Datenpfad: App-Group-Snapshot vom iPhone, kein
-/// eigener Tankerkoenig-Fetch (Watch hat keinen API-Key, wuerde sonst den Free-Tier-Limit
-/// ueberlasten).
+/// kurze „günstig im 5-km-Umkreis“-Liste. Daten kommen per WatchConnectivity vom iPhone —
+/// Aktualisierung startet dort einen Tankerkönig-Fetch; die Watch hat keinen eigenen API-Key.
 struct FuelNowWatchRootView: View {
     @Environment(FuelNowWatchSnapshotProvider.self) private var provider
 
     var body: some View {
         NavigationStack {
             List {
+                if provider.isRefreshingFromPhone {
+                    Section {
+                        ProgressView("Aktualisiere …")
+                    }
+                }
+                if let hint = provider.refreshHint {
+                    Section {
+                        Text(hint)
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    }
+                }
                 if let snapshot = provider.snapshot {
                     if let nearest = snapshot.nearest {
                         Section("Nächste") {
@@ -43,7 +54,21 @@ struct FuelNowWatchRootView: View {
                 }
             }
             .navigationTitle("FuelNow")
-            .refreshable { await provider.load() }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        Task { await provider.requestRefreshFromPhone() }
+                    } label: {
+                        Image(systemName: "arrow.clockwise")
+                    }
+                    .disabled(provider.isRefreshingFromPhone)
+                    .accessibilityLabel("Aktualisieren")
+                }
+            }
+            .refreshable {
+                await provider.requestRefreshFromPhone()
+                await provider.load()
+            }
         }
     }
 }

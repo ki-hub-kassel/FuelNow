@@ -4,7 +4,8 @@ import WatchConnectivity
 
 /// Versorgt die Watch-UI mit dem letzten vom iPhone geschickten `WidgetDataSnapshot`.
 ///
-/// **Quelle:** `WCSession.updateApplicationContext` vom iPhone-`WatchConnectivityCoordinator`.
+/// **Quelle:** `WCSession.updateApplicationContext` vom iPhone-`WatchConnectivityCoordinator`
+/// plus optionale Anfrage per `sendMessage` / `transferUserInfo` (`watchRefreshSnapshot`) für frische Daten.
 /// **Cache:** Letzte Payload wird im Application-Support-Verzeichnis als
 /// `watch-snapshot-v1.json` persistiert, damit die Watch auch ohne erreichbares iPhone
 /// (z. B. ausser Reichweite) sofort den letzten Stand zeigen kann.
@@ -17,11 +18,12 @@ final class FuelNowWatchSnapshotProvider: NSObject {
     private(set) var snapshot: WatchWidgetSnapshot?
     private(set) var lastError: String?
     private(set) var isAwaitingFirstPayload: Bool = true
+    private(set) var isRefreshingFromPhone: Bool = false
+    /// Kurzhinweis, wenn das iPhone nicht erreichbar war und nur `transferUserInfo` genutzt wurde.
+    private(set) var refreshHint: String?
 
     private let fileManager: FileManager
     private let cacheURL: URL?
-    private let snapshotContextKey = "snapshotV1"
-
     override init() {
         let manager = FileManager.default
         fileManager = manager
@@ -54,9 +56,52 @@ final class FuelNowWatchSnapshotProvider: NSObject {
         }
     }
 
+    /// Fordert auf dem iPhone einen neuen Tankstellen-Abruf und Snapshot an (kein API-Call auf der Watch).
+    func requestRefreshFromPhone() async {
+        guard WCSession.isSupported() else {
+            refreshHint = "WatchConnectivity nicht verfügbar."
+            return
+        }
+        let session = WCSession.default
+        guard session.activationState == .activated else {
+            refreshHint = "Verbindung wird aufgebaut …"
+            return
+        }
+        isRefreshingFromPhone = true
+        refreshHint = nil
+        defer { isRefreshingFromPhone = false }
+
+        if session.isReachable {
+            await withCheckedContinuation { (continuation: CheckedContinuation<Void, Never>) in
+                session.sendMessage(
+                    [WatchConnectivitySnapshotBridge.refreshRequestKey: true],
+                    replyHandler: { reply in
+                        Task { @MainActor in
+                            if let bytes = reply[WatchConnectivitySnapshotBridge.snapshotDataKey] as? Data {
+                                self.ingest(data: bytes, persist: true)
+                                self.refreshHint = nil
+                            }
+                            continuation.resume()
+                        }
+                    },
+                    errorHandler: { _ in
+                        Task { @MainActor in
+                            session.transferUserInfo([WatchConnectivitySnapshotBridge.refreshRequestKey: true])
+                            self.refreshHint = "iPhone nicht erreichbar. Öffne FuelNow auf dem iPhone."
+                            continuation.resume()
+                        }
+                    }
+                )
+            }
+        } else {
+            session.transferUserInfo([WatchConnectivitySnapshotBridge.refreshRequestKey: true])
+            refreshHint = "Aktualisierung angefordert. Öffne FuelNow auf dem iPhone."
+        }
+    }
+
     private func consumeBufferedContext() {
         let buffered = WCSession.default.receivedApplicationContext
-        if let bytes = buffered[snapshotContextKey] as? Data {
+        if let bytes = buffered[WatchConnectivitySnapshotBridge.snapshotDataKey] as? Data {
             ingest(data: bytes, persist: true)
         }
     }
@@ -90,7 +135,7 @@ extension FuelNowWatchSnapshotProvider: WCSessionDelegate {
         _: WCSession,
         didReceiveApplicationContext applicationContext: [String: Any]
     ) {
-        guard let bytes = applicationContext["snapshotV1"] as? Data else { return }
+        guard let bytes = applicationContext[WatchConnectivitySnapshotBridge.snapshotDataKey] as? Data else { return }
         Task { @MainActor in self.ingest(data: bytes, persist: true) }
     }
 }

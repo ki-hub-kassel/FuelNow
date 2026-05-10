@@ -8,4 +8,5 @@ import Foundation
 enum FuelNowRuntimeRegistry {
     static weak var stationStore: StationStore?
     static weak var locationService: LocationService?
+    static weak var lifecycleCoordinator: FuelNowLifecycleCoordinator?
 }

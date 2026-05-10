@@ -1,5 +1,5 @@
 import Foundation
-import WatchConnectivity
+@preconcurrency import WatchConnectivity
 
 /// Sendet den aktuellen `WidgetDataSnapshot` vom iPhone an die Apple-Watch-Companion-App.
 ///
@@ -23,7 +23,7 @@ final class WatchConnectivityCoordinator: NSObject {
 
     /// Schluessel im `applicationContext`-Dictionary fuer die JSON-codierte Snapshot-Payload.
     /// Versions-Suffix erlaubt zukuenftige Schema-Wechsel ohne Watch-Crash auf alten Builds.
-    static let snapshotContextKey = "snapshotV1"
+    static let snapshotContextKey = WatchConnectivitySnapshotBridge.snapshotDataKey
 
     override init() {
         if WCSession.isSupported() {
@@ -51,7 +51,7 @@ final class WatchConnectivityCoordinator: NSObject {
             let encoder = JSONEncoder()
             encoder.dateEncodingStrategy = .iso8601
             let data = try encoder.encode(snapshot)
-            try session.updateApplicationContext([Self.snapshotContextKey: data])
+            try session.updateApplicationContext([WatchConnectivitySnapshotBridge.snapshotDataKey: data])
             #if DEBUG
             let installed = session.isWatchAppInstalled
             print("[WatchConnectivityCoordinator] published snapshot (\(data.count)B, installed=\(installed))")
@@ -76,5 +76,30 @@ extension WatchConnectivityCoordinator: WCSessionDelegate {
     nonisolated func sessionDidBecomeInactive(_: WCSession) {}
     nonisolated func sessionDidDeactivate(_: WCSession) {
         WCSession.default.activate()
+    }
+
+    nonisolated func session(
+        _: WCSession,
+        didReceiveMessage message: [String: Any],
+        replyHandler: @escaping ([String: Any]) -> Void
+    ) {
+        guard message[WatchConnectivitySnapshotBridge.refreshRequestKey] as? Bool == true else { return }
+        // `replyHandler` ist nicht `Sendable`; Apple ruft auf WC-Queue — wir marshallen auf MainActor.
+        nonisolated(unsafe) let reply = replyHandler
+        DispatchQueue.main.async {
+            let payload = FuelNowRuntimeRegistry.lifecycleCoordinator?.refreshStationsForWatchCompanion()
+            var replyPayload: [String: Any] = [:]
+            if let payload {
+                replyPayload[WatchConnectivitySnapshotBridge.snapshotDataKey] = payload
+            }
+            reply(replyPayload)
+        }
+    }
+
+    nonisolated func session(_: WCSession, didReceiveUserInfo userInfo: [String: Any]) {
+        guard userInfo[WatchConnectivitySnapshotBridge.refreshRequestKey] as? Bool == true else { return }
+        DispatchQueue.main.async {
+            _ = FuelNowRuntimeRegistry.lifecycleCoordinator?.refreshStationsForWatchCompanion()
+        }
     }
 }
