@@ -67,7 +67,7 @@ struct AnimatedLaunchOverlay: View {
         if reduceMotion {
             logoPresented = true
             Task { @MainActor in
-                try? await Task.sleep(for: .milliseconds(140))
+                try? await Task.sleep(for: .milliseconds(1140))
                 overlayOpaque = false
                 try? await Task.sleep(for: .milliseconds(40))
                 onComplete()
@@ -78,7 +78,7 @@ struct AnimatedLaunchOverlay: View {
             withAnimation(TRMotion.launchLogoEntrance) {
                 logoPresented = true
             }
-            try? await Task.sleep(for: .milliseconds(340))
+            try? await Task.sleep(for: .milliseconds(1340))
             withAnimation(TRMotion.launchOverlayExit) {
                 overlayOpaque = false
             }

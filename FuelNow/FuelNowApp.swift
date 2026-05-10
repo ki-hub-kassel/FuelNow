@@ -99,6 +99,7 @@ struct FuelNowApp: App {
                 coordinator.networkMonitor.start()
                 syncWidgetSnapshot()
                 coordinator.priceAlertCoordinator.scheduleNextRefresh()
+                MapDeepLinkStore.shared.syncPendingControlFromAppGroupIfNeeded()
                 Task {
                     await StationIntentResolution.shared.setResolver(StationStoreIntentResolver())
                 }

@@ -1,10 +1,19 @@
 import AppIntents
+import OSLog
 import SwiftUI
 import WidgetKit
 
 private enum FuelNowControlAppGroupBridge {
+    private static let log = Logger(subsystem: "com.vibecoding.fuelnow", category: "ControlCenter")
+
+    /// Nur die echte App-Group — kein Fallback auf `.standard` der Extension (sonst sieht die Haupt-App nichts).
     static func enqueue(_ action: FuelNowPendingMapControlAction) {
-        WidgetSnapshotStore.sharedDefaults.set(action.rawValue, forKey: WidgetSnapshotStore.pendingControlMapActionKey)
+        guard let defs = UserDefaults(suiteName: WidgetSnapshotStore.appGroupIdentifier) else {
+            log.error("ControlCenter: App-Group UserDefaults nil — Entitlements prüfen.")
+            return
+        }
+        defs.set(action.rawValue, forKey: WidgetSnapshotStore.pendingControlMapActionKey)
+        defs.synchronize()
     }
 }
 

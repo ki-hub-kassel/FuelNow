@@ -239,7 +239,9 @@ struct MapScreen: View {
         }
         .task {
             locationService.start()
+            MapDeepLinkStore.shared.syncPendingControlFromAppGroupIfNeeded()
             applyPendingStationFocusFromDeepLink()
+            applyPendingMapControlActionIfNeeded()
         }
         .onChange(of: deepLinks.pendingStationFocusID) { _, _ in
             applyPendingStationFocusFromDeepLink()
@@ -277,6 +279,8 @@ struct MapScreen: View {
         .onChange(of: scenePhase) { _, phase in
             if phase == .active {
                 locationService.refreshAuthorizationStatus()
+                MapDeepLinkStore.shared.syncPendingControlFromAppGroupIfNeeded()
+                applyPendingMapControlActionIfNeeded()
             }
         }
         .onChange(of: networkMonitor.snapshot.reachability) { oldValue, newValue in
