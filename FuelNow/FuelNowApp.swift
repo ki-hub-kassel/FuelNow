@@ -108,6 +108,8 @@ struct FuelNowApp: App {
                     guard (notification.object as? UserDefaults) === UserDefaults.standard else { return }
                     syncWidgetSnapshot()
                 }
+                // WidgetKit (`widgetURL`): FuelNow-Widgets und Live-Activities nutzen `fuelnow://map` bzw.
+                // `fuelnow://station/<uuid>` — bei CarPlay öffnet ein Tap die App-CarPlay-Session, wenn das Fahrzeug Touch unterstützt.
                 .onOpenURL { url in
                     Task { @MainActor in
                         guard let link = FuelNowDeepLink.parse(url) else { return }

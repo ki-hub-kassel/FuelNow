@@ -130,9 +130,32 @@ Konfiguration **„FuelNow CarPlay Scene“**, die auf
 Der Delegate (`FuelNow/Features/CarPlay/FuelNowCarPlaySceneDelegate.swift`) ist
 die einzige Stelle, die `CPInterfaceController.setRootTemplate` aufruft.
 
-Bei Plus (`CPTabBarTemplate`): **`CPListTemplate` zuerst**, danach
-`CPPointOfInterestTemplate` — damit Preis/Zeile ohne Karten-Pan sofort erreichbar
-ist; Karte bleibt ein Tap entfernt.
+Bei Plus zeigt die Haupt-CarPlay-Scene ein **`CPListTemplate`** mit den nächsten
+Tankstellen (Zeilentap startet Navigation über Apple Maps).
+
+### 2.2a Widgets auf dem CarPlay-Dashboard (WidgetKit, iOS 26+)
+
+FuelNow ist eine **Fueling**-App ohne Navigations-CarPlay-Entitlement. Die
+**Navigations-Dashboard-Scene** (`CPTemplateApplicationDashboardScene`,
+`CPDashboardController`, Karte im Dashboard) ist für **Navigation**-Apps gedacht —
+FuelNow nutzt diesen Pfad **nicht**.
+
+Stattdessen können Nutzer **FuelNow-Widgets** (`WidgetFamily.systemSmall`) in der
+**Widget-Leiste** am CarPlay-Dashboard platzieren (Apple: „Widgets in CarPlay“ /
+StandBy-gleiche `systemSmall`-Darstellung). Zuweisung auf dem iPhone unter
+**Einstellungen → Allgemein → CarPlay → [Fahrzeug]** (Widget-Auswahl je nach
+iOS-Oberfläche).
+
+**Code:** Widget-Extension `FuelNowWidgets/` — v. a. `FuelNowStationWidget.swift`
+(konfigurierbar nächste/günstigste Station) und `FuelNowCheapestNearbyWidget.swift`.
+Die Views nutzen `containerBackground(for: .widget)` und größere Typografie, wenn
+`showsWidgetContainerBackground` falsch ist (Hintergrund von StandBy/CarPlay
+entfernt — Apple-Empfehlung „larger typography“).
+
+**Deep Links:** `widgetURL` setzt `fuelnow://map` bzw. `fuelnow://station/<uuid>`
+(`FuelNowDeepLink`, Verarbeitung in `FuelNowApp.onOpenURL`). Mit aktiver
+CarPlay-Integration und Touch-Fahrzeug öffnet ein Tap die App in der CarPlay-Session
+(siehe Apple „Linking to your app in CarPlay“).
 
 ### 2.3 Plus-Gating & Routing ([TAN-56](https://linear.app/tankradar-app/issue/TAN-56))
 
@@ -144,7 +167,7 @@ Instanz pro CarPlay-Scene). Danach liest `applyCurrentRoute(animated:)`
 
 | Plus (CarPlay unlocked) | Template-Stubs                                                                                                                            |
 | ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| Ja                      | `CPListTemplate` — Platzhalter bis [TAN-55](https://linear.app/tankradar-app/issue/TAN-55) (`CPPointOfInterestTemplate` + Daten)          |
+| Ja                      | `CPListTemplate` mit Tankstellenzeilen (Navigation pro Zeile)                                                                               |
 | Nein                    | `CPInformationTemplate` mit `carplay.locked.`* — ehrlicher Hinweis bis [TAN-57](https://linear.app/tankradar-app/issue/TAN-57) verfeinert |
 
 
@@ -169,8 +192,8 @@ laut CarPlay HIG (44×44 pt). Konkrete Symbole (`fuelpump.fill`, `leaf.fill`,
 `fuelpump.circle.fill`) liegen bereits in `FuelType.settingsCardSymbolName`
 (siehe `FuelTypePresentation.swift` aus TAN-78) und sind 1:1 für CarPlay
 wiederverwendbar.
-- **Tab-Bar-Icons:** Werden in TAN-55 ergänzt, falls eine `CPTabBarTemplate`
-zum Einsatz kommt — sonst brauchen wir keine.
+- **Tab-Bar-Icons:** Entfallen mit der reinen `CPListTemplate`-Hauptansicht; keine
+  separaten CarPlay-Tab-Icons nötig.
 
 ### 2.5 Plan B — CPInformationTemplate ohne Plus / ohne Approval
 
@@ -206,6 +229,9 @@ interfaceController.setRootTemplate(infoTemplate, animated: false)
 - **CarPlay-Simulator** in Xcode öffnen via *Simulator → I/O → External Displays
 → CarPlay* (Standard-Workflow) — **nur sinnvoll**, wenn Entitlement + Scene wieder
 aktiv sind (`FuelNowFeatureFlags.isCarPlayCapabilityEnabled`).
+- **CarPlay-Widgets (WidgetKit):** Xcode-Widget-Previews mit Kontext StandBy/CarPlay
+prüfen; im CarPlay-Simulator Widget zur Leiste hinzufügen, Lesbarkeit Hell/Dunkel,
+Tap auf `fuelnow://`-Ziel (App springt in CarPlay bei Touch und aktiver Integration).
 - **Device-Builds** mit CarPlay: freigegebenes Fueling-Entitlement im Profil.
 - **Unit:** `CarPlayRoutingPolicyTests` deckt die TAN-56-Routing-Entscheidung ab.
 - **Manuell / Sandbox:** Plus vs. Limited Templates — [TAN-59](https://linear.app/tankradar-app/issue/TAN-59).
