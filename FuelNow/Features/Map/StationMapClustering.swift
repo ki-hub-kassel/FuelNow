@@ -31,6 +31,17 @@ enum MapStationAnnotationItem: Identifiable {
     }
 }
 
+private enum ClusterZoomMath {
+    static let bboxPaddingFactor = 1.45
+    /// Mindest-Verkleinerung vs. aktuelle Span, sonst erzwungenes Nachzoomen.
+    static let shrinkEnoughRatio = 0.92
+    static let forcedZoomFactor = 0.5
+    static let softFloorFractionOfCurrent = 0.08
+    static let maxSpanFractionOfCurrent = 0.9
+    /// Untergrenze ~16 m — verhindert degenerierte Regionen, erlaubt aber mehr als das frühere 0.004°-Plateau.
+    static let absoluteMinSpanDegrees = 0.00015
+}
+
 enum StationMapClustering {
     /// Gitter über die aktuelle Region — bei großem Zoom (große Span) weniger Zellen ⇒ stärkeres Clustern.
     static func annotationItems(for stations: [Station], region: MKCoordinateRegion) -> [MapStationAnnotationItem] {
@@ -71,10 +82,11 @@ enum StationMapClustering {
                 items.append(.cluster(stations: bucket, coordinate: coord))
             }
         }
-        return items
+        return mergeProximitySingles(items)
     }
 
     /// Bounding box für Zoom nach Cluster-Tap — etwas Luft, damit Pins sich auflösen.
+    /// Verhindert Span-Plateaus (zwei fast gleiche Pins + bereits kleiner Ausschnitt): erzwingt multiplikatives Nachzoomen.
     static func regionToExpandCluster(_ stations: [Station], currentRegion: MKCoordinateRegion) -> MKCoordinateRegion {
         guard let minLat = stations.map(\.latitude).min(),
               let maxLat = stations.map(\.latitude).max(),
@@ -85,12 +97,32 @@ enum StationMapClustering {
         }
 
         let center = centroid(of: stations)
-        var latDelta = (maxLat - minLat) * 1.45
-        var lonDelta = (maxLon - minLon) * 1.45
-        latDelta = max(latDelta, 0.004)
-        lonDelta = max(lonDelta, 0.004)
-        latDelta = min(latDelta, max(currentRegion.span.latitudeDelta * 0.9, 0.004))
-        lonDelta = min(lonDelta, max(currentRegion.span.longitudeDelta * 0.9, 0.004))
+        let curLat = currentRegion.span.latitudeDelta
+        let curLon = currentRegion.span.longitudeDelta
+
+        var latDelta = (maxLat - minLat) * ClusterZoomMath.bboxPaddingFactor
+        var lonDelta = (maxLon - minLon) * ClusterZoomMath.bboxPaddingFactor
+
+        let softFloorLat = max(curLat * ClusterZoomMath.softFloorFractionOfCurrent, ClusterZoomMath.absoluteMinSpanDegrees)
+        let softFloorLon = max(curLon * ClusterZoomMath.softFloorFractionOfCurrent, ClusterZoomMath.absoluteMinSpanDegrees)
+        latDelta = max(latDelta, softFloorLat)
+        lonDelta = max(lonDelta, softFloorLon)
+
+        latDelta = min(latDelta, curLat * ClusterZoomMath.maxSpanFractionOfCurrent)
+        lonDelta = min(lonDelta, curLon * ClusterZoomMath.maxSpanFractionOfCurrent)
+
+        let shrinksEnough =
+            latDelta <= curLat * ClusterZoomMath.shrinkEnoughRatio ||
+            lonDelta <= curLon * ClusterZoomMath.shrinkEnoughRatio
+        if !shrinksEnough {
+            latDelta = curLat * ClusterZoomMath.forcedZoomFactor
+            lonDelta = curLon * ClusterZoomMath.forcedZoomFactor
+        }
+
+        let floorLat = min(ClusterZoomMath.absoluteMinSpanDegrees, curLat * 0.4)
+        let floorLon = min(ClusterZoomMath.absoluteMinSpanDegrees, curLon * 0.4)
+        latDelta = max(latDelta, floorLat)
+        lonDelta = max(lonDelta, floorLon)
 
         return MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: latDelta, longitudeDelta: lonDelta))
     }
@@ -130,6 +162,39 @@ enum StationMapClustering {
         let lat = stations.map(\.latitude).reduce(0, +) / Double(stations.count)
         let lon = stations.map(\.longitude).reduce(0, +) / Double(stations.count)
         return CLLocationCoordinate2D(latitude: lat, longitude: lon)
+    }
+
+    /// Genau zwei nahe Einzelpins zu einem „2“-Cluster — überlappende Touch-Ziele; ohne Mehrfach-Merge (Gitternetz bleibt bei ≥3 Singles gültig).
+    static func mergeProximitySingles(_ items: [MapStationAnnotationItem], radiusMeters: CLLocationDistance = 100) -> [
+        MapStationAnnotationItem
+    ] {
+        var singles: [Station] = []
+        for item in items {
+            if case .single(let station) = item { singles.append(station) }
+        }
+        guard singles.count == 2 else { return items }
+        let a = singles[0], b = singles[1]
+        let distance = CLLocation(latitude: a.latitude, longitude: a.longitude)
+            .distance(from: CLLocation(latitude: b.latitude, longitude: b.longitude))
+        guard distance <= radiusMeters else { return items }
+
+        var insertedPair = false
+        var output: [MapStationAnnotationItem] = []
+        output.reserveCapacity(items.count - 1)
+        for item in items {
+            switch item {
+            case .cluster:
+                output.append(item)
+            case .single(let station):
+                if !insertedPair && (station.id == a.id || station.id == b.id) {
+                    output.append(.cluster(stations: [a, b], coordinate: centroid(of: [a, b])))
+                    insertedPair = true
+                } else if station.id != a.id && station.id != b.id {
+                    output.append(.single(station))
+                }
+            }
+        }
+        return output
     }
 }
 

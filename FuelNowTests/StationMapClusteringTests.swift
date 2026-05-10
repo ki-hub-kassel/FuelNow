@@ -40,6 +40,47 @@ struct StationMapClusteringTests {
         #expect(singles.count == 4)
     }
 
+    /// Zwei fast gleiche Pins + bestehende Mindest-Span: Zoomen muss messbar verkleinern (kein Plateau).
+    @Test func clusterZoomShrinksPastBBoxPlateau() throws {
+        let stations = try Self.twoVeryCloseStations()
+        let current = MKCoordinateRegion(
+            center: CLLocationCoordinate2D(latitude: 52.530005, longitude: 13.440005),
+            span: MKCoordinateSpan(latitudeDelta: 0.004, longitudeDelta: 0.004)
+        )
+        let next = StationMapClustering.regionToExpandCluster(stations, currentRegion: current)
+        #expect(next.span.latitudeDelta < current.span.latitudeDelta * 0.92)
+        #expect(next.span.longitudeDelta < current.span.longitudeDelta * 0.92)
+    }
+
+    /// Genau zwei Einzel-Annotationen ≤100 m → ein Zweier-Cluster für Zoom-Tap.
+    @Test func mergeProximityCombinesTwoNearbySingles() throws {
+        let stations = try Self.twoVeryCloseStations()
+        let items: [MapStationAnnotationItem] = [.single(stations[0]), .single(stations[1])]
+        let merged = StationMapClustering.mergeProximitySingles(items)
+        #expect(merged.count == 1)
+        guard case .cluster(let members, _) = merged[0] else {
+            Issue.record("Expected merged cluster")
+            return
+        }
+        #expect(members.count == 2)
+    }
+
+    private static func twoVeryCloseStations() throws -> [Station] {
+        let json = Data(
+            """
+            {"stations":[
+              {"id":"AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEE00A1","name":"A","brand":"T",
+               "street":"a","place":"B","lat":52.53000,"lng":13.44000,"dist":1,"diesel":1.1,
+               "e5":1.2,"e10":1.15,"isOpen":true,"houseNumber":"1","postCode":10115},
+              {"id":"AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEE00A2","name":"B","brand":"T",
+               "street":"a","place":"B","lat":52.530012,"lng":13.440018,"dist":1,"diesel":1.1,
+               "e5":1.2,"e10":1.15,"isOpen":true,"houseNumber":"1","postCode":10115}
+            ]}
+            """.utf8
+        )
+        return try JSONDecoder().decode(StationListEnvelope.self, from: json).stations
+    }
+
     private static func fourTightQuadruplet() throws -> [Station] {
         let json = Data(
             """
