@@ -1,7 +1,6 @@
 #if canImport(CarPlay)
 import CarPlay
 import Foundation
-import MapKit
 import Observation
 import UIKit
 
@@ -181,7 +180,7 @@ final class FuelNowCarPlaySceneDelegate: UIResponder, CPTemplateApplicationScene
                     body: String(localized: "carplay.plus.loading.body")
                 )
             }
-            return makeStationsTabBar(store: store)
+            return makeStationsListRoot(store: store)
         }
     }
 
@@ -196,7 +195,7 @@ final class FuelNowCarPlaySceneDelegate: UIResponder, CPTemplateApplicationScene
     }
 
     @MainActor
-    private func makeStationsTabBar(store: StationStore) -> CPTemplate {
+    private func makeStationsListRoot(store: StationStore) -> CPTemplate {
         let fuel = AppSettings.preferredFuelFromStorage()
         let stations = store.stations.filter { StationCarPlayPOIMapper.isRenderableStationCoordinate($0) }
         guard !stations.isEmpty else {
@@ -207,17 +206,13 @@ final class FuelNowCarPlaySceneDelegate: UIResponder, CPTemplateApplicationScene
         }
         let rows = StationCarPlayPOIMapper.buildRows(stations: stations, preferredFuel: fuel)
         let byID = StationCarPlayPOIMapper.stationsByIDReplacingDuplicates(stations)
-        let points = StationCarPlayPOIMapper.makePointsOfInterest(rows: rows, stationsByID: byID)
-        guard !points.isEmpty else {
+        guard !rows.isEmpty else {
             return makeSimpleInfoTemplate(
                 title: String(localized: "carplay.plus.error.title"),
                 body: String(localized: "carplay.plus.error.generic")
             )
         }
-        let poiTemplate = StationCarPlayPOIMapper.makePointsTemplate(points: points, delegate: self)
-        let listTemplate = StationCarPlayPOIMapper.makeNearbyListTemplate(rows: rows, stationsByID: byID)
-        // Liste zuerst: nächste Tankstelle ohne Karten-Pan sichtbar; POI-Tab als zweites.
-        return CPTabBarTemplate(templates: [listTemplate, poiTemplate])
+        return StationCarPlayPOIMapper.makeNearbyListTemplate(rows: rows, stationsByID: byID)
     }
 
     @MainActor
@@ -370,18 +365,6 @@ private struct PlusUISnapshot: Equatable {
         }
 
         return .generic
-    }
-}
-
-// MARK: - POI delegate (Map-Region — MVP ohne Nachladen)
-
-extension FuelNowCarPlaySceneDelegate: CPPointOfInterestTemplateDelegate {
-    func pointOfInterestTemplate(
-        _: CPPointOfInterestTemplate,
-        didChangeMapRegion _: MKCoordinateRegion
-    ) {
-        // MVP: keine zusätzliche Tankerkönig-Anfrage bei Pan/Zoom — gleiches Datenmodell wie die Karten-
-        // Hauptansicht (StationStore lokal). Region-basiertes Nachladen wäre ein Folge-Ticket (Caching/TAN-83).
     }
 }
 

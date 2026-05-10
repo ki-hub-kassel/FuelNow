@@ -119,7 +119,7 @@ enum StationCarPlayPOIMapper {
         }
     }
 
-    /// Sortierte Liste — dieselben Stationen wie die POI-Karte (kein zweites Datenmodell). Im Tab-Bar **erster** Tab.
+    /// Sortierte Liste — dieselben Stationen wie zuvor die POI-Karte (kein zweites Datenmodell); Root in CarPlay.
     @MainActor
     static func makeNearbyListTemplate(
         rows: [StationCarPlayPOIRow],

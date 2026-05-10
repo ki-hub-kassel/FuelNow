@@ -4,7 +4,7 @@ import Foundation
 /// (TAN-56) konsumiert und in das jeweilige `CPTemplate` übersetzt.
 ///
 /// Folge-Tickets:
-/// * **TAN-55** — `.plus`: `CPTabBarTemplate` mit `CPPointOfInterestTemplate` + Liste,
+/// * **TAN-55** — `.plus`: `CPListTemplate` mit Tankstellen (Navigation pro Zeile),
 ///   Daten aus ``StationStore`` / ``StationCarPlayPOIMapper``.
 /// * **TAN-57** — `.limited`: `CPInformationTemplate` mit `carplay.locked.*` + ergänzendem Hinweis.
 /// * **TAN-58** baut auf der Flip-Beobachtung auf, die der Delegate bereits
