@@ -1,94 +1,122 @@
 {
-  "appPolicies" : {
-    "eula" : "",
-    "policies" : [
-
-    ]
+  "appPolicies": {
+    "eula": "",
+    "policies": []
   },
-  "identifier" : "8F3A21C4",
-  "nonRenewingSubscriptions" : [
-
-  ],
-  "products" : [
-
-  ],
-  "settings" : {
-    "_askToBuyEnabled" : false,
-    "_billingGracePeriodEnabled" : false,
-    "_billingIssuesEnabled" : false,
-    "_disableDialogs" : false,
-    "_failTransactionsEnabled" : false,
-    "_locale" : "de",
-    "_renewalBillingIssuesEnabled" : false,
-    "_storefront" : "DEU",
-    "_storeKitErrors" : [
-
-    ],
-    "_timeRate" : 0
+  "identifier": "8F3A21C4",
+  "nonRenewingSubscriptions": [],
+  "products": [],
+  "settings": {
+    "_askToBuyEnabled": false,
+    "_billingGracePeriodEnabled": false,
+    "_billingIssuesEnabled": false,
+    "_disableDialogs": false,
+    "_failTransactionsEnabled": false,
+    "_locale": "de",
+    "_renewalBillingIssuesEnabled": false,
+    "_storefront": "DEU",
+    "_storeKitErrors": [],
+    "_timeRate": 0
   },
-  "subscriptionGroups" : [
+  "subscriptionGroups": [
     {
-      "id" : "B17E94D2",
-      "localizations" : [
-
-      ],
-      "name" : "FuelNow Plus",
-      "subscriptions" : [
+      "id": "B17E94D2",
+      "localizations": [],
+      "name": "FuelNow Plus",
+      "subscriptions": [
         {
-          "adHocOffers" : [
-
-          ],
-          "codeOffers" : [
-
-          ],
-          "displayPrice" : "6.00",
-          "familyShareable" : false,
-          "groupNumber" : 1,
-          "internalID" : "5C4E8A91",
-          "introductoryOffer" : {
-            "billingPlanType" : "BILLED_UPFRONT",
-            "displayPrice" : "0.00",
-            "internalID" : "7A1B9C3D",
-            "numberOfPeriods" : 1,
-            "paymentMode" : "free",
-            "subscriptionPeriod" : "P3D"
+          "adHocOffers": [],
+          "codeOffers": [],
+          "displayPrice": "6.00",
+          "familyShareable": false,
+          "groupNumber": 1,
+          "internalID": "5C4E8A91",
+          "introductoryOffer": {
+            "billingPlanType": "BILLED_UPFRONT",
+            "displayPrice": "0.00",
+            "internalID": "7A1B9C3D",
+            "numberOfPeriods": 1,
+            "paymentMode": "free",
+            "subscriptionPeriod": "P3D"
           },
-          "introductoryOffers" : [
+          "introductoryOffers": [
             {
-              "billingPlanType" : "BILLED_UPFRONT",
-              "displayPrice" : "0.00",
-              "internalID" : "7A1B9C3D",
-              "numberOfPeriods" : 1,
-              "paymentMode" : "free",
-              "subscriptionPeriod" : "P3D"
+              "billingPlanType": "BILLED_UPFRONT",
+              "displayPrice": "0.00",
+              "internalID": "7A1B9C3D",
+              "numberOfPeriods": 1,
+              "paymentMode": "free",
+              "subscriptionPeriod": "P3D"
             }
           ],
-          "localizations" : [
+          "localizations": [
             {
-              "description" : "FuelNow Plus: CarPlay und Premium-Funktionen.",
-              "displayName" : "FuelNow Plus (Jahr)",
-              "locale" : "de"
+              "description": "FuelNow Plus: CarPlay und Premium-Funktionen.",
+              "displayName": "FuelNow Plus (Jahr)",
+              "locale": "de"
             },
             {
-              "description" : "FuelNow Plus: CarPlay and premium features.",
-              "displayName" : "FuelNow Plus (Year)",
-              "locale" : "en_US"
+              "description": "FuelNow Plus: CarPlay and premium features.",
+              "displayName": "FuelNow Plus (Year)",
+              "locale": "en_US"
             }
           ],
-          "productID" : "com.vibecoding.fuelnow.subscription.year",
-          "recurringSubscriptionPeriod" : "P1Y",
-          "referenceName" : "FuelNow Plus Yearly",
-          "subscriptionGroupID" : "B17E94D2",
-          "type" : "RecurringSubscription",
-          "winbackOffers" : [
-
-          ]
+          "productID": "com.vibecoding.fuelnow.subscription.year",
+          "recurringSubscriptionPeriod": "P1Y",
+          "referenceName": "FuelNow Plus Yearly",
+          "subscriptionGroupID": "B17E94D2",
+          "type": "RecurringSubscription",
+          "winbackOffers": []
+        },
+        {
+          "adHocOffers": [],
+          "codeOffers": [],
+          "displayPrice": "0.99",
+          "familyShareable": false,
+          "groupNumber": 1,
+          "internalID": "6D2F1A8E",
+          "introductoryOffer": {
+            "billingPlanType": "BILLED_UPFRONT",
+            "displayPrice": "0.00",
+            "internalID": "8B2C0E4F",
+            "numberOfPeriods": 1,
+            "paymentMode": "free",
+            "subscriptionPeriod": "P3D"
+          },
+          "introductoryOffers": [
+            {
+              "billingPlanType": "BILLED_UPFRONT",
+              "displayPrice": "0.00",
+              "internalID": "8B2C0E4F",
+              "numberOfPeriods": 1,
+              "paymentMode": "free",
+              "subscriptionPeriod": "P3D"
+            }
+          ],
+          "localizations": [
+            {
+              "description": "FuelNow Plus: CarPlay, Favoriten, Preisalarme und weitere Pro-Funktionen.",
+              "displayName": "FuelNow Plus (Monat)",
+              "locale": "de"
+            },
+            {
+              "description": "FuelNow Plus: CarPlay, favorites, price alerts, and more Pro features.",
+              "displayName": "FuelNow Plus (Month)",
+              "locale": "en_US"
+            }
+          ],
+          "productID": "com.vibecoding.fuelnow.subscription.month",
+          "recurringSubscriptionPeriod": "P1M",
+          "referenceName": "FuelNow Plus Monthly",
+          "subscriptionGroupID": "B17E94D2",
+          "type": "RecurringSubscription",
+          "winbackOffers": []
         }
       ]
     }
   ],
-  "version" : {
-    "major" : 5,
-    "minor" : 0
+  "version": {
+    "major": 5,
+    "minor": 0
   }
 }

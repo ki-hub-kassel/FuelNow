@@ -7,8 +7,9 @@ including the **3-day Free Trial Introductory Offer** introduced with
 ## Upgrade UI placement ([TAN-45](https://linear.app/tankradar-app/issue/TAN-45))
 
 **Product decision:** FuelNow ships **one** optional upgrade surface — `PlusUpgradeView`
-as a **large sheet** (`presentationDetents: [.large]`), opened **only** from **Settings**
-via `PlusMiniHero` (“FuelNow Plus ansehen” / gleicher Bereich). There is **no** automatic
+as a **large sheet** (`presentationDetents: [.large]`), opened from **Settings**
+via `PlusMiniHero`, from **gated Favoriten/Preisalarme** rows, or from the **Favoriten-Herz**
+in `StationDetailView` when the user is not subscribed. There is **no** automatic
 launch paywall, **no** map nag banner, and **no** separate web checkout outside StoreKit.
 
 **Pipeline parity:** Settings and the sheet both use:
@@ -24,12 +25,16 @@ launch paywall, **no** map nag banner, and **no** separate web checkout outside 
 ## Product configuration
 
 - Subscription Group: **FuelNow Plus** (`B17E94D2`)
-- Auto-renewable subscription product:
-  - **Product ID:** `com.vibecoding.fuelnow.subscription.year`
-  - **Period:** 1 year (`P1Y`)
-  - **Display price (DEU):** € 6.00 (placeholder — overridden by ASC pricing tier)
-  - **Family shareable:** false
-- Introductory offer (Free Trial):
+- Auto-renewable subscription products (same group; app loads both IDs via `SubscriptionConstants.productIDs`):
+  - **Yearly — Product ID:** `com.vibecoding.fuelnow.subscription.year`
+    - **Period:** 1 year (`P1Y`)
+    - **Display price (DEU):** € 6.00 (placeholder — overridden by ASC pricing tier)
+    - **Family shareable:** false
+  - **Monthly — Product ID:** `com.vibecoding.fuelnow.subscription.month`
+    - **Period:** 1 month (`P1M`)
+    - **Display price (local `.storekit`):** placeholder — set real price in ASC
+    - **Family shareable:** false
+- Introductory offer (Free Trial) — configure on **each** product in ASC (same group rules apply):
   - **Payment mode:** Free Trial
   - **Period:** 3 days (`P3D`)
   - **Eligibility:** Apple-managed — first-time purchasers per Subscription Group / Family.
@@ -84,11 +89,27 @@ Steps to configure once per app:
    - **Start / End:** No end date (or roll a date-bounded campaign)
 6. **Save** and propagate. Allow ~15 minutes for the offer to surface in
    `Product.subscription.introductoryOffer`.
+7. Repeat steps **2–6** for **`com.vibecoding.fuelnow.subscription.month`** (monthly tier) so both products exist in ASC and match `FuelNowPlus.storekit`.
 
 > The offer flips on for users who have **never** subscribed to a product
 > in the *FuelNow Plus* Subscription Group on the same Family. Apple
 > serves at most **one** Introductory Offer per group per Family. See:
 > [Implementing introductory offers in your app](https://developer.apple.com/documentation/storekit/implementing-introductory-offers-in-your-app).
+
+### Monthly product checklist (`com.vibecoding.fuelnow.subscription.month`)
+
+Use this when the monthly SKU is **not** in App Store Connect yet, or to verify parity with `FuelNowPlus.storekit` and the app’s `SubscriptionConstants.productIDs`.
+
+1. **App Store Connect → Apps → FuelNow → Subscriptions** → open group **FuelNow Plus** (same group as the yearly product).
+2. **Create** a new auto-renewable subscription (blue **+** or **Create** under the group).
+3. **Reference name:** e.g. `FuelNow Plus Monthly` (internal only).
+4. **Product ID:** exactly `com.vibecoding.fuelnow.subscription.month` — must match code and StoreKit Configuration.
+5. **Subscription duration:** **1 month**.
+6. **Pricing:** open **Subscription Pricing**, set your base territory (e.g. Germany) and any other regions; ASC applies tiers — align with your intended monthly anchor (see plan note: monthly is typically priced higher *per month* than 1/12 of the yearly tier).
+7. **Introductory offer (required for parity with yearly):** on this monthly product, repeat the same pattern as the yearly SKU — **Free Trial**, **3 days**, **New subscribers**, all regions, no end date (unless running a campaign). One introductory offer per subscription group per Apple ID family still applies.
+8. **Review information / localizations:** add display name and description per locale if prompted; save all sections until the product shows **Ready to Submit** with the app version that includes both product IDs.
+9. **Propagation:** after save, allow time (often ~15 minutes) before Sandbox / TestFlight sees `Product.subscription.introductoryOffer` on the new SKU.
+10. **Verify:** Xcode **StoreKit Testing** with `FuelNowPlus.storekit`, or a Sandbox account on device — Settings and `PlusUpgradeView` should list **year** and **month**; trial copy follows `isEligibleForIntroOffer` from the product you refresh in `PlusPurchaseController.refreshTrialOffer(for:)`.
 
 ## Eligibility check
 

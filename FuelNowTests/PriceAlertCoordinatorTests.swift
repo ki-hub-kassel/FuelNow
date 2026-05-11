@@ -217,6 +217,7 @@ struct PriceAlertCoordinatorTests {
         let coordinator = PriceAlertCoordinator(
             client: client,
             favoritesStore: store,
+            isPlusUnlocked: { true },
             notificationCenter: .current(),
             defaults: defaults,
             preferredFuelDefaults: defaults

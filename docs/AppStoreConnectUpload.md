@@ -9,6 +9,21 @@ Das Repo bietet **zwei** Upload-Pfade nach App Store Connect, beide mit demselbe
 
 Beide Pfade sprechen dieselbe Bundle-ID **`com.vibecoding.fuelnow`** und dasselbe Apple-Team **`FNXU97S3QK`** an.
 
+## Nur Deutschland (App Store Verfügbarkeit)
+
+**Ziel:** FuelNow soll im App Store **nur in Deutschland** gelistet und herunterladbar sein (kein weltweiter oder EU-weiter Release).
+
+1. **App Store Connect** → **Apps** → **FuelNow** → **App Store** (bzw. **Distribution** je nach ASC-Oberfläche).
+2. Öffne **Preise und Verfügbarkeit** / **Pricing and Availability** (oder die Verfügbarkeitsverwaltung für die App).
+3. Unter **Verfügbarkeit** / **App Availability** nur **Deutschland** auswählen (alle anderen Regionen abwählen bzw. „Verfügbar in neuen Regionen“ deaktivieren, falls angeboten).
+4. **Speichern.** Änderungen können etwas brauchen, bis sie in allen Storefronts konsistent sind.
+
+**Hinweise:**
+
+- Das ist **unabhängig** von der App-Sprache: `Localizable.xcstrings` kann weiter **Deutsch und Englisch** enthalten (z. B. für Nutzer in Deutschland mit englischer Systemsprache).
+- **In-App-Käufe / Abos (FuelNow Plus):** Preise und ggf. Angebote pro Territorium weiter in **Abonnements** pflegen; wenn die App nur in **DEU** verkauft wird, reicht in der Praxis oft die deutsche Preisstaffel — prüfe in ASC trotzdem die Abo-Territorienliste auf ungewollte zusätzliche Länder.
+- **CLI:** Territorien lassen sich mit `asc` pflegen, sobald ihr den passenden Workflow im Team nutzt (z. B. `asc pricing availability` / App-Setup — siehe [asc CLI](https://asccli.sh) und eure interne Doku). Für einmalige Korrektur reicht die ASC-Web-Oberfläche meist.
+
 ## `asc` CLI (TAN-95) — Standard-Pfad
 
 ### Einmal einrichten

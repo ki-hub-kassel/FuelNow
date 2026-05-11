@@ -14,6 +14,7 @@ import UserNotifications
 ///   mit Deep-Link `fuelnow://station/{id}`.
 /// - **User-Schalter:** `AppSettings.UserDefaultsKey.priceAlertsEnabled` muss `true` sein, sonst
 ///   stiller No-Op.
+/// - **Plus:** Nur bei aktivem FuelNow-Plus-Abo (`isPlusUnlocked`) laufen Checks und BG-Tasks.
 @MainActor
 final class PriceAlertCoordinator {
     /// Identifier fuer den `BGTaskScheduler`. Wird **zwingend** auch in `Info.plist` unter
@@ -28,16 +29,19 @@ final class PriceAlertCoordinator {
     private let notificationCenter: UNUserNotificationCenter
     private let defaults: UserDefaults
     private let preferredFuelDefaults: UserDefaults
+    private let isPlusUnlocked: () -> Bool
 
     init(
         client: TankerkoenigClient,
         favoritesStore: FavoritesStore,
+        isPlusUnlocked: @escaping () -> Bool,
         notificationCenter: UNUserNotificationCenter = .current(),
         defaults: UserDefaults = .standard,
         preferredFuelDefaults: UserDefaults? = nil
     ) {
         self.client = client
         self.favoritesStore = favoritesStore
+        self.isPlusUnlocked = isPlusUnlocked
         self.notificationCenter = notificationCenter
         self.defaults = defaults
         self.preferredFuelDefaults = preferredFuelDefaults
@@ -110,6 +114,11 @@ final class PriceAlertCoordinator {
         init(task: BGTask) { self.task = task }
     }
 
+    /// Entfernt einen geplanten BG-Refresh (z. B. nach Abo-Ende).
+    func cancelScheduledRefresh() {
+        BGTaskScheduler.shared.cancel(taskRequestWithIdentifier: Self.backgroundTaskIdentifier)
+    }
+
     /// Plant den naechsten Background-Refresh in 30 Min — iOS entscheidet dann, ob/wann er laeuft.
     func scheduleNextRefresh() {
         guard isEnabled else { return }
@@ -125,7 +134,7 @@ final class PriceAlertCoordinator {
     }
 
     var isEnabled: Bool {
-        defaults.bool(forKey: AppSettings.UserDefaultsKey.priceAlertsEnabled)
+        defaults.bool(forKey: AppSettings.UserDefaultsKey.priceAlertsEnabled) && isPlusUnlocked()
     }
 
     var thresholdEuros: Double {
@@ -152,6 +161,7 @@ final class PriceAlertCoordinator {
 
     @discardableResult
     private func performRefresh() async -> Bool {
+        guard isPlusUnlocked() else { return false }
         let ids = favoritesStore.favorites.map(\.id)
         guard !ids.isEmpty else { return false }
 

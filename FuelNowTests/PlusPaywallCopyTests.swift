@@ -117,6 +117,18 @@ struct PlusPaywallCopyTests {
         #expect(headline == nil)
     }
 
+    @Test func trialHeadlineForEligibleMonthlyContainsPrice() throws {
+        let headline = PlusPaywallCopy.trialHeadline(
+            audience: .eligibleForTrial,
+            trialDuration: "3 Tage",
+            displayPrice: "0,99 €",
+            billing: .monthly
+        )
+        let unwrapped = try #require(headline)
+        #expect(unwrapped.contains("3 Tage"))
+        #expect(unwrapped.contains("0,99 €"))
+    }
+
     @Test func trialHeadlineForEligibleContainsDurationAndPrice() throws {
         let headline = PlusPaywallCopy.trialHeadline(
             audience: .eligibleForTrial,
@@ -167,12 +179,17 @@ struct PlusPaywallCopyTests {
     }
 
     @Test func footerForEligibleMentionsAutoRenew() {
-        let footer = PlusPaywallCopy.footer(audience: .eligibleForTrial, displayPrice: "6,99 €")
+        let footer = PlusPaywallCopy.footer(audience: .eligibleForTrial, displayPrice: "6,99 €", billing: .yearly)
         #expect(footer.contains("6,99 €"))
     }
 
+    @Test func footerForEligibleMonthlyMentionsPrice() {
+        let footer = PlusPaywallCopy.footer(audience: .eligibleForTrial, displayPrice: "0,99 €", billing: .monthly)
+        #expect(footer.contains("0,99 €"))
+    }
+
     @Test func footerForIneligibleUsesNonTrialCopy() {
-        let footer = PlusPaywallCopy.footer(audience: .ineligibleForTrial, displayPrice: "6,99 €")
+        let footer = PlusPaywallCopy.footer(audience: .ineligibleForTrial, displayPrice: "6,99 €", billing: .yearly)
         let standard = String(localized: "plus.sheet.footer.cancel")
         #expect(footer == standard)
     }

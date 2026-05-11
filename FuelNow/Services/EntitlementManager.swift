@@ -44,7 +44,7 @@ final class EntitlementManager {
     func loadProducts() async {
         do {
             products = try await Product.products(for: SubscriptionConstants.productIDs)
-            products.sort { $0.id < $1.id }
+            Self.sortPlusProducts(&products)
         } catch {
             products = []
         }
@@ -83,6 +83,16 @@ final class EntitlementManager {
             }
         }
         isPlusSubscriber = plus
+    }
+
+    private static func sortPlusProducts(_ products: inout [Product]) {
+        let order = SubscriptionConstants.productIDs
+        products.sort { lhs, rhs in
+            let li = order.firstIndex(of: lhs.id) ?? Int.max
+            let ri = order.firstIndex(of: rhs.id) ?? Int.max
+            if li != ri { return li < ri }
+            return lhs.id < rhs.id
+        }
     }
 
     private func observeTransactionUpdates() {

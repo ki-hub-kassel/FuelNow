@@ -120,6 +120,13 @@ final class FavoritesStore {
         }
     }
 
+    /// Leert die Merkliste und persistiert — z. B. einmalige Migration fuer Nicht-Plus-Nutzer.
+    func removeAllFavorites() {
+        guard !favorites.isEmpty else { return }
+        favorites = []
+        persist()
+    }
+
     /// Aktualisiert Anzeige-Cache + Preis-Observation; gibt zurueck, ob der Schwellenwert
     /// fuer einen Preisabfall erreicht wurde (`oldPrice - newPrice >= threshold`).
     @discardableResult

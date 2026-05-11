@@ -4,6 +4,14 @@ import Foundation
 enum SubscriptionConstants {
     /// Jahresabo (EUR-Basispreis kommt aus StoreKit / ASC, nicht hardcodieren für UI).
     static let plusYearlyProductID = "com.vibecoding.fuelnow.subscription.year"
+    /// Monatsabo — gleiche Subscription Group wie das Jahresprodukt.
+    static let plusMonthlyProductID = "com.vibecoding.fuelnow.subscription.month"
 
-    static let productIDs: [String] = [plusYearlyProductID]
+    /// Reihenfolge für StoreKit-Ladung und Paywall (Jahr zuerst = „Bester Wert“).
+    static let productIDs: [String] = [plusYearlyProductID, plusMonthlyProductID]
+}
+
+/// Zentrale Apple-Abonnementübersicht (Review-konform für „Verwalten").
+enum AppleSubscriptionPortal {
+    static let manageAllSubscriptionsURL = URL(string: "https://apps.apple.com/account/subscriptions")!
 }

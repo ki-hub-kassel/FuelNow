@@ -5,6 +5,7 @@ Diese Datei ist die **zentrale Einstiegs-Spezifikation** im Repo: Kurzfassung vo
 ## Produktüberblick
 
 - **FuelNow** ist eine native iOS-App: Tankstellen in der Nähe auf der Karte, Öffnungsstatus und Preise; Kraftstoffsorte (z. B. Super, Super95, Diesel) in den Einstellungen.
+- **Vertrieb:** Die App ist für den **deutschen App Store** vorgesehen (**Verfügbarkeit nur Deutschland**). Technische Umsetzung: App Store Connect (nicht im Binary); Schritte: [`docs/AppStoreConnectUpload.md`](AppStoreConnectUpload.md) → Abschnitt *Nur Deutschland*. In-App-Daten (Tankerkönig) sind ohnehin auf Deutschland bezogen.
 - **Daten:** Tankerkönig (Deutschland); API-Details und Decoding-Fallen: [`.cursor/skills/tankerkoenig-api/SKILL.md`](../.cursor/skills/tankerkoenig-api/SKILL.md). **Caching-Strategie (kein eigener DB-Mirror, On-Demand bleibt Default):** [`docs/TANKERKOENIG_CACHING.md`](TANKERKOENIG_CACHING.md) ([TAN-82](https://linear.app/tankradar-app/issue/TAN-82)). **Anschluss an Tankerkönig (TAN-92):** Vercel-Edge-Function-Proxy [`tankerkoenig-proxy/`](../tankerkoenig-proxy/README.md) hängt `apikey` serverseitig dran — der Key landet nicht in der App-Binary. App-seitige URL: `FuelNow/Info.plist` → `TankerkoenigProxyBaseURL`; Direct-Modus mit lokalem Key bleibt als Notnagel.
 - **Geplant / Roadmap:** Siri (nächste/günstigste Station), CarPlay-kartenlastig, Abo-Gate (CarPlay u. a. für Abonnenten; Preisrichtung z. B. ~6 €/Jahr — finale Preise über StoreKit, nicht hardcodieren).
 - **Backend-Richtung:** Appwrite (Swift SDK) — siehe Architektur-/Ticket-Kontext in Linear.
@@ -18,6 +19,7 @@ Diese Datei ist die **zentrale Einstiegs-Spezifikation** im Repo: Kurzfassung vo
 | Thema | Wert / Ort |
 | --- | --- |
 | Bundle-ID | `com.vibecoding.fuelnow` |
+| App Store Verfügbarkeit | **Nur Deutschland (DEU)** — siehe [`docs/AppStoreConnectUpload.md`](AppStoreConnectUpload.md) |
 | Tankerkönig-Anschluss (Default) | Vercel-Proxy in [`tankerkoenig-proxy/`](../tankerkoenig-proxy/README.md); URL via `FuelNow/Info.plist` → `TankerkoenigProxyBaseURL` (TAN-92) |
 | Tankerkönig-Key (Direct-Notnagel) | `README.md`, `FuelNow/Support/APIKeys.example.swift` — nie Key committen |
 | Plus-Abo Product-ID | `com.vibecoding.fuelnow.subscription.year` (`SubscriptionConstants`, `FuelNowPlus.storekit`) |

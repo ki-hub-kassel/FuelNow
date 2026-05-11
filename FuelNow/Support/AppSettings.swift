@@ -30,6 +30,8 @@ enum AppSettings {
         static let priceAlertsEnabled = "tr.priceAlerts.enabled"
         /// Schwellenwert in Euro fuer Preis-Pushes; Default 0.05 (5 Cent).
         static let priceAlertsThresholdEuros = "tr.priceAlerts.thresholdEuros"
+        /// Einmalige Freemium-Migration (Favoriten/Preisalarme → Plus): nach erstem Lauf `true`.
+        static let plusFreemiumMigrationV1Completed = "tr.plusFreemiumMigration.v1.completed"
     }
 
     /// Suchradius für Tankerkönig-`list.php` (TAN-79).

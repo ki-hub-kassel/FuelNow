@@ -20,16 +20,18 @@ final class FuelNowLifecycleCoordinator {
         let store = StationStoreFactory.makeDefault()
         let favorites = FavoritesStore()
         let client = TankerkoenigClient()
+        let entitlement = EntitlementManager()
         locationService = location
         stationStore = store
         stationDetailFetcher = TankerkoenigStationDetailFetcher(client: client)
-        entitlementManager = EntitlementManager()
+        entitlementManager = entitlement
         networkMonitor = NetworkMonitor()
         widgetSnapshotStore = WidgetSnapshotStore()
         favoritesStore = favorites
         priceAlertCoordinator = PriceAlertCoordinator(
             client: client,
-            favoritesStore: favorites
+            favoritesStore: favorites,
+            isPlusUnlocked: { entitlement.isPlusSubscriber }
         )
 
         FuelNowRuntimeRegistry.stationStore = store

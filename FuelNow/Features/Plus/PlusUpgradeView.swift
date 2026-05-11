@@ -9,19 +9,27 @@ import SwiftUI
 /// ist (`Product.SubscriptionInfo.isEligibleForIntroOffer`, TAN-81).
 struct PlusUpgradeView: View {
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.openURL) private var openURL
     @Environment(EntitlementManager.self) private var entitlementManager
 
     @State private var purchase = PlusPurchaseController()
 
-    /// Loading-Fallback (TAN-90): Wenn nach `loadingTimeoutSeconds` immer noch kein Produkt geladen ist
-    /// (z. B. fehlende Sandbox-Apple-ID), zeigt die Sheet einen lesbaren Fallback-Text statt
-    /// eines endlosen Spinners. Restore- und Manage-Buttons bleiben unabhängig benutzbar.
     @State private var loadingTimedOut = false
-    private static let loadingTimeoutSeconds: UInt64 = 8
+    @State private var selectedUpgradeProductID = SubscriptionConstants.plusYearlyProductID
 
     private var plusYearlyProduct: Product? {
         entitlementManager.products.first { $0.id == SubscriptionConstants.plusYearlyProductID }
+    }
+
+    private var plusMonthlyProduct: Product? {
+        entitlementManager.products.first { $0.id == SubscriptionConstants.plusMonthlyProductID }
+    }
+
+    private var selectedUpgradeProduct: Product? {
+        entitlementManager.products.first { $0.id == selectedUpgradeProductID }
+    }
+
+    private var selectedBilling: PlusPaywallCopy.PlusBillingPeriod {
+        selectedUpgradeProductID == SubscriptionConstants.plusMonthlyProductID ? .monthly : .yearly
     }
 
     private var audience: PlusPaywallCopy.Audience {
@@ -36,11 +44,8 @@ struct PlusUpgradeView: View {
         return PlusPaywallCopy.formattedTrialDuration(offer: trial)
     }
 
-    /// Bevorzugt `Product.displayPrice`; im Simulator-Mock-Modus
-    /// (DEBUG, Launch-Arg `--mock-trial-offer-eligible`) ein Platzhalter,
-    /// damit Trial-Copy auch ohne StoreKit-Configuration-File rendern kann.
     private var displayPriceText: String? {
-        if let product = plusYearlyProduct {
+        if let product = selectedUpgradeProduct {
             return product.displayPrice
         }
         #if DEBUG
@@ -56,10 +61,22 @@ struct PlusUpgradeView: View {
                 VStack(alignment: .leading, spacing: TRSpacing.l) {
                     heroSection
                     trialBlock
-                    benefitsSection
-                    purchaseSection
-                    secondaryActionsSection
-                    fineprintSection
+                    if !entitlementManager.isPlusSubscriber,
+                       plusYearlyProduct != nil || plusMonthlyProduct != nil {
+                        PlusUpgradePlanPicker(
+                            yearly: plusYearlyProduct,
+                            monthly: plusMonthlyProduct,
+                            selectedProductID: $selectedUpgradeProductID
+                        )
+                    }
+                    PlusUpgradeBenefitsSection()
+                    PlusUpgradePurchaseSection(
+                        purchase: purchase,
+                        selectedUpgradeProductID: $selectedUpgradeProductID,
+                        loadingTimedOut: $loadingTimedOut
+                    )
+                    PlusUpgradeSecondaryActionsSection(purchase: purchase)
+                    PlusUpgradeFineprintSection(footerText: footerText)
                 }
                 .padding(TRSpacing.m)
                 .padding(.bottom, TRSpacing.l)
@@ -85,7 +102,8 @@ struct PlusUpgradeView: View {
                 purchase.applyDebugMockIfRequested()
                 #endif
                 await entitlementManager.loadProducts()
-                if let product = plusYearlyProduct {
+                syncSelectedProductIDWithCatalog()
+                if let product = plusYearlyProduct ?? plusMonthlyProduct {
                     await purchase.refreshTrialOffer(for: product)
                 }
             }
@@ -109,7 +127,15 @@ struct PlusUpgradeView: View {
         }
     }
 
-    // MARK: - Sections
+    private func syncSelectedProductIDWithCatalog() {
+        let ids = Set(entitlementManager.products.map(\.id))
+        if ids.contains(selectedUpgradeProductID) { return }
+        if ids.contains(SubscriptionConstants.plusYearlyProductID) {
+            selectedUpgradeProductID = SubscriptionConstants.plusYearlyProductID
+        } else if let first = entitlementManager.products.first {
+            selectedUpgradeProductID = first.id
+        }
+    }
 
     private var heroSection: some View {
         VStack(alignment: .leading, spacing: TRSpacing.s) {
@@ -140,7 +166,8 @@ struct PlusUpgradeView: View {
            let headline = PlusPaywallCopy.trialHeadline(
                audience: audience,
                trialDuration: duration,
-               displayPrice: price
+               displayPrice: price,
+               billing: selectedBilling
            )
         {
             HStack(alignment: .top, spacing: TRSpacing.s) {
@@ -169,260 +196,11 @@ struct PlusUpgradeView: View {
         }
     }
 
-    private var benefitsSection: some View {
-        VStack(alignment: .leading, spacing: TRSpacing.m) {
-            ForEach(Self.paywallBenefits) { benefit in
-                BenefitRow(benefit: benefit)
-            }
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-    }
-
-    @ViewBuilder
-    private var purchaseSection: some View {
-        if entitlementManager.isPlusSubscriber {
-            VStack(alignment: .leading, spacing: TRSpacing.s) {
-                Label {
-                    Text("settings.plus.status.active")
-                        .font(TRTypography.bodyBold())
-                } icon: {
-                    Image(systemName: "checkmark.seal.fill")
-                        .foregroundStyle(TRColors.accentText)
-                }
-                Text("plus.status.active.detail")
-                    .font(TRTypography.callout())
-                    .foregroundStyle(TRColors.labelSecondary)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .accessibilityElement(children: .combine)
-        } else if let product = plusYearlyProduct {
-            VStack(spacing: TRSpacing.s) {
-                HStack(alignment: .firstTextBaseline) {
-                    Text(product.displayPrice)
-                        .font(TRTypography.title2())
-                    Text("settings.plus.perYear")
-                        .font(TRTypography.body())
-                        .foregroundStyle(TRColors.labelSecondary)
-                    Spacer()
-                }
-                .accessibilityElement(children: .combine)
-
-                Button {
-                    Haptics.tap(.medium)
-                    Task { await purchase.subscribe(to: product, via: entitlementManager) }
-                } label: {
-                    Group {
-                        if purchase.isPurchasing {
-                            ProgressView()
-                        } else {
-                            Text(ctaText)
-                        }
-                    }
-                    .frame(maxWidth: .infinity)
-                }
-                .buttonStyle(.trPrimaryGlass)
-                .disabled(purchase.isBusy)
-                .accessibilityLabel(Text(ctaText))
-                .accessibilityHint(ctaAccessibilityHint)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-        } else {
-            #if DEBUG
-            if let mockPrice = purchase.debugMockDisplayPrice {
-                VStack(spacing: TRSpacing.s) {
-                    HStack(alignment: .firstTextBaseline) {
-                        Text(mockPrice)
-                            .font(TRTypography.title2())
-                        Text("settings.plus.perYear")
-                            .font(TRTypography.body())
-                            .foregroundStyle(TRColors.labelSecondary)
-                        Spacer()
-                    }
-                    .accessibilityElement(children: .combine)
-
-                    Button {
-                        // No-op in mock mode — kein echtes Produkt vorhanden.
-                    } label: {
-                        Text(ctaText)
-                            .frame(maxWidth: .infinity)
-                    }
-                    .buttonStyle(.trPrimaryGlass)
-                    .disabled(true)
-                    .accessibilityLabel(Text(ctaText))
-                    .accessibilityHint(ctaAccessibilityHint)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-            } else {
-                priceLoadingOrFallback
-            }
-            #else
-            priceLoadingOrFallback
-            #endif
-        }
-    }
-
-    /// Spinner mit `loadingTimeoutSeconds`-Timeout → Fallback-Text (TAN-90).
-    @ViewBuilder
-    private var priceLoadingOrFallback: some View {
-        if loadingTimedOut {
-            VStack(alignment: .leading, spacing: TRSpacing.xs) {
-                Text("settings.plus.priceUnavailable")
-                    .font(TRTypography.bodyBold())
-                    .foregroundStyle(TRColors.labelPrimary)
-                Text("settings.plus.priceUnavailable.hint")
-                    .font(TRTypography.caption())
-                    .foregroundStyle(TRColors.labelSecondary)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .accessibilityElement(children: .combine)
-        } else {
-            HStack(spacing: TRSpacing.s) {
-                ProgressView()
-                Text("settings.plus.priceLoading")
-                    .foregroundStyle(TRColors.labelSecondary)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .task {
-                try? await Task.sleep(nanoseconds: Self.loadingTimeoutSeconds * 1_000_000_000)
-                if !Task.isCancelled, plusYearlyProduct == nil {
-                    loadingTimedOut = true
-                }
-            }
-        }
-    }
-
-    private var ctaText: String {
-        PlusPaywallCopy.ctaLabel(
-            audience: audience,
-            trialDuration: trialDurationText ?? ""
-        )
-    }
-
-    private var ctaAccessibilityHint: Text {
-        switch audience {
-        case .eligibleForTrial:
-            Text("plus.sheet.subscribe.trial.a11yHint")
-        default:
-            Text("plus.sheet.subscribe.a11yHint")
-        }
-    }
-
-    private var secondaryActionsSection: some View {
-        VStack(alignment: .leading, spacing: TRSpacing.s) {
-            Button {
-                Haptics.tap(.light)
-                Task { await purchase.restore(via: entitlementManager) }
-            } label: {
-                Label("settings.plus.restore", systemImage: "arrow.clockwise")
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            .buttonStyle(.plain)
-            .disabled(purchase.isBusy)
-            .foregroundStyle(TRColors.accentText)
-            .accessibilityHint("Synchronisiert Käufe mit deinem Apple-ID-Konto.")
-
-            Button {
-                Haptics.tap(.light)
-                openURL(Self.manageSubscriptionsURL)
-            } label: {
-                Label("settings.plus.manage", systemImage: "creditcard")
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            .buttonStyle(.plain)
-            .foregroundStyle(TRColors.accentText)
-            .accessibilityHint("Öffnet die Abonnementverwaltung deines Apple-ID-Kontos.")
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-    }
-
-    private var fineprintSection: some View {
-        VStack(alignment: .leading, spacing: TRSpacing.xxs) {
-            Text(footerText)
-                .font(TRTypography.caption())
-                .foregroundStyle(TRColors.labelSecondary)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .accessibilityElement(children: .combine)
-    }
-
     private var footerText: String {
         let price = displayPriceText ?? ""
-        return PlusPaywallCopy.footer(audience: audience, displayPrice: price)
+        return PlusPaywallCopy.footer(audience: audience, displayPrice: price, billing: selectedBilling)
     }
 }
-
-// MARK: - Benefits
-
-private extension PlusUpgradeView {
-    struct Benefit: Identifiable {
-        let id: String
-        let systemImage: String
-        let title: LocalizedStringResource
-        let description: LocalizedStringResource
-    }
-
-    static let benefits: [Benefit] = [
-        Benefit(
-            id: "carplay",
-            systemImage: "car.fill",
-            title: "plus.benefit.carplay.title",
-            description: "plus.benefit.carplay.description"
-        ),
-        Benefit(
-            id: "support",
-            systemImage: "heart.fill",
-            title: "plus.benefit.support.title",
-            description: "plus.benefit.support.description"
-        ),
-        Benefit(
-            id: "future",
-            systemImage: "sparkles",
-            title: "plus.benefit.future.title",
-            description: "plus.benefit.future.description"
-        ),
-    ]
-
-    /// CarPlay wird erst gezeigt, wenn eine Capability aktiv ist (none/fueling/evCharging).
-    static var paywallBenefits: [Benefit] {
-        benefits.filter { benefit in
-            benefit.id != "carplay" || FuelNowFeatureFlags.isCarPlayCapabilityEnabled
-        }
-    }
-
-    /// Apple-zentrale Abonnementübersicht (Review-konform für „Manage").
-    static let manageSubscriptionsURL = URL(string: "https://apps.apple.com/account/subscriptions")!
-}
-
-private struct BenefitRow: View {
-    let benefit: PlusUpgradeView.Benefit
-
-    var body: some View {
-        HStack(alignment: .top, spacing: TRSpacing.m) {
-            Image(systemName: benefit.systemImage)
-                .font(.title2)
-                .foregroundStyle(TRColors.accentText)
-                .frame(width: 32, height: 32, alignment: .center)
-                .accessibilityHidden(true)
-
-            VStack(alignment: .leading, spacing: TRSpacing.xxs) {
-                Text(benefit.title)
-                    .font(TRTypography.bodyBold())
-                    .foregroundStyle(TRColors.labelPrimary)
-                Text(benefit.description)
-                    .font(TRTypography.callout())
-                    .foregroundStyle(TRColors.labelSecondary)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-        }
-        .accessibilityElement(children: .combine)
-    }
-}
-
-// MARK: - Previews
 
 #Preview("Light") {
     PlusUpgradeView()

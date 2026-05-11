@@ -16,6 +16,12 @@ import StoreKit
 /// lokalisierte Variante. Nichts wird hartkodiert — die Trial-Dauer kommt immer aus
 /// `Product.SubscriptionPeriod` und wird mit `DateComponentsFormatter` gerendert.
 enum PlusPaywallCopy {
+    /// Abrechnungsperiode für Trial-Headline und Footer (Jahres- vs. Monatsabo).
+    enum PlusBillingPeriod: Equatable, Sendable {
+        case yearly
+        case monthly
+    }
+
     /// Drei deterministische Audience-Pfade für die Trial-Copy:
     ///
     /// - `activeSubscriber`: bezahlt bereits Plus → kein Trial-Block, kein Trial-CTA.
@@ -82,18 +88,28 @@ enum PlusPaywallCopy {
     }
 
     /// Headline-Block für die Paywall direkt unter dem Hero
-    /// („3 Tage kostenlos testen, danach 6,99 €/Jahr"). `nil`, wenn keine Trial-Promotion sichtbar sein soll.
+    /// („3 Tage kostenlos testen, danach …"). `nil`, wenn keine Trial-Promotion sichtbar sein soll.
     static func trialHeadline(
         audience: Audience,
         trialDuration: String,
-        displayPrice: String
+        displayPrice: String,
+        billing: PlusBillingPeriod = .yearly
     ) -> String? {
         guard audience == .eligibleForTrial else { return nil }
-        return String(
-            format: String(localized: "plus.trial.headline.eligible"),
-            trialDuration,
-            displayPrice
-        )
+        switch billing {
+        case .yearly:
+            return String(
+                format: String(localized: "plus.trial.headline.eligible.year"),
+                trialDuration,
+                displayPrice
+            )
+        case .monthly:
+            return String(
+                format: String(localized: "plus.trial.headline.eligible.month"),
+                trialDuration,
+                displayPrice
+            )
+        }
     }
 
     /// Label für den primären Subscribe-Button.
@@ -123,14 +139,17 @@ enum PlusPaywallCopy {
     /// Footer-Hinweis am Ende der Paywall — ehrliche Renewal-Erklärung.
     static func footer(
         audience: Audience,
-        displayPrice: String
+        displayPrice: String,
+        billing: PlusBillingPeriod = .yearly
     ) -> String {
         switch audience {
         case .activeSubscriber, .eligibleForTrial:
-            return String(
-                format: String(localized: "plus.sheet.footer.cancel.trial"),
-                displayPrice
-            )
+            switch billing {
+            case .yearly:
+                return String(format: String(localized: "plus.sheet.footer.cancel.trial.year"), displayPrice)
+            case .monthly:
+                return String(format: String(localized: "plus.sheet.footer.cancel.trial.month"), displayPrice)
+            }
         case .ineligibleForTrial:
             return String(localized: "plus.sheet.footer.cancel")
         }

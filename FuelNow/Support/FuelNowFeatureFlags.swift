@@ -22,10 +22,7 @@ enum FuelNowFeatureFlags {
 
     /// Schaltet die FuelNow-Plus-UI (Settings-Section, Paywall-Sheet, Mini-Hero) sichtbar.
     ///
-    /// Für das 1.0-Release bewusst auf `false` — die Plus-Bezahllogik (`StoreKit 2`,
-    /// `EntitlementManager`, `PlusPurchaseController`, `PlusUpgradeView`, `PlusMiniHero`) bleibt
-    /// vollständig im Build erhalten und ist über DEBUG-Demo-Toggle weiter testbar; im Release-UI
-    /// wird die Plus-Section in `SettingsView` aber nicht gerendert. Reaktivierung später nur
-    /// durch Flippen dieses Flags auf `true` — keine UI-Strukturänderung nötig.
-    static let isPlusUIEnabled: Bool = false
+    /// `true`, damit CarPlay- und Favoriten-Gates mit echtem StoreKit-Verkauf zusammenpassen
+    /// (Freemium: Karte gratis, Plus für CarPlay, Favoriten und Preisalarme).
+    static let isPlusUIEnabled: Bool = true
 }

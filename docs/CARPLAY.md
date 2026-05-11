@@ -7,7 +7,7 @@ und [TAN-57](https://linear.app/tankradar-app/issue/TAN-57) (Limited UX ohne Plu
 > **Kategorie:** CarPlay Fueling (`com.apple.developer.carplay-fueling`, iOS 16+).
 > **Template-Tiefe:** max. 3 Templates (Fueling-Limit laut HIG).
 > **Plus-Gating:** Volle POI-Erfahrung nur für FuelNow-Plus-Abonnentinnen
-> ([TAN-44](https://linear.app/tankradar-app/issue/TAN-44), Coordinator [TAN-56](https://linear.app/tankradar-app/issue/TAN-56)). Free-Nutzerinnen erhalten Plan B (siehe unten).
+> ([TAN-44](https://linear.app/tankradar-app/issue/TAN-44), Coordinator [TAN-56](https://linear.app/tankradar-app/issue/TAN-56)). Free-Nutzerinnen erhalten Plan B (siehe unten). **Marketing:** Nur CarPlay-Claims ausliefern, die zum aktiven `FuelNowFeatureFlags.carPlayCapabilityMode` passen (siehe `docs/CARPLAY.md`); Plus umfasst zusätzlich Favoriten, Preisalarme und weitere Pro-Features laut App-Copy.
 
 ---
 

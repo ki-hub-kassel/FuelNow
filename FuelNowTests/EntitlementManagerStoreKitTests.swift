@@ -83,17 +83,16 @@ struct EntitlementManagerStoreKitTests {
         #expect(restored.isCarPlayUnlocked == true)
     }
 
-    @Test func loadProductsReturnsConfiguredYearlyPlus() async throws {
+    @Test func loadProductsReturnsConfiguredPlusSubscriptions() async throws {
         let session = try makeFreshSession()
         defer { session.clearTransactions() }
 
         let manager = EntitlementManager()
         await manager.loadProducts()
 
-        #expect(
-            manager.products.contains(where: { $0.id == SubscriptionConstants.plusYearlyProductID }),
-            "Test-Storefront muss das in FuelNowPlus.storekit konfigurierte Jahres-Abo liefern."
-        )
+        #expect(manager.products.contains { $0.id == SubscriptionConstants.plusYearlyProductID })
+        #expect(manager.products.contains { $0.id == SubscriptionConstants.plusMonthlyProductID })
+        #expect(manager.products.first?.id == SubscriptionConstants.plusYearlyProductID)
     }
 
     private func makeFreshSession() throws -> SKTestSession {

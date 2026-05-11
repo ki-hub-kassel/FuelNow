@@ -136,6 +136,21 @@
 		F65C10000000000000000001 /* StationResultSnippetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65C00000000000000000001 /* StationResultSnippetView.swift */; };
 		F66010000000000000000002 /* PlusPurchaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66000000000000000000002 /* PlusPurchaseController.swift */; };
 		F66010000000000000000003 /* PlusUpgradeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66000000000000000000003 /* PlusUpgradeView.swift */; };
+		F64110000000000000000005 /* PlusFreemiumMigration.swift in Sources */ = {isa = PBXBuildFile; fileRef = F64000000000000000000005 /* PlusFreemiumMigration.swift */; };
+		F66010000000000000000007 /* PlusUpgradePlanPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66000000000000000000007 /* PlusUpgradePlanPicker.swift */; };
+		F6601000000000000000000B /* PlusUpgradeBenefitsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6600000000000000000000B /* PlusUpgradeBenefitsSection.swift */; };
+		F6601000000000000000000C /* PlusUpgradePurchaseSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6600000000000000000000C /* PlusUpgradePurchaseSection.swift */; };
+		F6601000000000000000000D /* PlusUpgradeSheetFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6600000000000000000000D /* PlusUpgradeSheetFooter.swift */; };
+		F60810000000000000000014 /* SettingsFavoritesFormSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60800000000000000000014 /* SettingsFavoritesFormSection.swift */; };
+		F60810000000000000000015 /* SettingsPriceAlertsFormSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60800000000000000000015 /* SettingsPriceAlertsFormSection.swift */; };
+		F60810000000000000000016 /* SettingsPlusFormSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60800000000000000000016 /* SettingsPlusFormSections.swift */; };
+		F60810000000000000000017 /* SettingsDataSourceAttributionFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60800000000000000000017 /* SettingsDataSourceAttributionFooter.swift */; };
+		F60810000000000000000018 /* StationDetailFetchPhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60800000000000000000018 /* StationDetailFetchPhase.swift */; };
+		F60810000000000000000019 /* StationDetailFavoriteToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60800000000000000000019 /* StationDetailFavoriteToolbar.swift */; };
+		F6081000000000000000001A /* StationDetailStatusDistanceRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6080000000000000000001A /* StationDetailStatusDistanceRow.swift */; };
+		F6081000000000000000001B /* StationDetailPricesCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6080000000000000000001B /* StationDetailPricesCard.swift */; };
+		F6081000000000000000001C /* StationOpeningHoursPopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6080000000000000000001C /* StationOpeningHoursPopoverView.swift */; };
+		F6081000000000000000001D /* StationDetailView+Previews.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6080000000000000000001D /* StationDetailView+Previews.swift */; };
 		F66010000000000000000004 /* PlusPurchaseControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66000000000000000000004 /* PlusPurchaseControllerTests.swift */; };
 		F66010000000000000000005 /* PlusMiniHero.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66000000000000000000005 /* PlusMiniHero.swift */; };
 		F66200000000000000000001 /* EntitlementManagerStoreKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66200000000000000000010 /* EntitlementManagerStoreKitTests.swift */; };
@@ -310,6 +325,16 @@
 		F60800000000000000000010 /* AppearanceIconPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceIconPicker.swift; sourceTree = "<group>"; };
 		F60800000000000000000011 /* StationMapClustering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationMapClustering.swift; sourceTree = "<group>"; };
 		F60800000000000000000012 /* OfflineSplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineSplashView.swift; sourceTree = "<group>"; };
+		F60800000000000000000014 /* SettingsFavoritesFormSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsFavoritesFormSection.swift; sourceTree = "<group>"; };
+		F60800000000000000000015 /* SettingsPriceAlertsFormSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPriceAlertsFormSection.swift; sourceTree = "<group>"; };
+		F60800000000000000000016 /* SettingsPlusFormSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPlusFormSections.swift; sourceTree = "<group>"; };
+		F60800000000000000000017 /* SettingsDataSourceAttributionFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsDataSourceAttributionFooter.swift; sourceTree = "<group>"; };
+		F60800000000000000000018 /* StationDetailFetchPhase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationDetailFetchPhase.swift; sourceTree = "<group>"; };
+		F60800000000000000000019 /* StationDetailFavoriteToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationDetailFavoriteToolbar.swift; sourceTree = "<group>"; };
+		F6080000000000000000001A /* StationDetailStatusDistanceRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationDetailStatusDistanceRow.swift; sourceTree = "<group>"; };
+		F6080000000000000000001B /* StationDetailPricesCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationDetailPricesCard.swift; sourceTree = "<group>"; };
+		F6080000000000000000001C /* StationOpeningHoursPopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationOpeningHoursPopoverView.swift; sourceTree = "<group>"; };
+		F6080000000000000000001D /* StationDetailView+Previews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StationDetailView+Previews.swift"; sourceTree = "<group>"; };
 		F32531000000000000000001 /* FuelNowTipEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelNowTipEvents.swift; sourceTree = "<group>"; };
 		F32531000000000000000002 /* MapSearchAreaTip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSearchAreaTip.swift; sourceTree = "<group>"; };
 		F32531000000000000000003 /* FavoriteStationTip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteStationTip.swift; sourceTree = "<group>"; };
@@ -325,6 +350,7 @@
 		F62E00000000000000000001 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		F64000000000000000000001 /* FuelNowPlus.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = FuelNowPlus.storekit; sourceTree = "<group>"; };
 		F64000000000000000000002 /* SubscriptionConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionConstants.swift; sourceTree = "<group>"; };
+		F64000000000000000000005 /* PlusFreemiumMigration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlusFreemiumMigration.swift; sourceTree = "<group>"; };
 		F64000000000000000000003 /* SubscriptionConstantsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionConstantsTests.swift; sourceTree = "<group>"; };
 		F65000000000000000000001 /* FuelType+AppEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FuelType+AppEnum.swift"; sourceTree = "<group>"; };
 		F65000000000000000000002 /* StationIntentResolving.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationIntentResolving.swift; sourceTree = "<group>"; };
@@ -356,6 +382,10 @@
 		F65C00000000000000000001 /* StationResultSnippetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationResultSnippetView.swift; sourceTree = "<group>"; };
 		F66000000000000000000002 /* PlusPurchaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlusPurchaseController.swift; sourceTree = "<group>"; };
 		F66000000000000000000003 /* PlusUpgradeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlusUpgradeView.swift; sourceTree = "<group>"; };
+		F66000000000000000000007 /* PlusUpgradePlanPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlusUpgradePlanPicker.swift; sourceTree = "<group>"; };
+		F6600000000000000000000B /* PlusUpgradeBenefitsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlusUpgradeBenefitsSection.swift; sourceTree = "<group>"; };
+		F6600000000000000000000C /* PlusUpgradePurchaseSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlusUpgradePurchaseSection.swift; sourceTree = "<group>"; };
+		F6600000000000000000000D /* PlusUpgradeSheetFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlusUpgradeSheetFooter.swift; sourceTree = "<group>"; };
 		F66000000000000000000004 /* PlusPurchaseControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlusPurchaseControllerTests.swift; sourceTree = "<group>"; };
 		F66000000000000000000005 /* PlusMiniHero.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlusMiniHero.swift; sourceTree = "<group>"; };
 		F66200000000000000000010 /* EntitlementManagerStoreKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntitlementManagerStoreKitTests.swift; sourceTree = "<group>"; };
@@ -599,6 +629,7 @@
 				F52300000000000000000006 /* StationDetailFetching.swift */,
 				F52300000000000000000007 /* StationOpeningHoursPresenter.swift */,
 				F64000000000000000000002 /* SubscriptionConstants.swift */,
+				F64000000000000000000005 /* PlusFreemiumMigration.swift */,
 				907F97B8A7B1B0D42E5FFD63 /* Haptics.swift */,
 			);
 			path = Support;
@@ -664,7 +695,13 @@
 		F33000000000000000000001 /* Detail */ = {
 			isa = PBXGroup;
 			children = (
+				F60800000000000000000018 /* StationDetailFetchPhase.swift */,
 				F60800000000000000000002 /* StationDetailView.swift */,
+				F60800000000000000000019 /* StationDetailFavoriteToolbar.swift */,
+				F6080000000000000000001A /* StationDetailStatusDistanceRow.swift */,
+				F6080000000000000000001B /* StationDetailPricesCard.swift */,
+				F6080000000000000000001C /* StationOpeningHoursPopoverView.swift */,
+				F6080000000000000000001D /* StationDetailView+Previews.swift */,
 			);
 			path = Detail;
 			sourceTree = "<group>";
@@ -673,6 +710,10 @@
 			isa = PBXGroup;
 			children = (
 				F60800000000000000000003 /* SettingsView.swift */,
+				F60800000000000000000014 /* SettingsFavoritesFormSection.swift */,
+				F60800000000000000000015 /* SettingsPriceAlertsFormSection.swift */,
+				F60800000000000000000016 /* SettingsPlusFormSections.swift */,
+				F60800000000000000000017 /* SettingsDataSourceAttributionFooter.swift */,
 				F60800000000000000000007 /* FuelTypeCardPicker.swift */,
 				F60800000000000000000010 /* AppearanceIconPicker.swift */,
 				F60800000000000000000008 /* FuelTypePresentation.swift */,
@@ -791,6 +832,10 @@
 				F66000000000000000000002 /* PlusPurchaseController.swift */,
 				F66300000000000000000010 /* PlusPaywallCopy.swift */,
 				F66000000000000000000003 /* PlusUpgradeView.swift */,
+				F6600000000000000000000B /* PlusUpgradeBenefitsSection.swift */,
+				F6600000000000000000000C /* PlusUpgradePurchaseSection.swift */,
+				F6600000000000000000000D /* PlusUpgradeSheetFooter.swift */,
+				F66000000000000000000007 /* PlusUpgradePlanPicker.swift */,
 				F66000000000000000000005 /* PlusMiniHero.swift */,
 			);
 			path = Plus;
@@ -1015,6 +1060,7 @@
 				F52331000000000000000002 /* StationDetailFetching.swift in Sources */,
 				F52331000000000000000003 /* StationOpeningHoursPresenter.swift in Sources */,
 				F64110000000000000000001 /* SubscriptionConstants.swift in Sources */,
+				F64110000000000000000005 /* PlusFreemiumMigration.swift in Sources */,
 				F50200000000000000000001 /* FuelType.swift in Sources */,
 				F50200000000000000000002 /* Station.swift in Sources */,
 				F60200000000000000000001 /* LocationService.swift in Sources */,
@@ -1044,10 +1090,24 @@
 				F32541000000000000000006 /* OnboardingPages.swift in Sources */,
 				F32541000000000000000007 /* AnimatedLaunchOverlay.swift in Sources */,
 				F60810000000000000000002 /* StationDetailView.swift in Sources */,
+				F60810000000000000000018 /* StationDetailFetchPhase.swift in Sources */,
+				F60810000000000000000019 /* StationDetailFavoriteToolbar.swift in Sources */,
+				F6081000000000000000001A /* StationDetailStatusDistanceRow.swift in Sources */,
+				F6081000000000000000001B /* StationDetailPricesCard.swift in Sources */,
+				F6081000000000000000001C /* StationOpeningHoursPopoverView.swift in Sources */,
+				F6081000000000000000001D /* StationDetailView+Previews.swift in Sources */,
 				F60810000000000000000003 /* SettingsView.swift in Sources */,
+				F60810000000000000000014 /* SettingsFavoritesFormSection.swift in Sources */,
+				F60810000000000000000015 /* SettingsPriceAlertsFormSection.swift in Sources */,
+				F60810000000000000000016 /* SettingsPlusFormSections.swift in Sources */,
+				F60810000000000000000017 /* SettingsDataSourceAttributionFooter.swift in Sources */,
 				F66010000000000000000002 /* PlusPurchaseController.swift in Sources */,
 				F66300000000000000000001 /* PlusPaywallCopy.swift in Sources */,
 				F66010000000000000000003 /* PlusUpgradeView.swift in Sources */,
+				F6601000000000000000000B /* PlusUpgradeBenefitsSection.swift in Sources */,
+				F6601000000000000000000C /* PlusUpgradePurchaseSection.swift in Sources */,
+				F6601000000000000000000D /* PlusUpgradeSheetFooter.swift in Sources */,
+				F66010000000000000000007 /* PlusUpgradePlanPicker.swift in Sources */,
 				F66010000000000000000005 /* PlusMiniHero.swift in Sources */,
 				F60810000000000000000007 /* FuelTypeCardPicker.swift in Sources */,
 				F60810000000000000000010 /* AppearanceIconPicker.swift in Sources */,

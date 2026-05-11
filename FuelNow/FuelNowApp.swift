@@ -146,9 +146,21 @@ struct FuelNowApp: App {
             .task {
                 FuelNowTipsBootstrap.configure()
                 await coordinator.entitlementManager.start()
+                PlusFreemiumMigration.applyIfNeeded(
+                    isPlusSubscriber: coordinator.entitlementManager.isPlusSubscriber,
+                    favoritesStore: coordinator.favoritesStore
+                )
                 #if DEBUG
                 APIKeys.warnIfPlaceholderActive()
                 #endif
+            }
+            .onChange(of: coordinator.entitlementManager.isPlusSubscriber) { _, isPlus in
+                if !isPlus {
+                    UserDefaults.standard.set(false, forKey: AppSettings.UserDefaultsKey.priceAlertsEnabled)
+                    coordinator.priceAlertCoordinator.cancelScheduledRefresh()
+                } else {
+                    coordinator.priceAlertCoordinator.scheduleNextRefresh()
+                }
             }
     }
 

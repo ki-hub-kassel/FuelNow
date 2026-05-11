@@ -176,12 +176,14 @@ private extension PlusMiniHero {
 
     private static let miniBenefitsAll: [MiniBenefit] = [
         MiniBenefit(id: "carplay", symbolName: "car.fill", title: "plus.benefit.carplay.title"),
+        MiniBenefit(id: "favorites", symbolName: "bell.badge.fill", title: "plus.benefit.favorites.title"),
         MiniBenefit(id: "future", symbolName: "sparkles", title: "plus.benefit.future.title"),
     ]
 
     static var visibleMiniBenefits: [MiniBenefit] {
         miniBenefitsAll.filter { benefit in
-            benefit.id != "carplay" || FuelNowFeatureFlags.isCarPlayCapabilityEnabled
+            if benefit.id == "carplay" { return FuelNowFeatureFlags.isCarPlayCapabilityEnabled }
+            return true
         }
     }
 }
