@@ -7,6 +7,7 @@ enum SettingsPlusFormSections {
         @Bindable var purchase: PlusPurchaseController
         let plusHeroProduct: Product?
         @Binding var showPlusUpgradeSheet: Bool
+        @Binding var showOfferCodeRedemption: Bool
         var onRestore: () async -> Void
 
         var body: some View {
@@ -20,6 +21,13 @@ enum SettingsPlusFormSections {
                 .listRowInsets(EdgeInsets(top: TRSpacing.xs, leading: 0, bottom: TRSpacing.xs, trailing: 0))
                 .listRowBackground(Color.clear)
                 .listRowSeparator(.hidden)
+
+                Button {
+                    showOfferCodeRedemption = true
+                } label: {
+                    Label("settings.plus.offerCode", systemImage: "giftcard")
+                }
+                .accessibilityHint(Text("settings.plus.offerCode.hint"))
 
                 Button {
                     Task { await onRestore() }
@@ -39,6 +47,7 @@ enum SettingsPlusFormSections {
     struct Active: View {
         @Environment(\.openURL) private var openURL
         @Bindable var purchase: PlusPurchaseController
+        @Binding var showOfferCodeRedemption: Bool
         var onRestore: () async -> Void
 
         var body: some View {
@@ -58,6 +67,13 @@ enum SettingsPlusFormSections {
                     Label("settings.plus.manage", systemImage: "creditcard")
                 }
                 .accessibilityHint("Öffnet die Abonnementverwaltung deines Apple-ID-Kontos.")
+
+                Button {
+                    showOfferCodeRedemption = true
+                } label: {
+                    Label("settings.plus.offerCode", systemImage: "giftcard")
+                }
+                .accessibilityHint(Text("settings.plus.offerCode.hint"))
 
                 Button {
                     Task { await onRestore() }

@@ -111,6 +111,27 @@ Use this when the monthly SKU is **not** in App Store Connect yet, or to verify 
 9. **Propagation:** after save, allow time (often ~15 minutes) before Sandbox / TestFlight sees `Product.subscription.introductoryOffer` on the new SKU.
 10. **Verify:** Xcode **StoreKit Testing** with `FuelNowPlus.storekit`, or a Sandbox account on device — Settings and `PlusUpgradeView` should list **year** and **month**; trial copy follows `isEligibleForIntroOffer` from the product you refresh in `PlusPurchaseController.refreshTrialOffer(for:)`.
 
+## Subscription offer codes (ASC + in-app)
+
+**What they are:** One-time **codes** (often printed or emailed) that attach a **subscription offer** from App Store Connect to a subscriber’s Apple Account — e.g. win-back, promotional pricing, or partner campaigns. Redemption is **only** through Apple’s system UI; FuelNow does not validate codes itself. After redemption, Plus state follows `Transaction.currentEntitlements` like any other purchase (see [`offerCodeRedemption(isPresented:onCompletion:)`](https://developer.apple.com/documentation/swiftui/view/offercoderedemption(ispresented:oncompletion:)) on **Settings**).
+
+### App Store Connect — typical click path (labels may vary slightly by locale)
+
+1. **App Store Connect** → **Apps** → **FuelNow** → **Subscriptions** (left sidebar).
+2. Open subscription group **FuelNow Plus**, then the **subscription product** the offer should apply to (e.g. yearly or monthly SKU).
+3. Find **Subscription Offers** (or **Offers**) for that product — create or select an **Offer** (not the same UI as the standard **Introductory Offer**; offer codes reference **subscription offers** you define per product).
+4. Configure the offer terms (duration, pricing, eligibility) and **save**.
+5. Open the **Offer Codes** (or **Subscription Offer Codes**) area for that offer — **create a batch** of codes, set quantity / naming, and **generate** codes when ASC prompts you.
+6. **Distribute** codes outside the app (email, print, support). Testers can redeem in **Sandbox** with a **Sandbox Apple ID** on device or in TestFlight builds; production codes apply to production Apple IDs once the subscription is live and the app version that includes the IAP is approved.
+
+**Limits / review:** Apple documents quotas, expiry, and review expectations for offer codes — see [Implementing offer codes in your app](https://developer.apple.com/documentation/storekit/implementing-offer-codes-in-your-app) and ASC help for **Subscription Offer Codes**.
+
+### In-app entry (FuelNow)
+
+**Settings → FuelNow Plus → „Angebots-Code einlösen“ / „Redeem offer code“** presents Apple’s redemption sheet only (`offerCodeRedemption`). On dismiss, the app calls `EntitlementManager.refreshEntitlements()` so Plus UI updates without a separate restore tap when the redemption succeeds.
+
+**If the sheet shows a wireframe / empty app icon:** That UI loads **App Store–processed** artwork (not the Simulator home-screen icon). Until App Store Connect has a **masked** store icon derived from your uploaded binary, Apple may serve `Placeholder.mill` for the `masked: true` build icon. Mitigate by shipping **iOS 18+ icon appearances** (Any + Dark + Tinted) in `AppIcon.appiconset`, then upload a **new** build and wait for processing; optional check: `asc builds icons list --app "6766354442" --latest` — the masked `APP_STORE` entry should stop pointing at `Placeholder.mill` once ASC has real assets.
+
 ## Eligibility check
 
 The app **never** hardcodes the trial duration or eligibility flag. At
@@ -186,4 +207,6 @@ forever — TAN-90 hardens each one:
 - Apple — [Implementing introductory offers in your app](https://developer.apple.com/documentation/storekit/implementing-introductory-offers-in-your-app)
 - Apple — [`Product.SubscriptionInfo.isEligibleForIntroOffer`](https://developer.apple.com/documentation/storekit/product/subscriptioninfo/iseligibleforintrooffer)
 - Apple — [`Product.SubscriptionOffer`](https://developer.apple.com/documentation/storekit/product/subscriptionoffer)
+- Apple — [Implementing offer codes in your app](https://developer.apple.com/documentation/storekit/implementing-offer-codes-in-your-app)
+- Apple — [`View.offerCodeRedemption(isPresented:onCompletion:)`](https://developer.apple.com/documentation/swiftui/view/offercoderedemption(ispresented:oncompletion:))
 - Apple HIG — [In-App Purchase guidelines](https://developer.apple.com/design/human-interface-guidelines/in-app-purchase)

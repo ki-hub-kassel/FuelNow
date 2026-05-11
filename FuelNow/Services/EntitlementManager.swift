@@ -82,7 +82,12 @@ final class EntitlementManager {
                 break
             }
         }
+        #if DEBUG
+        let debugOverride = UserDefaults.standard.bool(forKey: AppSettings.UserDefaultsKey.temporaryDebugPlusOverrideEnabled)
+        isPlusSubscriber = plus || debugOverride
+        #else
         isPlusSubscriber = plus
+        #endif
     }
 
     private static func sortPlusProducts(_ products: inout [Product]) {

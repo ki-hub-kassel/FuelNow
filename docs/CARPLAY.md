@@ -183,10 +183,11 @@ Framework). End-to-End CarPlay-QA: [TAN-59](https://linear.app/tankradar-app/iss
 
 ### 2.4 Asset-Compliance
 
-- **App-Icon:** Aktuell ein `1024×1024`-Universal-Asset
-(`FuelNow/Assets.xcassets/AppIcon.appiconset`). Für CarPlay (iOS 26+) reicht
-das, da Apple das App-Icon-Set vereinheitlicht und CarPlay daraus die
-passende Variante zieht. Kein zusätzliches `CarPlay`-AppIcon-Set nötig.
+- **App-Icon:** `AppIcon.appiconset` mit `1024×1024` **Any** plus **Dark** und
+**Tinted** (grayscale) gemäß iOS-18-App-Icon-Varianten — damit App Store Connect
+beim Build-Processing auch die **masked** Store-Icon-Spur füllen kann (u. a.
+StoreKit-„Sonderangebot einlösen“). Kein separates `CarPlay`-AppIcon-Set nötig;
+CarPlay nutzt weiter die vom System aufbereiteten Varianten.
 - **POI-Pin / List-Item-Glyphen:** SF-Symbols sind die offizielle Empfehlung
 laut CarPlay HIG (44×44 pt). Konkrete Symbole (`fuelpump.fill`, `leaf.fill`,
 `fuelpump.circle.fill`) liegen bereits in `FuelType.settingsCardSymbolName`

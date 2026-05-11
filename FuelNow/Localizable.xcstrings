@@ -2106,6 +2106,60 @@
         }
       }
     },
+    "settings.debug.sectionTitle" : {
+      "comment" : "DEBUG-only settings section; remove with pre-release Plus toggle.",
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intern (nur Debug)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Internal (debug only)"
+          }
+        }
+      }
+    },
+    "settings.debug.temporaryPlus" : {
+      "comment" : "DEBUG Toggle label — simulates FuelNow Plus without StoreKit purchase.",
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FuelNow Plus simulieren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simulate FuelNow Plus"
+          }
+        }
+      }
+    },
+    "settings.debug.temporaryPlus.footer" : {
+      "comment" : "DEBUG footer for temporary Plus toggle.",
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nur in Debug-Builds. Später entfernen, sobald echtes Abo über den App Store greift."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Debug builds only. Remove this once live subscriptions are in use."
+          }
+        }
+      }
+    },
     "settings.done.close" : {
       "localizations" : {
         "de" : {
@@ -2513,6 +2567,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Opens an overview of FuelNow Plus benefits and the purchase flow."
+          }
+        }
+      }
+    },
+    "settings.plus.offerCode" : {
+      "comment" : "Opens Apple’s system sheet to redeem a subscription offer code (no custom code entry).",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Angebots-Code einlösen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Redeem offer code"
+          }
+        }
+      }
+    },
+    "settings.plus.offerCode.hint" : {
+      "comment" : "VoiceOver hint for the offer-code row — system redemption UI only.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öffnet das Apple-Formular zum Einlösen eines Abo-Angebots-Codes."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opens Apple’s subscription offer code redemption sheet."
           }
         }
       }

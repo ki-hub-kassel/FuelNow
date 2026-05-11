@@ -39,6 +39,8 @@ fastlane/screenshots
 
 # AXe CLI smoke output (scripts/build-run-and-axe.sh, run-axe-batch.sh)
 scripts/axe/output/
+# ASC Store-Screenshots (scripts/capture-asc-store-screenshots.sh)
+screenshots/asc-store/
 .derived-data-ios-test
 
 # Vercel Edge Functions proxy (tankerkoenig-proxy/) — local-only artefacts

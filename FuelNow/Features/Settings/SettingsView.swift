@@ -15,6 +15,9 @@ struct SettingsView: View {
     private var appearanceRaw = AppSettings.AppearancePreference.system.rawValue
     @AppStorage(AppSettings.UserDefaultsKey.priceAlertsEnabled) private var priceAlertsEnabled = false
     @AppStorage(AppSettings.UserDefaultsKey.priceAlertsThresholdEuros) private var priceAlertsThresholdEuros: Double = 0.05
+    #if DEBUG
+    @AppStorage(AppSettings.UserDefaultsKey.temporaryDebugPlusOverrideEnabled) private var temporaryDebugPlusOverride = false
+    #endif
 
     private var appearanceBinding: Binding<AppSettings.AppearancePreference> {
         Binding(
@@ -32,6 +35,7 @@ struct SettingsView: View {
 
     @State private var purchase = PlusPurchaseController()
     @State private var showPlusUpgradeSheet = false
+    @State private var showOfferCodeRedemption = false
     @State private var notificationAuthStatus: UNAuthorizationStatus = .notDetermined
 
     private var plusYearlyProduct: Product? {
@@ -61,65 +65,75 @@ struct SettingsView: View {
                 if FuelNowFeatureFlags.isPlusUIEnabled {
                     plusSection
                 }
+                #if DEBUG
+                debugTemporaryPlusSection
+                #endif
                 dataSourceFooterSection
             }
             .adaptiveSensoryFeedback(.selection, trigger: preferredFuelRaw)
             .adaptiveSensoryFeedback(.selection, trigger: appearanceRaw)
             .adaptiveSensoryFeedback(.impact(weight: .light), trigger: priceAlertsEnabled)
             .adaptiveSensoryFeedback(.selection, trigger: priceAlertsThresholdEuros)
-            .navigationTitle(Text("settings.title"))
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button {
-                        dismiss()
-                    } label: {
-                        Image(systemName: "xmark")
-                            .font(.title3.weight(.medium))
-                            .foregroundStyle(TRColors.labelSecondary)
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel(Text("settings.done.close"))
-                    .accessibilityHint("Schließt die Einstellungen.")
-                }
-            }
-            .task {
-                #if DEBUG
-                purchase.applyDebugMockIfRequested()
-                #endif
-                await entitlementManager.loadProducts()
-                if let product = plusYearlyProduct ?? plusMonthlyProduct {
-                    await purchase.refreshTrialOffer(for: product)
-                }
-                notificationAuthStatus = await PriceAlertCoordinator.currentAuthorizationStatus()
-            }
-            .onChange(of: entitlementManager.isPlusSubscriber) { _, isPlus in
-                if !isPlus {
-                    priceAlertsEnabled = false
-                }
-            }
-            .sheet(isPresented: $showPlusUpgradeSheet) {
-                PlusUpgradeView()
-                    .presentationDetents([.large])
-                    .presentationDragIndicator(.visible)
-            }
-            .alert(
-                Text("settings.plus.alert.title"),
-                isPresented: Binding(
-                    get: { purchase.alertMessage != nil },
-                    set: { if !$0 { purchase.alertMessage = nil } }
-                ),
-                actions: {
-                    Button("settings.plus.alert.ok", role: .cancel) {
-                        purchase.alertMessage = nil
-                    }
-                },
-                message: {
-                    if let message = purchase.alertMessage {
-                        Text(message)
+            #if DEBUG
+                .adaptiveSensoryFeedback(.selection, trigger: temporaryDebugPlusOverride)
+            #endif
+                .navigationTitle(Text("settings.title"))
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button {
+                            dismiss()
+                        } label: {
+                            Image(systemName: "xmark")
+                                .font(.title3.weight(.medium))
+                                .foregroundStyle(TRColors.labelSecondary)
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel(Text("settings.done.close"))
+                        .accessibilityHint("Schließt die Einstellungen.")
                     }
                 }
-            )
+                .task {
+                    #if DEBUG
+                    purchase.applyDebugMockIfRequested()
+                    await entitlementManager.refreshEntitlements()
+                    #endif
+                    await entitlementManager.loadProducts()
+                    if let product = plusYearlyProduct ?? plusMonthlyProduct {
+                        await purchase.refreshTrialOffer(for: product)
+                    }
+                    notificationAuthStatus = await PriceAlertCoordinator.currentAuthorizationStatus()
+                }
+                .onChange(of: entitlementManager.isPlusSubscriber) { _, isPlus in
+                    if !isPlus {
+                        priceAlertsEnabled = false
+                    }
+                }
+                .sheet(isPresented: $showPlusUpgradeSheet) {
+                    PlusUpgradeView()
+                        .presentationDetents([.large])
+                        .presentationDragIndicator(.visible)
+                }
+                .alert(
+                    Text("settings.plus.alert.title"),
+                    isPresented: Binding(
+                        get: { purchase.alertMessage != nil },
+                        set: { if !$0 { purchase.alertMessage = nil } }
+                    ),
+                    actions: {
+                        Button("settings.plus.alert.ok", role: .cancel) {
+                            purchase.alertMessage = nil
+                        }
+                    },
+                    message: {
+                        if let message = purchase.alertMessage {
+                            Text(message)
+                        }
+                    }
+                )
+                .offerCodeRedemption(isPresented: $showOfferCodeRedemption) { _ in
+                    Task { await entitlementManager.refreshEntitlements() }
+                }
         }
     }
 
@@ -148,14 +162,18 @@ struct SettingsView: View {
     @ViewBuilder
     private var plusSection: some View {
         if entitlementManager.isPlusSubscriber {
-            SettingsPlusFormSections.Active(purchase: purchase) {
+            SettingsPlusFormSections.Active(
+                purchase: purchase,
+                showOfferCodeRedemption: $showOfferCodeRedemption
+            ) {
                 await restorePurchases()
             }
         } else {
             SettingsPlusFormSections.Promo(
                 purchase: purchase,
                 plusHeroProduct: plusHeroProduct,
-                showPlusUpgradeSheet: $showPlusUpgradeSheet
+                showPlusUpgradeSheet: $showPlusUpgradeSheet,
+                showOfferCodeRedemption: $showOfferCodeRedemption
             ) {
                 await restorePurchases()
             }
@@ -170,6 +188,25 @@ struct SettingsView: View {
         }
         .accessibilityElement(children: .combine)
     }
+
+    #if DEBUG
+    /// TEMPORARY — Entfernen, sobald Live-StoreKit / App-Store-Version die Plus-States liefert.
+    private var debugTemporaryPlusSection: some View {
+        Section {
+            Toggle(isOn: $temporaryDebugPlusOverride) {
+                Label("settings.debug.temporaryPlus", systemImage: "hammer.fill")
+            }
+            .tint(TRColors.accent)
+            .onChange(of: temporaryDebugPlusOverride) { _, _ in
+                Task { await entitlementManager.refreshEntitlements() }
+            }
+        } header: {
+            Text("settings.debug.sectionTitle")
+        } footer: {
+            Text("settings.debug.temporaryPlus.footer")
+        }
+    }
+    #endif
 
     @MainActor
     private func restorePurchases() async {
