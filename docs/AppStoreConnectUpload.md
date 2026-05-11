@@ -79,6 +79,28 @@ Das Skript führt vollständig aus:
 - ASC-Web → FuelNow → TestFlight: Build erscheint zuerst als „Processing", danach mit grünem Status. Verschlüsselungs-/Export-Compliance-Antwort kann pro Build gefragt werden.
 - TestFlight-Verteilung an Gruppen läuft über `asc publish testflight --app 6766354442 --ipa … --group <GROUP_ID>` oder via ASC-Web.
 
+### App Store Screenshots (PNG)
+
+Die Skripte `./scripts/capture-asc-store-screenshots.sh`, `./scripts/frame-asc-store-screenshots.sh` und `./scripts/capture-asc-watch-screenshots.sh` erzeugen und **validieren nur lokale Dateien** — sie laden **nichts** in App Store Connect hoch.
+
+Upload (nach erfolgreichem `asc auth login`):
+
+```bash
+# Lokalisierungs-ID ermitteln (pro App-Version):
+asc localizations list --version "<APP_STORE_VERSION_ID>" --output json
+
+# Dry-Run, dann echter Upload (Beispiel de-DE):
+ASC_APP_STORE_VERSION_ID="<VERSION_ID>" ASC_LOCALE=de-DE ASC_UPLOAD_DRY_RUN=1 ./scripts/upload-asc-screenshots.sh
+ASC_APP_STORE_VERSION_ID="<VERSION_ID>" ASC_LOCALE=de-DE ./scripts/upload-asc-screenshots.sh
+
+# Zusätzlich Apple Watch (Ordner screenshots/asc-watch/raw):
+ASC_UPLOAD_WATCH=1 ASC_APP_STORE_VERSION_ID="<VERSION_ID>" ASC_LOCALE=de-DE ./scripts/upload-asc-screenshots.sh
+```
+
+Alternativ direkt `ASC_VERSION_LOCALIZATION_ID=<UUID>` setzen (ein Eintrag aus der JSON-Liste). **en-US** braucht in der Regel eine **zweite** `asc screenshots upload`-Ausführung mit der englischen Lokalisierungs-ID.
+
+**API-Key:** Manche JWT-Keys sind für Metadaten-Änderungen eingeschränkt (`This request is forbidden for security reasons`). Screenshot-Upload braucht passende ASC-Rechte; bei Fehlern ggf. Rolle des Keys prüfen oder mit Nutzer-Session (`asc auth login`) arbeiten.
+
 ### Automatisch nach Push auf `main`
 
 Wenn du nach jedem Push auf `main` automatisch eine neue Version in TestFlight hochladen willst:

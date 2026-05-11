@@ -84,14 +84,15 @@ enum StationCarPlayPOIMapper {
     @MainActor
     static func makeNearbyListTemplate(
         rows: [StationCarPlayPOIRow],
-        stationsByID: [UUID: Station]
+        stationsByID: [UUID: Station],
+        onSelectStation: @MainActor @escaping (Station) -> Void
     ) -> CPListTemplate {
         let items: [CPListItem] = rows.map { row in
             let detailText = "\(row.pickerSubtitle) · \(row.pickerSummary)"
             let item = CPListItem(text: row.pickerTitle, detailText: detailText)
             item.handler = { _, completion in
                 if let station = stationsByID[row.stationID] {
-                    CarPlayDrivingNavigation.openDrivingDirections(to: station)
+                    onSelectStation(station)
                 }
                 completion()
             }

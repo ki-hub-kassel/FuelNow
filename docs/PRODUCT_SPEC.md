@@ -22,7 +22,7 @@ Diese Datei ist die **zentrale Einstiegs-Spezifikation** im Repo: Kurzfassung vo
 | App Store Verfügbarkeit | **Nur Deutschland (DEU)** — siehe [`docs/AppStoreConnectUpload.md`](AppStoreConnectUpload.md) |
 | Tankerkönig-Anschluss (Default) | Vercel-Proxy in [`tankerkoenig-proxy/`](../tankerkoenig-proxy/README.md); URL via `FuelNow/Info.plist` → `TankerkoenigProxyBaseURL` (TAN-92) |
 | Tankerkönig-Key (Direct-Notnagel) | `README.md`, `FuelNow/Support/APIKeys.example.swift` — nie Key committen |
-| Plus-Abo Product-ID | `com.vibecoding.fuelnow.subscription.year` (`SubscriptionConstants`, `FuelNowPlus.storekit`) |
+| Plus-Abo Product-IDs | **Jahr:** `com.vibecoding.fuelnow.subscription.year` · **Monat:** `com.vibecoding.fuelnow.subscription.month` (`SubscriptionConstants`, `FuelNowPlus.storekit`; Details [`docs/SUBSCRIPTIONS.md`](SUBSCRIPTIONS.md)) |
 
 ## Kernflows (Nutzer)
 
@@ -57,6 +57,7 @@ Diese Datei ist die **zentrale Einstiegs-Spezifikation** im Repo: Kurzfassung vo
 | Tankerkönig Caching-ADR | [`docs/TANKERKOENIG_CACHING.md`](TANKERKOENIG_CACHING.md) ([TAN-82](https://linear.app/tankradar-app/issue/TAN-82)) |
 | Tankerkönig Vercel-Proxy | [`tankerkoenig-proxy/README.md`](../tankerkoenig-proxy/README.md) ([TAN-92](https://linear.app/tankradar-app/issue/TAN-92)) |
 | SDD-Arbeitsweise (Planung/Umsetzung/Audit) | [`.cursor/skills/sdd-*.md`](../.cursor/skills/) |
+| Spec-Kit (GitHub) / Cursor-Integration | [`.spec-kit.md`](../.spec-kit.md), [`docs/SPECKIT.md`](SPECKIT.md) |
 | Feature-Scope, Akzeptanzkriterien, Epics | [Linear — FuelNow App](https://linear.app/tankradar-app) |
 
 ## Pflege

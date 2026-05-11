@@ -20,9 +20,13 @@ enum FuelNowFeatureFlags {
         carPlayCapabilityMode != .none
     }
 
-    /// Schaltet die FuelNow-Plus-UI (Settings-Section, Paywall-Sheet, Mini-Hero) sichtbar.
-    ///
-    /// `true`, damit CarPlay- und Favoriten-Gates mit echtem StoreKit-Verkauf zusammenpassen
-    /// (Freemium: Karte gratis, Plus für CarPlay, Favoriten und Preisalarme).
-    static let isPlusUIEnabled: Bool = true
+    /// `true`: StoreKit-Verkauf, Paywall/Mini-Hero in den Einstellungen, Freemium-Migration und
+    /// Abo-Abmelde-Logik aktiv. `false`: Plus-UI aus; Favoriten/Preisalarme über `EntitlementManager.hasPlusBenefits`.
+    static let isPlusMonetizationActive: Bool = false
+
+    /// Plus-UI (Settings-Section, Paywall-Sheet, Mini-Hero) — nur wenn Monetarisierung aktiv ist.
+    static var isPlusUIEnabled: Bool { isPlusMonetizationActive }
+
+    /// TestFlight/Beta: Bei HTTP 503 erklärende Nutzer-Meldung (begrenzte API / viele Anfragen). Für App-Store-GA auf `false` setzen.
+    static let showsTankerkoenig503BetaUserMessage: Bool = true
 }

@@ -26,6 +26,7 @@ struct MapScreen: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     @AppStorage(AppSettings.UserDefaultsKey.preferredFuelType) private var preferredFuelRaw = FuelType.e10.rawValue
+    @AppStorage(AppSettings.UserDefaultsKey.mapSearchAreaCoachmarkCompleted) private var mapSearchAreaCoachmarkCompleted = false
 
     /// Sichtbarer Ausschnitt für Grid-Clustering und „Gebiet suchen“. Nur bei **beendeter** Kamerabewegung aktualisiert — verhindert Flackern beim Schieben (`continuous` würde jedes Frame neu clustern).
     @State private var mapVisibleRegion = MapScreenDefaults.initialRegion
@@ -123,10 +124,13 @@ struct MapScreen: View {
 
             VStack(spacing: TRSpacing.m) {
                 if shouldOfferSearchInVisibleRegion {
-                    TipView(MapSearchAreaTip(), arrowEdge: .bottom)
-                        .padding(.bottom, TRSpacing.xxs)
+                    if !mapSearchAreaCoachmarkCompleted {
+                        MapSearchAreaCoachmark()
+                            .padding(.bottom, TRSpacing.xxs)
+                    }
                     Button {
                         searchAreaTrigger &+= 1
+                        mapSearchAreaCoachmarkCompleted = true
                         searchStationsForVisibleMapCenter()
                         Task {
                             await FuelNowTipEvents.didUseSearchThisArea.donate()

@@ -92,7 +92,7 @@ struct StationDetailView: View {
                     StationDetailFavoriteToolbar(
                         resolvedStation: resolvedStation,
                         isFavorited: isFavorited,
-                        isPlusSubscriber: entitlementManager.isPlusSubscriber,
+                        hasPlusBenefits: entitlementManager.hasPlusBenefits,
                         showPlusUpgradeSheet: $showPlusUpgradeSheet
                     )
                 }
@@ -115,6 +115,7 @@ struct StationDetailView: View {
                             .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
+                    .accessibilityIdentifier("stationDetail.close")
                     .accessibilityLabel("Schließen")
                     .accessibilityHint("Schließt die Tankstellendetails.")
                 }

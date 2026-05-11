@@ -105,13 +105,13 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<!--
-		Statischer System-Launch: nur App-Hintergrund. Logo + Animation folgen in
-		`AnimatedLaunchOverlay` (SwiftUI), weil `UILaunchScreen` nicht animierbar ist.
+		Statischer System-Launch: TRBackgroundTertiary (hell etwas sichtbarer als TRBackground),
+		damit der erste Frame nicht wie reines Weiß wirkt. Logo + Animation in AnimatedLaunchOverlay.
 	-->
 	<key>UILaunchScreen</key>
 	<dict>
 		<key>UIColorName</key>
-		<string>TRBackground</string>
+		<string>TRBackgroundTertiary</string>
 	</dict>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>

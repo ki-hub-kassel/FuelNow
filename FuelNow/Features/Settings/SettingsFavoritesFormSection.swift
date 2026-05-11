@@ -8,7 +8,7 @@ struct SettingsFavoritesFormSection: View {
 
     var body: some View {
         Section {
-            if entitlementManager.isPlusSubscriber {
+            if entitlementManager.hasPlusBenefits {
                 if favoritesStore.favorites.isEmpty {
                     Text("Noch keine Favoriten — tippe in der Tankstellen-Detailansicht auf das Herz.")
                         .font(TRTypography.caption())
@@ -59,7 +59,7 @@ struct SettingsFavoritesFormSection: View {
         } header: {
             Text("plus.gated.favorites.title")
         } footer: {
-            if entitlementManager.isPlusSubscriber {
+            if entitlementManager.hasPlusBenefits {
                 Text("Lokale Liste — wird mit Widget und Watch geteilt, sobald Sync aktiviert ist.")
                     .font(TRTypography.caption())
                     .foregroundStyle(TRColors.labelSecondary)

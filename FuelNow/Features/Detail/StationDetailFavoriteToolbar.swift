@@ -1,18 +1,17 @@
 import SwiftUI
-import TipKit
 
-/// Herz in der Tankstellen-Detail-Toolbar (Plus-gated).
+/// Herz in der Tankstellen-Detail-Toolbar (Plus-gated, wenn Monetarisierung aktiv).
 struct StationDetailFavoriteToolbar: View {
     @Environment(FavoritesStore.self) private var favoritesStore
 
     let resolvedStation: Station
     let isFavorited: Bool
-    let isPlusSubscriber: Bool
+    let hasPlusBenefits: Bool
     @Binding var showPlusUpgradeSheet: Bool
 
     var body: some View {
         Group {
-            if isPlusSubscriber {
+            if hasPlusBenefits {
                 Button {
                     Haptics.tap(.light)
                     favoritesStore.toggle(resolvedStation)
@@ -26,7 +25,6 @@ struct StationDetailFavoriteToolbar: View {
                         .symbolRenderingMode(.hierarchical)
                 }
                 .buttonStyle(.plain)
-                .popoverTip(FavoriteStationTip(), arrowEdge: .leading)
                 .accessibilityLabel(isFavorited ? "Favorit entfernen" : "Als Favorit speichern")
                 .accessibilityHint(
                     isFavorited

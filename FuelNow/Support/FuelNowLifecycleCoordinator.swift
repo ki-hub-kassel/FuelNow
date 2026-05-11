@@ -31,7 +31,7 @@ final class FuelNowLifecycleCoordinator {
         priceAlertCoordinator = PriceAlertCoordinator(
             client: client,
             favoritesStore: favorites,
-            isPlusUnlocked: { entitlement.isPlusSubscriber }
+            isPlusUnlocked: { entitlement.hasPlusBenefits }
         )
 
         FuelNowRuntimeRegistry.stationStore = store

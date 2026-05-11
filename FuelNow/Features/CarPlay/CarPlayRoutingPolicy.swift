@@ -4,13 +4,13 @@ import Foundation
 /// (TAN-56) konsumiert und in das jeweilige `CPTemplate` übersetzt.
 ///
 /// Folge-Tickets:
-/// * **TAN-55** — `.plus`: `CPListTemplate` mit Tankstellen (Navigation pro Zeile),
+/// * **TAN-55** — `.plus`: `CPListTemplate` mit Tankstellen; Tap pusht Detail-`CPInformationTemplate`, Navigation per Button,
 ///   Daten aus ``StationStore`` / ``StationCarPlayPOIMapper``.
 /// * **TAN-57** — `.limited`: `CPInformationTemplate` mit `carplay.locked.*` + ergänzendem Hinweis.
 /// * **TAN-58** baut auf der Flip-Beobachtung auf, die der Delegate bereits
 ///   einrichtet (Aboablauf während aktiver Session).
 enum CarPlayRoute: Equatable, Sendable {
-    /// FuelNow-Plus aktiv → volle CarPlay-Erfahrung (Tankstellen-Liste mit Navigation).
+    /// FuelNow-Plus aktiv → volle CarPlay-Erfahrung (Tankstellen-Liste, gepushtes Detail, Navigation per Button).
     case plus
 
     /// Kein Plus → ehrliches `CPInformationTemplate` (HIG-konform, keine Pseudo-Daten).

@@ -1,0 +1,12 @@
+# FuelNow — Kurz-Smoke (nur Prelude). Pin + Detail: ./scripts/run-fuelnow-functional-smoke.sh
+# Oder: AXE_STEPS_FILE=scripts/axe/fuelnow-functional-smoke-prelude.steps ./scripts/build-run-and-axe.sh
+
+sleep 6
+
+tap --label "Einstellungen" --wait-timeout 30
+sleep 2
+tap --label "Fertig" --wait-timeout 20
+sleep 1.5
+
+tap --label "Karte auf Standort zentrieren" --wait-timeout 25
+sleep 2

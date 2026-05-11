@@ -34,15 +34,23 @@ struct LocationDeniedCallout: View {
                 Button("iOS-Einstellungen öffnen") {
                     openSystemSettings()
                 }
-                .buttonStyle(.borderedProminent)
+                .buttonStyle(TRPrimaryGlassButtonStyle())
 
                 Button("FuelNow-Einstellungen") {
                     openInAppSettings()
                 }
-                .buttonStyle(.bordered)
+                .buttonStyle(TRSoftButtonStyle())
             }
             .padding(TRSpacing.l)
-            .background(RoundedRectangle(cornerRadius: TRRadius.lg, style: .continuous).fill(.thinMaterial))
+            .background(
+                RoundedRectangle(cornerRadius: TRRadius.xl, style: .continuous)
+                    .fill(.regularMaterial)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: TRRadius.xl, style: .continuous)
+                    .strokeBorder(TRColors.separator.opacity(0.6), lineWidth: 0.5)
+            )
+            .shadow(color: .black.opacity(colorScheme == .dark ? 0.55 : 0.18), radius: 28, y: 12)
             .padding(TRSpacing.m)
         }
         .accessibilityElement(children: .contain)

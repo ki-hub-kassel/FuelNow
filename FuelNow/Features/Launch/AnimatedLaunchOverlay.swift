@@ -6,6 +6,7 @@ struct AnimatedLaunchOverlay: View {
     let onComplete: () -> Void
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.colorScheme) private var colorScheme
     @State private var logoPresented = false
     @State private var overlayOpaque = true
 
@@ -25,27 +26,53 @@ struct AnimatedLaunchOverlay: View {
     }
 
     private var launchBackground: some View {
-        LinearGradient(
-            colors: [
-                TRColors.background,
-                TRColors.backgroundSecondary.opacity(0.92),
-                TRColors.background.opacity(0.98),
-            ],
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
-        .overlay(
+        ZStack {
+            TRColors.background
+            if colorScheme == .light {
+                LinearGradient(
+                    colors: [
+                        TRColors.accentMuted.opacity(0.52),
+                        TRColors.accentMuted.opacity(0.22),
+                        Color.clear,
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: UnitPoint(x: 0.72, y: 0.58)
+                )
+            }
+            LinearGradient(
+                colors: launchGradientColors,
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
             RadialGradient(
                 colors: [
-                    TRColors.accentMuted.opacity(0.22),
+                    TRColors.accentMuted.opacity(colorScheme == .light ? 0.5 : 0.22),
                     Color.clear,
                 ],
                 center: .topTrailing,
                 startRadius: 40,
                 endRadius: 420
             )
-        )
+        }
         .ignoresSafeArea()
+    }
+
+    /// Light: kräftigerer Teal-Nebel (zusätzliche Schicht oben links) + Verlauf, damit Store-Screens
+    /// und heller Simulator nicht wie „weißes Blatt mit ausgeblichenem Icon“ wirken.
+    private var launchGradientColors: [Color] {
+        if colorScheme == .light {
+            [
+                TRColors.backgroundTertiary,
+                TRColors.background,
+                TRColors.accentMuted.opacity(0.22),
+            ]
+        } else {
+            [
+                TRColors.background,
+                TRColors.backgroundSecondary.opacity(0.92),
+                TRColors.background.opacity(0.98),
+            ]
+        }
     }
 
     private var logo: some View {
@@ -54,7 +81,16 @@ struct AnimatedLaunchOverlay: View {
             .aspectRatio(contentMode: .fit)
             .frame(width: 108, height: 108)
             .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
-            .shadow(color: .black.opacity(0.3), radius: 12, x: 0, y: 6)
+            .overlay(
+                RoundedRectangle(cornerRadius: 24, style: .continuous)
+                    .strokeBorder(TRColors.separator.opacity(colorScheme == .light ? 0.55 : 0.35), lineWidth: 1)
+            )
+            .shadow(
+                color: .black.opacity(colorScheme == .light ? 0.45 : 0.3),
+                radius: colorScheme == .light ? 20 : 12,
+                x: 0,
+                y: colorScheme == .light ? 10 : 6
+            )
             .scaleEffect(logoPresented ? 1 : 0.86)
             .opacity(logoPresented ? 1 : 0)
     }

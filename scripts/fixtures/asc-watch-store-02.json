@@ -1,0 +1,38 @@
+{
+  "generatedAt": "2026-05-11T11:30:00+00:00",
+  "nearest": {
+    "stationID": "cb27a158-e94e-4df6-9685-d493e7287586",
+    "brandTitle": "Esso",
+    "stationName": "Esso Tiergarten",
+    "pumpPriceText": "1,92⁹",
+    "distanceText": "0,5 km",
+    "isOpen": true
+  },
+  "cheapest": null,
+  "cheapestNearby": [
+    {
+      "stationID": "373f8a4b-f8a9-4946-881f-5ce68fce0c18",
+      "brandTitle": "Classic",
+      "stationName": "Classic Tankstelle",
+      "pumpPriceText": "1,84⁹",
+      "distanceText": "1,1 km",
+      "isOpen": true
+    },
+    {
+      "stationID": "dddb9d78-bee9-4872-8171-ed34ea1c6387",
+      "brandTitle": "HEM",
+      "stationName": "HEM Moabit",
+      "pumpPriceText": "1,87⁹",
+      "distanceText": "1,9 km",
+      "isOpen": true
+    },
+    {
+      "stationID": "1fad4d5c-c265-4b24-8a43-24aeb875cebd",
+      "brandTitle": "Star",
+      "stationName": "Star Friedrichshain",
+      "pumpPriceText": "1,90⁹",
+      "distanceText": "2,4 km",
+      "isOpen": false
+    }
+  ]
+}

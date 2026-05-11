@@ -17,7 +17,7 @@ private final class TransactionUpdatesSubscription {
     }
 }
 
-/// StoreKit-2 subscription state for FuelNow Plus. Same entitlement gates CarPlay (Phase 7).
+/// StoreKit-2 subscription state for FuelNow Plus. CarPlay uses `isCarPlayUnlocked` (same as `hasPlusBenefits`, including full access when monetization is off).
 @Observable @MainActor
 final class EntitlementManager {
     /// Loaded subscription products (ASC / `.storekit` Local Testing).
@@ -26,8 +26,11 @@ final class EntitlementManager {
     /// True when an active FuelNow Plus subscription is in `Transaction.currentEntitlements`.
     private(set) var isPlusSubscriber = false
 
-    /// Alias for product roadmap — today identical to Plus.
-    var isCarPlayUnlocked: Bool { isPlusSubscriber }
+    /// Favoriten, Preisalarme und zugehörige Logik — bei inaktiver Monetarisierung für alle Nutzer frei.
+    var hasPlusBenefits: Bool { isPlusSubscriber || !FuelNowFeatureFlags.isPlusMonetizationActive }
+
+    /// Volle CarPlay-POI-UI — gleiche Freigabe wie `hasPlusBenefits` (nicht nur Roh-StoreKit).
+    var isCarPlayUnlocked: Bool { hasPlusBenefits }
 
     @ObservationIgnored private let transactionUpdates = TransactionUpdatesSubscription()
 
@@ -82,12 +85,7 @@ final class EntitlementManager {
                 break
             }
         }
-        #if DEBUG
-        let debugOverride = UserDefaults.standard.bool(forKey: AppSettings.UserDefaultsKey.temporaryDebugPlusOverrideEnabled)
-        isPlusSubscriber = plus || debugOverride
-        #else
         isPlusSubscriber = plus
-        #endif
     }
 
     private static func sortPlusProducts(_ products: inout [Product]) {

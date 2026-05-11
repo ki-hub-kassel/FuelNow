@@ -1,6 +1,6 @@
 import Foundation
 
-/// Liefert dem CarPlay-Scene-Delegate (TAN-56) die Plus-Wahrheit, ohne ihn an den
+/// Liefert dem CarPlay-Scene-Delegate (TAN-56) die CarPlay-Freigabe (`isCarPlayUnlocked`), ohne ihn an den
 /// konkreten `EntitlementManager` zu binden.
 ///
 /// Der Default-Provider ist eine **eigene** `EntitlementManager`-Instanz pro
@@ -10,8 +10,8 @@ import Foundation
 /// einen Stub und sparen sich StoreKit komplett.
 @MainActor
 protocol CarPlayEntitlementProviding: AnyObject {
-    /// Spiegelt den aktuellen Plus-Status. Muss `@Observable`-Beobachtung erlauben,
-    /// damit der Scene-Delegate auf einen Flip reagieren kann.
+    /// Spiegelt, ob die volle CarPlay-POI-UI aktiv ist (inkl. kostenlosem Vollzugriff ohne Monetarisierung).
+    /// Muss `@Observable`-Beobachtung erlauben, damit der Scene-Delegate auf einen Flip reagieren kann.
     var isCarPlayUnlocked: Bool { get }
 
     /// Wird genau einmal pro Scene-Connect aufgerufen, bevor der erste Template-

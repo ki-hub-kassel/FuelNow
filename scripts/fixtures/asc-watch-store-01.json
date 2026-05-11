@@ -1,0 +1,37 @@
+{
+  "generatedAt": "2026-05-11T10:00:00+00:00",
+  "nearest": {
+    "stationID": "d4d9a4f7-5e3b-4405-a119-aec7c5862d64",
+    "brandTitle": "Shell",
+    "stationName": "Shell Berlin Mitte",
+    "pumpPriceText": "1,89⁹",
+    "distanceText": "0,8 km",
+    "isOpen": true
+  },
+  "cheapest": {
+    "stationID": "d67f6480-cf9d-4b5f-b7fb-30a5103385a5",
+    "brandTitle": "JET",
+    "stationName": "JET Kreuzberg",
+    "pumpPriceText": "1,86⁹",
+    "distanceText": "1,4 km",
+    "isOpen": true
+  },
+  "cheapestNearby": [
+    {
+      "stationID": "e54aa72a-5630-4989-8e3f-c6fc5a1f9f80",
+      "brandTitle": "TOTAL",
+      "stationName": "TOTAL Charlottenburg",
+      "pumpPriceText": "1,91⁹",
+      "distanceText": "2,1 km",
+      "isOpen": false
+    },
+    {
+      "stationID": "3b2254c4-4936-4329-a68c-2b96087d5e9a",
+      "brandTitle": "Aral",
+      "stationName": "Aral Prenzlauer Berg",
+      "pumpPriceText": "1,88⁹",
+      "distanceText": "3,0 km",
+      "isOpen": true
+    }
+  ]
+}

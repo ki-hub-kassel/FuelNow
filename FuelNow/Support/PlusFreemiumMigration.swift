@@ -9,6 +9,7 @@ enum PlusFreemiumMigration {
         favoritesStore: FavoritesStore,
         defaults: UserDefaults = .standard
     ) {
+        guard FuelNowFeatureFlags.isPlusMonetizationActive else { return }
         let key = AppSettings.UserDefaultsKey.plusFreemiumMigrationV1Completed
         guard !defaults.bool(forKey: key) else { return }
         defaults.set(true, forKey: key)

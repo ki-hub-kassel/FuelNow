@@ -39,7 +39,11 @@ actor TankerkoenigClient {
             case let .network(err):
                 err.localizedDescription
             case let .http(code):
-                "HTTP \(code) von Tankerkönig."
+                if code == 503, FuelNowFeatureFlags.showsTankerkoenig503BetaUserMessage {
+                    String(localized: "error.tankerkoenig.http503.beta")
+                } else {
+                    "HTTP \(code) von Tankerkönig."
+                }
             case .rateLimited:
                 "Tankerkönig API hat mit zu vielen Anfragen geantwortet (HTTP 429). Bitte später erneut versuchen."
             case let .apiFailed(message):

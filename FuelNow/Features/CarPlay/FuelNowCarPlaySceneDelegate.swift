@@ -51,6 +51,7 @@ final class FuelNowCarPlaySceneDelegate: UIResponder, CPTemplateApplicationScene
         }
         withObservationTracking {
             _ = manager.isPlusSubscriber
+            _ = manager.isCarPlayUnlocked
         } onChange: { [weak self] in
             Task { @MainActor [weak self] in
                 guard let self, self.didStartEntitlementObservation else { return }
@@ -212,7 +213,15 @@ final class FuelNowCarPlaySceneDelegate: UIResponder, CPTemplateApplicationScene
                 body: String(localized: "carplay.plus.error.generic")
             )
         }
-        return StationCarPlayPOIMapper.makeNearbyListTemplate(rows: rows, stationsByID: byID)
+        return StationCarPlayPOIMapper.makeNearbyListTemplate(rows: rows, stationsByID: byID) { [weak self] station in
+            guard let self, let interfaceController = self.interfaceController else { return }
+            let detail = CarPlayStationDetailInformationTemplate.make(
+                station: station,
+                interfaceController: interfaceController
+            )
+            // `presentTemplate` erlaubt laut Apple nur Alert/ActionSheet/VoiceControl — kein CPInformationTemplate.
+            interfaceController.pushTemplate(detail, animated: true, completion: nil)
+        }
     }
 
     @MainActor
@@ -258,6 +267,8 @@ final class FuelNowCarPlaySceneDelegate: UIResponder, CPTemplateApplicationScene
             String(localized: "carplay.plus.error.connectivity")
         case .rateLimited:
             String(localized: "carplay.plus.error.rateLimited")
+        case .serviceUnavailable:
+            String(localized: "error.tankerkoenig.http503.beta")
         case .generic:
             String(localized: "carplay.plus.error.generic")
         }
@@ -294,6 +305,7 @@ private struct PlusUISnapshot: Equatable {
     enum CarPlayErrorKind: Equatable {
         case connectivity
         case rateLimited
+        case serviceUnavailable
         case generic
     }
 
@@ -357,6 +369,8 @@ private struct PlusUISnapshot: Equatable {
                 return .rateLimited
             case let .http(statusCode) where statusCode == 429:
                 return .rateLimited
+            case let .http(statusCode) where statusCode == 503 && FuelNowFeatureFlags.showsTankerkoenig503BetaUserMessage:
+                return .serviceUnavailable
             case let .network(urlError):
                 return mapErrorKind(from: urlError)
             default:

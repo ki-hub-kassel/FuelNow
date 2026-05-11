@@ -81,6 +81,7 @@
 		F60710000000000000000001 /* StationFetching.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60700000000000000000001 /* StationFetching.swift */; };
 		F60710000000000000000002 /* StationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60700000000000000000002 /* StationStore.swift */; };
 		F60810000000000000000001 /* MapScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60800000000000000000001 /* MapScreen.swift */; };
+		F6081000000000000000001E /* MapSearchAreaCoachmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6080000000000000000001E /* MapSearchAreaCoachmark.swift */; };
 		F60810000000000000000002 /* StationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60800000000000000000002 /* StationDetailView.swift */; };
 		F60810000000000000000003 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60800000000000000000003 /* SettingsView.swift */; };
 		F60810000000000000000004 /* StationAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60800000000000000000004 /* StationAnnotationView.swift */; };
@@ -93,8 +94,6 @@
 		F60810000000000000000011 /* StationMapClustering.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60800000000000000000011 /* StationMapClustering.swift */; };
 		F60810000000000000000012 /* OfflineSplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60800000000000000000012 /* OfflineSplashView.swift */; };
 		F32541000000000000000001 /* FuelNowTipEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32531000000000000000001 /* FuelNowTipEvents.swift */; };
-		F32541000000000000000002 /* MapSearchAreaTip.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32531000000000000000002 /* MapSearchAreaTip.swift */; };
-		F32541000000000000000003 /* FavoriteStationTip.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32531000000000000000003 /* FavoriteStationTip.swift */; };
 		F32541000000000000000004 /* FuelNowTipsBootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32531000000000000000004 /* FuelNowTipsBootstrap.swift */; };
 		F32541000000000000000005 /* OnboardingFlowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32532000000000000000001 /* OnboardingFlowView.swift */; };
 		F32541000000000000000006 /* OnboardingPages.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32532000000000000000002 /* OnboardingPages.swift */; };
@@ -166,6 +165,7 @@
 		F70110000000000000000003 /* AppSettings+PreferredFuel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70100000000000000000003 /* AppSettings+PreferredFuel.swift */; };
 		F70110000000000000000004 /* CarPlayDrivingNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70100000000000000000004 /* CarPlayDrivingNavigation.swift */; };
 		F70110000000000000000005 /* StationCarPlayPOIMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70100000000000000000005 /* StationCarPlayPOIMapper.swift */; };
+		F70110000000000000000009 /* CarPlayStationDetailInformationTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70100000000000000000009 /* CarPlayStationDetailInformationTemplate.swift */; };
 		F70110000000000000000006 /* FuelNowFeatureFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70100000000000000000006 /* FuelNowFeatureFlags.swift */; };
 		F70110000000000000000007 /* ShortcutSuggestionDonation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70100000000000000000007 /* ShortcutSuggestionDonation.swift */; };
 		F70110000000000000000008 /* FuelNowLifecycleCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70100000000000000000008 /* FuelNowLifecycleCoordinator.swift */; };
@@ -325,6 +325,7 @@
 		F60800000000000000000010 /* AppearanceIconPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceIconPicker.swift; sourceTree = "<group>"; };
 		F60800000000000000000011 /* StationMapClustering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationMapClustering.swift; sourceTree = "<group>"; };
 		F60800000000000000000012 /* OfflineSplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineSplashView.swift; sourceTree = "<group>"; };
+		F6080000000000000000001E /* MapSearchAreaCoachmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSearchAreaCoachmark.swift; sourceTree = "<group>"; };
 		F60800000000000000000014 /* SettingsFavoritesFormSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsFavoritesFormSection.swift; sourceTree = "<group>"; };
 		F60800000000000000000015 /* SettingsPriceAlertsFormSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPriceAlertsFormSection.swift; sourceTree = "<group>"; };
 		F60800000000000000000016 /* SettingsPlusFormSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPlusFormSections.swift; sourceTree = "<group>"; };
@@ -336,8 +337,6 @@
 		F6080000000000000000001C /* StationOpeningHoursPopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationOpeningHoursPopoverView.swift; sourceTree = "<group>"; };
 		F6080000000000000000001D /* StationDetailView+Previews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StationDetailView+Previews.swift"; sourceTree = "<group>"; };
 		F32531000000000000000001 /* FuelNowTipEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelNowTipEvents.swift; sourceTree = "<group>"; };
-		F32531000000000000000002 /* MapSearchAreaTip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSearchAreaTip.swift; sourceTree = "<group>"; };
-		F32531000000000000000003 /* FavoriteStationTip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteStationTip.swift; sourceTree = "<group>"; };
 		F32531000000000000000004 /* FuelNowTipsBootstrap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelNowTipsBootstrap.swift; sourceTree = "<group>"; };
 		F32532000000000000000001 /* OnboardingFlowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFlowView.swift; sourceTree = "<group>"; };
 		F32532000000000000000002 /* OnboardingPages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPages.swift; sourceTree = "<group>"; };
@@ -402,6 +401,7 @@
 		F70100000000000000000003 /* AppSettings+PreferredFuel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppSettings+PreferredFuel.swift"; sourceTree = "<group>"; };
 		F70100000000000000000004 /* CarPlayDrivingNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlayDrivingNavigation.swift; sourceTree = "<group>"; };
 		F70100000000000000000005 /* StationCarPlayPOIMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationCarPlayPOIMapper.swift; sourceTree = "<group>"; };
+		F70100000000000000000009 /* CarPlayStationDetailInformationTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlayStationDetailInformationTemplate.swift; sourceTree = "<group>"; };
 		F70100000000000000000006 /* FuelNowFeatureFlags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelNowFeatureFlags.swift; sourceTree = "<group>"; };
 		F70100000000000000000007 /* ShortcutSuggestionDonation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutSuggestionDonation.swift; sourceTree = "<group>"; };
 		F70100000000000000000008 /* FuelNowLifecycleCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelNowLifecycleCoordinator.swift; sourceTree = "<group>"; };
@@ -655,8 +655,6 @@
 			children = (
 				F32531000000000000000004 /* FuelNowTipsBootstrap.swift */,
 				F32531000000000000000001 /* FuelNowTipEvents.swift */,
-				F32531000000000000000003 /* FavoriteStationTip.swift */,
-				F32531000000000000000002 /* MapSearchAreaTip.swift */,
 			);
 			path = Tips;
 			sourceTree = "<group>";
@@ -687,6 +685,7 @@
 				F60800000000000000000006 /* LocationDeniedCallout.swift */,
 				F60800000000000000000011 /* StationMapClustering.swift */,
 				F60800000000000000000012 /* OfflineSplashView.swift */,
+				F6080000000000000000001E /* MapSearchAreaCoachmark.swift */,
 				491F61A9BB2718A70D9CA351 /* MapScreen+Previews.swift */,
 			);
 			path = Map;
@@ -849,6 +848,7 @@
 				F70000000000000000000002 /* CarPlayRoutingPolicy.swift */,
 				F70000000000000000000004 /* FuelNowCarPlaySceneDelegate.swift */,
 				F70100000000000000000005 /* StationCarPlayPOIMapper.swift */,
+				F70100000000000000000009 /* CarPlayStationDetailInformationTemplate.swift */,
 			);
 			path = CarPlay;
 			sourceTree = "<group>";
@@ -1082,10 +1082,9 @@
 				F60810000000000000000006 /* LocationDeniedCallout.swift in Sources */,
 				F60810000000000000000011 /* StationMapClustering.swift in Sources */,
 				F60810000000000000000012 /* OfflineSplashView.swift in Sources */,
-				F32541000000000000000003 /* FavoriteStationTip.swift in Sources */,
+				F6081000000000000000001E /* MapSearchAreaCoachmark.swift in Sources */,
 				F32541000000000000000004 /* FuelNowTipsBootstrap.swift in Sources */,
 				F32541000000000000000001 /* FuelNowTipEvents.swift in Sources */,
-				F32541000000000000000002 /* MapSearchAreaTip.swift in Sources */,
 				F32541000000000000000005 /* OnboardingFlowView.swift in Sources */,
 				F32541000000000000000006 /* OnboardingPages.swift in Sources */,
 				F32541000000000000000007 /* AnimatedLaunchOverlay.swift in Sources */,
@@ -1153,6 +1152,7 @@
 				F70110000000000000000006 /* FuelNowFeatureFlags.swift in Sources */,
 				F70110000000000000000004 /* CarPlayDrivingNavigation.swift in Sources */,
 				F70110000000000000000005 /* StationCarPlayPOIMapper.swift in Sources */,
+				F70110000000000000000009 /* CarPlayStationDetailInformationTemplate.swift in Sources */,
 				9EBBB10B408B1EB76966E794 /* WidgetSnapshotStore.swift in Sources */,
 				F77WCBRIDGE00000000000002 /* WatchConnectivitySnapshotBridge.swift in Sources */,
 				BC5D99E292E59147554A49E8 /* WidgetSnapshotBuilder.swift in Sources */,

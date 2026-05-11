@@ -1,0 +1,7 @@
+# ASC-Capture: System-Standortdialog (liegt oft über WhatsNew) → WhatsNew „Weiter“.
+sleep 0.8
+tap --label "Beim Verwenden der App erlauben" --wait-timeout 8 --post-delay 0.6
+tap --label "Allow While Using App" --wait-timeout 3 --post-delay 0.6
+tap --label "Allow Once" --wait-timeout 2 --post-delay 0.4
+tap --label "Weiter" --wait-timeout 8 --post-delay 0.5
+tap --label "Continue" --wait-timeout 3 --post-delay 0.5

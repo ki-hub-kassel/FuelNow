@@ -38,13 +38,17 @@ hinterlegen** (idealerweise mit Screenshot/Mail).
 > erlaubten 25-km-Umkreis (TAN-79) und ermöglicht von dort eine
 > Tankstellen-Routenführung in Apple Maps.
 >
-> **CarPlay-Erfahrung:** Während der Fahrt zeigt FuelNow die nächsten und
-> günstigsten Tankstellen entlang oder im Umkreis als POIs
-> (`CPPointOfInterestTemplate`) und ermöglicht das Übergeben einer Tankstelle
-> an Apple Maps für die Routenführung. Eingaben sind auf eine sehr flache
-> Tiefe begrenzt (max. 3 Templates laut Apple Fueling-Guideline). Wir nutzen
-> ausschließlich Standard-Templates (`CPPointOfInterestTemplate`,
-> `CPListTemplate`, `CPInformationTemplate`).
+> **CarPlay-Erfahrung:** Während der Fahrt zeigt FuelNow die nächsten Tankstellen
+> in einer sortierten **Liste** (`CPListTemplate`). Ein Tap auf eine Zeile öffnet
+> eine **Detailansicht** (`CPInformationTemplate`, per `pushTemplate` auf den
+> Stack — kein `presentTemplate`, siehe §2.2 unten) mit **Preisen** zuerst, dann
+> **Live-Status** (geöffnet/geschlossen und Entfernung), ohne Adressblock; von dort
+> startet die Nutzerin die **Autoroute in Apple Maps**
+> (Out-of-app, kein eigenes Navigations-Entitlement). Eingaben bleiben flach
+> (max. 3 Templates laut Apple Fueling-Guideline: Root-Liste plus ein gepushtes
+> Detail). Genutzt werden die Standard-Templates **`CPListTemplate`** und
+> **`CPInformationTemplate`**; ohne Plus zusätzlich dasselbe Information-Template
+> als ehrlicher Hinweis-Screen (Plan B).
 >
 > **Monetarisierung:** Die volle CarPlay-Funktionalität ist Teil des
 > kostenpflichtigen Jahresabos „FuelNow Plus“ (StoreKit 2, 6 €/Jahr). Free-
@@ -131,7 +135,17 @@ Der Delegate (`FuelNow/Features/CarPlay/FuelNowCarPlaySceneDelegate.swift`) ist
 die einzige Stelle, die `CPInterfaceController.setRootTemplate` aufruft.
 
 Bei Plus zeigt die Haupt-CarPlay-Scene ein **`CPListTemplate`** mit den nächsten
-Tankstellen (Zeilentap startet Navigation über Apple Maps).
+Tankstellen. Ein **Zeilentap** pusht ein **`CPInformationTemplate`** auf den Stack
+(`pushTemplate` — Apple erlaubt **`presentTemplate`** nur für Alert/ActionSheet/VoiceControl,
+nicht für Information). Zuerst **alle Preise**, dann **Live-Status** (geöffnet/geschlossen, Entfernung) — **keine Adresse**;
+**Navigation** startet über den primären Button (Apple Maps Autoroute, wie im
+Tankstellendetail auf dem iPhone), danach **`popTemplate`** zurück zur Liste.
+
+**Hierarchie vs. Modal:** Detail mit `CPInformationTemplate` gehört auf den Stack
+via **`pushTemplate` / `popTemplate`** (systemseitige Zurück-Navigation).
+**`presentTemplate`** ist für modale Kurz-UI reserviert; die Laufzeit erlaubt dort
+u. a. nur **`CPAlertTemplate`**, **`CPActionSheetTemplate`** und
+**`CPVoiceControlTemplate`** — kein `CPInformationTemplate` (sonst `NSException`).
 
 ### 2.2a Widgets auf dem CarPlay-Dashboard (WidgetKit, iOS 26+)
 
@@ -161,13 +175,13 @@ CarPlay-Integration und Touch-Fahrzeug öffnet ein Tap die App in der CarPlay-Se
 
 Vor dem ersten `setRootTemplate` lädt die Scene **asynchron**
 `CarPlayEntitlementProviding.start()` (Default: eigene `EntitlementManager`-
-Instanz pro CarPlay-Scene). Danach liest `applyCurrentRoute(animated:)`
-`isCarPlayUnlocked` und wählt über `CarPlayRoutingPolicy` den Pfad:
+Instanz pro CarPlay-Scene). Danach ruft der Delegate `reconcileCarPlayUI(animated:)`
+auf, liest `isCarPlayUnlocked` und wählt über `CarPlayRoutingPolicy` den Pfad:
 
 
 | Plus (CarPlay unlocked) | Template-Stubs                                                                                                                            |
 | ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| Ja                      | `CPListTemplate` mit Tankstellenzeilen (Navigation pro Zeile)                                                                               |
+| Ja                      | `CPListTemplate` mit Tankstellenzeilen; Tap → `pushTemplate` mit `CPInformationTemplate` (Details + Navigations-Button)                     |
 | Nein                    | `CPInformationTemplate` mit `carplay.locked.`* — ehrlicher Hinweis bis [TAN-57](https://linear.app/tankradar-app/issue/TAN-57) verfeinert |
 
 

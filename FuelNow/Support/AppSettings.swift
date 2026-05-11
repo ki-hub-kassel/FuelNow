@@ -32,9 +32,8 @@ enum AppSettings {
         static let priceAlertsThresholdEuros = "tr.priceAlerts.thresholdEuros"
         /// Einmalige Freemium-Migration (Favoriten/Preisalarme → Plus): nach erstem Lauf `true`.
         static let plusFreemiumMigrationV1Completed = "tr.plusFreemiumMigration.v1.completed"
-        /// Nur **Debug-Builds**: Schalter „Plus simulieren“ in den Einstellungen (vor App-Store-Live).
-        /// In Release wird der Key von `EntitlementManager` nicht ausgewertet.
-        static let temporaryDebugPlusOverrideEnabled = "tr.debug.temporaryPlusOverrideEnabled"
+        /// „In diesem Gebiet suchen“-Hinweis wurde einmal genutzt oder verworfen (ersetzt instabiles TipKit `TipView` über dem Chip).
+        static let mapSearchAreaCoachmarkCompleted = "tr.mapSearchAreaCoachmark.completed"
     }
 
     /// Suchradius für Tankerkönig-`list.php` (TAN-79).

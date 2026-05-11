@@ -55,9 +55,9 @@ struct FuelNowApp: App {
                             subtitle: "Neues Onboarding mit klarem Nutzen und optionaler Standortfreigabe."
                         ),
                         .init(
-                            image: .init(systemName: "sparkles", foregroundColor: .teal),
-                            title: "Plus deutlicher kommuniziert",
-                            subtitle: "FuelNow Plus nennt CarPlay jetzt direkt im Einstiegstext."
+                            image: .init(systemName: "fuelpump.fill", foregroundColor: .teal),
+                            title: "Schneller zur Tankstelle",
+                            subtitle: "Navigation in Apple Maps startet direkt mit Turn-by-turn zur gewählten Station."
                         ),
                     ],
                     primaryAction: .init(
@@ -155,6 +155,7 @@ struct FuelNowApp: App {
                 #endif
             }
             .onChange(of: coordinator.entitlementManager.isPlusSubscriber) { _, isPlus in
+                guard FuelNowFeatureFlags.isPlusMonetizationActive else { return }
                 if !isPlus {
                     UserDefaults.standard.set(false, forKey: AppSettings.UserDefaultsKey.priceAlertsEnabled)
                     coordinator.priceAlertCoordinator.cancelScheduledRefresh()

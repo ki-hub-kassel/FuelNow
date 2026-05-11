@@ -169,6 +169,18 @@ audiences:
   *Settings → FuelNow Plus* and the *„FuelNow Plus ansehen"* sheet to see
   the trial badge / headline.
 
+## TestFlight (Beta)
+
+**There is no TestFlight or App Store setting to “manually turn on” FuelNow Plus** — Apple does not expose that, and the in-app **DEBUG-only** “temporary Plus override” toggle in `SettingsView` is compiled out of Release/TestFlight binaries (`#if DEBUG`).
+
+To get **Plus** on a TestFlight build:
+
+1. In the app: **Settings → FuelNow Plus** → open the upgrade sheet (**„FuelNow Plus ansehen“** / equivalent) and complete the normal **Subscribe** flow. TestFlight IAPs run against Apple’s **sandbox**; you may be prompted to sign in with a **Sandbox Apple ID** (create under **App Store Connect → Users and Access → Sandbox → Testers**).
+2. Or use **Settings → FuelNow Plus → Redeem offer code** if the team generated **subscription offer codes** in App Store Connect (see *Subscription offer codes* above).
+3. **Restore purchases** is available in the same Plus section if a subscription already exists for that Apple ID / sandbox account.
+
+If products never load (spinner / “price unavailable”), confirm both subscription product IDs are **Ready to Submit** with the shipped build and wait for ASC propagation (often ~15 minutes).
+
 ## Local testing fallbacks (TAN-90)
 
 Three layered failure modes can leave the Settings price spinner running

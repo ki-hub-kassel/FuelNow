@@ -41,6 +41,10 @@ fastlane/screenshots
 scripts/axe/output/
 # ASC Store-Screenshots (scripts/capture-asc-store-screenshots.sh)
 screenshots/asc-store/
+# ASC Watch-Screenshots (scripts/capture-asc-watch-screenshots.sh)
+screenshots/asc-watch/
+# Watch-DerivedData (scripts/capture-asc-watch-screenshots.sh)
+.derived-data-watch/
 .derived-data-ios-test
 
 # Vercel Edge Functions proxy (tankerkoenig-proxy/) — local-only artefacts

@@ -3,3 +3,6 @@
 
 brew "swiftlint"
 brew "swiftformat"
+
+# Optional: GitHub Spec-Kit (`specify` CLI) — see docs/SPECKIT.md
+# brew "uv"

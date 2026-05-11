@@ -7,7 +7,7 @@ struct EntitlementManagerTests {
     @Test func initialSubscriptionGateIsClosed() {
         let manager = EntitlementManager()
         #expect(manager.isPlusSubscriber == false)
-        #expect(manager.isCarPlayUnlocked == false)
+        #expect(manager.isCarPlayUnlocked == (!FuelNowFeatureFlags.isPlusMonetizationActive || manager.isPlusSubscriber))
         #expect(manager.products.isEmpty)
     }
 }

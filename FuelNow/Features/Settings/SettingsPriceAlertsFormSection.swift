@@ -13,7 +13,7 @@ struct SettingsPriceAlertsFormSection: View {
 
     var body: some View {
         Section {
-            if entitlementManager.isPlusSubscriber {
+            if entitlementManager.hasPlusBenefits {
                 Toggle(isOn: $priceAlertsEnabled) {
                     Label("Preis-Pushes (Beta)", systemImage: "bell.badge")
                 }
@@ -72,7 +72,7 @@ struct SettingsPriceAlertsFormSection: View {
 
     private var priceAlertsFooterText: String {
         let baseHint = "Beta — läuft lokal im Hintergrund. iOS bestimmt, wie oft die App nachsehen darf."
-        guard entitlementManager.isPlusSubscriber else {
+        guard entitlementManager.hasPlusBenefits else {
             return String(localized: "plus.gated.priceAlerts.footer")
         }
         guard priceAlertsEnabled else { return baseHint }

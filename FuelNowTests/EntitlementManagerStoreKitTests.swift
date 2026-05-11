@@ -38,15 +38,14 @@ struct EntitlementManagerStoreKitTests {
         await manager.refreshEntitlements()
 
         #expect(manager.isPlusSubscriber == false)
-        #expect(manager.isCarPlayUnlocked == false)
+        #expect(manager.isCarPlayUnlocked == (!FuelNowFeatureFlags.isPlusMonetizationActive || manager.isPlusSubscriber))
 
         let product = try plusYearlyProduct(from: manager)
         try await manager.purchase(product)
 
         #expect(manager.isPlusSubscriber == true)
         #expect(
-            manager.isCarPlayUnlocked == true,
-            "isCarPlayUnlocked muss als Alias auf isPlusSubscriber zeigen — sonst wäre das CarPlay-Gate falsch."
+            manager.isCarPlayUnlocked == (!FuelNowFeatureFlags.isPlusMonetizationActive || manager.isPlusSubscriber)
         )
     }
 
@@ -63,7 +62,7 @@ struct EntitlementManagerStoreKitTests {
         session.clearTransactions()
         await manager.refreshEntitlements()
         #expect(manager.isPlusSubscriber == false)
-        #expect(manager.isCarPlayUnlocked == false)
+        #expect(manager.isCarPlayUnlocked == (!FuelNowFeatureFlags.isPlusMonetizationActive || manager.isPlusSubscriber))
     }
 
     @Test func restoreSurfacesExistingEntitlementForFreshManager() async throws {
