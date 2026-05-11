@@ -1,6 +1,5 @@
 import CoreLocation
 import Foundation
-import MapKit
 
 #if canImport(CarPlay)
 import CarPlay
@@ -8,30 +7,21 @@ import CarPlay
 
 // MARK: - Presentation rows (unit-testable, kein CarPlay)
 
-/// Eine Zeile für CarPlay POI-Liste und Map-Picker — gebaut aus ``Station`` + bevorzugter Kraftstoffsorte.
+/// Eine Zeile für die CarPlay-Plus-Tankstellenliste — gebaut aus ``Station`` + bevorzugter Kraftstoffsorte.
 struct StationCarPlayPOIRow {
     let stationID: UUID
-    let coordinate: CLLocationCoordinate2D
     /// Zeile im horizontalen Picker — typischerweise Marke.
     let pickerTitle: String
     /// Untertitel — bevorzugte Sorte + Preis (oder „—“).
     let pickerSubtitle: String
     /// Kurz-Zusammenfassung unter dem Picker-Eintrag — Status + Entfernung.
     let pickerSummary: String
-    let detailTitle: String
-    let detailSubtitle: String
+    /// Mehrzeilige Detail-Zusammenfassung (Tests / künftige Erweiterungen).
     let detailSummary: String
-
-    func makeMapItem() -> MKMapItem {
-        let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
-        let item = MKMapItem(location: location, address: nil)
-        item.name = detailTitle
-        return item
-    }
 }
 
 enum StationCarPlayPOIMapper {
-    /// Tankerkönig / Produkt: höchstens 12 POIs laut `CPPointOfInterestTemplate`.
+    /// Tankerkönig / UX: höchstens 12 Einträge in der CarPlay-Plus-Liste.
     static let maxPointsOfInterest = 12
 
     /// Letzter Eintrag gewinnt — vermeidet Crash von `Dictionary(uniqueKeysWithValues:)` bei doppelter `Station.id`.
@@ -65,8 +55,6 @@ enum StationCarPlayPOIMapper {
         let distance = StationDisplayFormatting.distanceString(kilometers: station.distanceKilometers)
         let pickerSummary = "\(status) · \(distance)"
 
-        let detailTitle = station.name
-        let detailSubtitle = "\(status) · \(distance)"
         let detailSummary = """
         \(station.fullAddress)
 
@@ -75,12 +63,9 @@ enum StationCarPlayPOIMapper {
 
         return StationCarPlayPOIRow(
             stationID: station.id,
-            coordinate: station.coordinate,
             pickerTitle: pickerTitle,
             pickerSubtitle: pickerSubtitle,
             pickerSummary: pickerSummary,
-            detailTitle: detailTitle,
-            detailSubtitle: detailSubtitle,
             detailSummary: detailSummary
         )
     }
@@ -95,31 +80,7 @@ enum StationCarPlayPOIMapper {
     }
 
     #if canImport(CarPlay)
-    @MainActor
-    static func makePointsOfInterest(rows: [StationCarPlayPOIRow], stationsByID: [UUID: Station]) -> [CPPointOfInterest] {
-        rows.map { row in
-            let poi = CPPointOfInterest(
-                location: row.makeMapItem(),
-                title: row.pickerTitle,
-                subtitle: row.pickerSubtitle,
-                summary: row.pickerSummary,
-                detailTitle: row.detailTitle,
-                detailSubtitle: row.detailSubtitle,
-                detailSummary: row.detailSummary,
-                pinImage: nil
-            )
-            poi.userInfo = row.stationID.uuidString as NSString
-            if let station = stationsByID[row.stationID] {
-                let navigateTitle = String(localized: "carplay.poi.navigateMaps")
-                poi.primaryButton = CPTextButton(title: navigateTitle, textStyle: .normal) { _ in
-                    CarPlayDrivingNavigation.openDrivingDirections(to: station)
-                }
-            }
-            return poi
-        }
-    }
-
-    /// Sortierte Liste — dieselben Stationen wie zuvor die POI-Karte (kein zweites Datenmodell); Root in CarPlay.
+    /// Sortierte Liste — Root-Template in CarPlay Plus.
     @MainActor
     static func makeNearbyListTemplate(
         rows: [StationCarPlayPOIRow],
@@ -138,20 +99,6 @@ enum StationCarPlayPOIMapper {
         }
         let section = CPListSection(items: items)
         return CPListTemplate(title: String(localized: "carplay.plus.list.title"), sections: [section])
-    }
-
-    @MainActor
-    static func makePointsTemplate(
-        points: [CPPointOfInterest],
-        delegate: (any CPPointOfInterestTemplateDelegate)?
-    ) -> CPPointOfInterestTemplate {
-        let template = CPPointOfInterestTemplate(
-            title: String(localized: "carplay.plus.map.title"),
-            pointsOfInterest: points,
-            selectedIndex: 0
-        )
-        template.pointOfInterestDelegate = delegate
-        return template
     }
     #endif
 }

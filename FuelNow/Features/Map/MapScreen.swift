@@ -239,19 +239,13 @@ struct MapScreen: View {
         }
         .task {
             locationService.start()
-            MapDeepLinkStore.shared.syncPendingControlFromAppGroupIfNeeded()
             applyPendingStationFocusFromDeepLink()
-            applyPendingMapControlActionIfNeeded()
         }
         .onChange(of: deepLinks.pendingStationFocusID) { _, _ in
             applyPendingStationFocusFromDeepLink()
         }
-        .onChange(of: deepLinks.pendingControlAction) { _, _ in
-            applyPendingMapControlActionIfNeeded()
-        }
         .onChange(of: stationStore.stations) { _, _ in
             applyPendingStationFocusFromDeepLink()
-            applyPendingMapControlActionIfNeeded()
         }
         .onChange(of: stationStore.loadState) { _, newState in
             switch newState {
@@ -279,8 +273,6 @@ struct MapScreen: View {
         .onChange(of: scenePhase) { _, phase in
             if phase == .active {
                 locationService.refreshAuthorizationStatus()
-                MapDeepLinkStore.shared.syncPendingControlFromAppGroupIfNeeded()
-                applyPendingMapControlActionIfNeeded()
             }
         }
         .onChange(of: networkMonitor.snapshot.reachability) { oldValue, newValue in
@@ -416,42 +408,6 @@ struct MapScreen: View {
         mapVisibleRegion = region
         cameraPosition = .region(region)
         deepLinks.clearPendingStationFocus()
-    }
-}
-
-// MARK: - Control Center / map?action (TAN-110)
-
-extension MapScreen {
-    private func applyPendingMapControlActionIfNeeded() {
-        guard let action = deepLinks.pendingControlAction else { return }
-        switch action {
-        case .focusCheapest:
-            guard !stationStore.stations.isEmpty else { return }
-            guard let station = cheapestStationForPreferredFuel() else {
-                deepLinks.clearPendingMapControl()
-                return
-            }
-            selectedStation = station
-            let region = MKCoordinateRegion(
-                center: station.coordinate,
-                latitudinalMeters: 3_500,
-                longitudinalMeters: 3_500
-            )
-            mapVisibleRegion = region
-            cameraPosition = .region(region)
-            deepLinks.clearPendingMapControl()
-        case .refreshVisibleRegion:
-            searchStationsForVisibleMapCenter()
-            deepLinks.clearPendingMapControl()
-        }
-    }
-
-    private func cheapestStationForPreferredFuel() -> Station? {
-        let priced: [(Station, Double)] = stationStore.stations.compactMap { station in
-            guard let price = station.price(for: preferredFuel) else { return nil }
-            return (station, price)
-        }
-        return priced.min(by: { $0.1 < $1.1 })?.0
     }
 }
 

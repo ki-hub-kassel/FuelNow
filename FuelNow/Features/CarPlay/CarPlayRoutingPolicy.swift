@@ -10,7 +10,7 @@ import Foundation
 /// * **TAN-58** baut auf der Flip-Beobachtung auf, die der Delegate bereits
 ///   einrichtet (Aboablauf während aktiver Session).
 enum CarPlayRoute: Equatable, Sendable {
-    /// FuelNow-Plus aktiv → volle CarPlay-Erfahrung (POI-Liste & Detail).
+    /// FuelNow-Plus aktiv → volle CarPlay-Erfahrung (Tankstellen-Liste mit Navigation).
     case plus
 
     /// Kein Plus → ehrliches `CPInformationTemplate` (HIG-konform, keine Pseudo-Daten).

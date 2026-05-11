@@ -1,12 +1,11 @@
 import Foundation
 
 enum WidgetSnapshotBuilder {
-    /// Engerer Radius fuer das `FuelNowCheapestNearbyWidget` — nur diese werden in
-    /// `cheapestNearby` aufgenommen, damit das Widget nicht bei einer 25-km-Suche eine
-    /// "guenstige" Tankstelle 18 km weg empfiehlt.
+    /// Engerer Radius fuer `cheapestNearby` (u. a. Apple-Watch-Ansicht) — nur diese
+    /// werden aufgenommen, damit bei einer 25-km-Suche keine Tankstelle weit draussen
+    /// als „nah“ gilt.
     static let nearbyCheapestRadiusKm: Double = 5
-    /// Wir liefern bis zu 4 Eintraege, damit das `.systemMedium`-Widget vier Reihen
-    /// fuellen kann; `.systemSmall` und Watch zeigen je nach Layout nur einen Teil davon.
+    /// Wir liefern bis zu 4 Eintraege fuer die Watch-Liste guenstiger Stationen in 5 km.
     static let nearbyCheapestMaxCount: Int = 4
 
     static func makeSnapshot(

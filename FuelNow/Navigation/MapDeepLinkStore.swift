@@ -12,9 +12,6 @@ final class MapDeepLinkStore {
 
     private(set) var pendingStationFocusID: UUID?
 
-    /// Aus Steuerzentrum (App-Group) oder `fuelnow://map?action=…`; wird von `MapScreen` verarbeitet.
-    private(set) var pendingControlAction: FuelNowPendingMapControlAction?
-
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
         if let str = defaults.string(forKey: AppSettings.UserDefaultsKey.pendingMapStationFocusID),
@@ -31,22 +28,5 @@ final class MapDeepLinkStore {
     func clearPendingStationFocus() {
         pendingStationFocusID = nil
         defaults.removeObject(forKey: AppSettings.UserDefaultsKey.pendingMapStationFocusID)
-    }
-
-    func enqueuePendingMapControl(_ action: FuelNowPendingMapControlAction) {
-        pendingControlAction = action
-    }
-
-    func clearPendingMapControl() {
-        pendingControlAction = nil
-    }
-
-    /// Steuerzentrum-Extension schreibt in die App-Group; beim Aktivwerden der Szene einlesen.
-    func syncPendingControlFromAppGroupIfNeeded() {
-        guard let defs = UserDefaults(suiteName: WidgetSnapshotStore.appGroupIdentifier),
-              let raw = defs.string(forKey: WidgetSnapshotStore.pendingControlMapActionKey),
-              let action = FuelNowPendingMapControlAction(rawValue: raw) else { return }
-        defs.removeObject(forKey: WidgetSnapshotStore.pendingControlMapActionKey)
-        pendingControlAction = action
     }
 }

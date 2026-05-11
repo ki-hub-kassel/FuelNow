@@ -20,14 +20,11 @@ struct FuelNowDeepLinkTests {
         #expect(FuelNowDeepLink.parse(url) == .map)
     }
 
-    @Test func parsesMapFocusCheapestQuery() throws {
-        let url = try #require(URL(string: "fuelnow://map?action=cheapest"))
-        #expect(FuelNowDeepLink.parse(url) == .mapFocusCheapest)
-    }
-
-    @Test func parsesMapRefreshQuery() throws {
-        let url = try #require(URL(string: "fuelnow:///map?action=refresh"))
-        #expect(FuelNowDeepLink.parse(url) == .mapRefreshVisibleRegion)
+    @Test func mapQueryOpensPlainMap() throws {
+        let cheapestURL = try #require(URL(string: "fuelnow://map?action=cheapest"))
+        #expect(FuelNowDeepLink.parse(cheapestURL) == .map)
+        let refreshURL = try #require(URL(string: "fuelnow:///map?action=refresh"))
+        #expect(FuelNowDeepLink.parse(refreshURL) == .map)
     }
 
     @Test func parsesStationWithHost() throws {

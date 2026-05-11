@@ -99,7 +99,6 @@ struct FuelNowApp: App {
                 coordinator.networkMonitor.start()
                 syncWidgetSnapshot()
                 coordinator.priceAlertCoordinator.scheduleNextRefresh()
-                MapDeepLinkStore.shared.syncPendingControlFromAppGroupIfNeeded()
                 Task {
                     await StationIntentResolution.shared.setResolver(StationStoreIntentResolver())
                 }
@@ -139,15 +138,7 @@ struct FuelNowApp: App {
                     switch link {
                     case .map:
                         MapDeepLinkStore.shared.clearPendingStationFocus()
-                        MapDeepLinkStore.shared.clearPendingMapControl()
-                    case .mapFocusCheapest:
-                        MapDeepLinkStore.shared.clearPendingStationFocus()
-                        MapDeepLinkStore.shared.enqueuePendingMapControl(.focusCheapest)
-                    case .mapRefreshVisibleRegion:
-                        MapDeepLinkStore.shared.clearPendingStationFocus()
-                        MapDeepLinkStore.shared.enqueuePendingMapControl(.refreshVisibleRegion)
                     case let .station(id):
-                        MapDeepLinkStore.shared.clearPendingMapControl()
                         MapDeepLinkStore.shared.enqueueStationFocus(id: id)
                     }
                 }

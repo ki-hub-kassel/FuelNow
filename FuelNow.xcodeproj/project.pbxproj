@@ -28,12 +28,10 @@
 		A8FC803FA31CA1C81B2DF72D /* MapScreen+Previews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 491F61A9BB2718A70D9CA351 /* MapScreen+Previews.swift */; };
 		AC86F7B392CE20719A88F688 /* WidgetSnapshotStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96A9A26AC911821D9433665 /* WidgetSnapshotStore.swift */; };
 		AD7773331292C5888A27AA36 /* FuelNowWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29EF13678B417327854B6A5F /* FuelNowWidgets.swift */; };
-		E99000020000000000000005 /* FuelNowControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99000010000000000000005 /* FuelNowControls.swift */; };
 		F60710000000000000000003 /* StationSpotlightIndexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60700000000000000000003 /* StationSpotlightIndexer.swift */; };
 		F65710000000000000000007 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = F65700000000000000000003 /* Localizable.xcstrings */; };
 		E99000020000000000000001 /* FuelNowWidgetGlanceHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99000010000000000000001 /* FuelNowWidgetGlanceHelpers.swift */; };
 		E99000020000000000000002 /* FuelNowStationWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99000010000000000000002 /* FuelNowStationWidget.swift */; };
-		E99000020000000000000003 /* FuelNowCheapestNearbyWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99000010000000000000003 /* FuelNowCheapestNearbyWidget.swift */; };
 		E99000020000000000000004 /* FuelNowDrivingToStationLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99000010000000000000004 /* FuelNowDrivingToStationLiveActivity.swift */; };
 		B3814888CFA594192E88DACA /* PriceAlertCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D94403D6ECDE0DC11FEE26 /* PriceAlertCoordinatorTests.swift */; };
 		B7F408A7BC145A5CB3CC63DA /* WidgetSnapshotBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 269EA733547319C628DE1B80 /* WidgetSnapshotBuilderTests.swift */; };
@@ -234,9 +232,7 @@
 		29EF13678B417327854B6A5F /* FuelNowWidgets.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FuelNowWidgets.swift; sourceTree = "<group>"; };
 		E99000010000000000000001 /* FuelNowWidgetGlanceHelpers.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FuelNowWidgetGlanceHelpers.swift; sourceTree = "<group>"; };
 		E99000010000000000000002 /* FuelNowStationWidget.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FuelNowStationWidget.swift; sourceTree = "<group>"; };
-		E99000010000000000000003 /* FuelNowCheapestNearbyWidget.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FuelNowCheapestNearbyWidget.swift; sourceTree = "<group>"; };
 		E99000010000000000000004 /* FuelNowDrivingToStationLiveActivity.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FuelNowDrivingToStationLiveActivity.swift; sourceTree = "<group>"; };
-		E99000010000000000000005 /* FuelNowControls.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FuelNowControls.swift; sourceTree = "<group>"; };
 		300000000000000000000001 /* FuelNowApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelNowApp.swift; sourceTree = "<group>"; };
 		300000000000000000000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		300000000000000000000003 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -558,9 +554,7 @@
 			children = (
 				E99000010000000000000001 /* FuelNowWidgetGlanceHelpers.swift */,
 				E99000010000000000000002 /* FuelNowStationWidget.swift */,
-				E99000010000000000000003 /* FuelNowCheapestNearbyWidget.swift */,
 				E99000010000000000000004 /* FuelNowDrivingToStationLiveActivity.swift */,
-				E99000010000000000000005 /* FuelNowControls.swift */,
 				29EF13678B417327854B6A5F /* FuelNowWidgets.swift */,
 				0EFF8C993D01E0D843AD75F2 /* Info.plist */,
 				CCCAF6F904C31BD56BD3B36F /* FuelNowWidgets.entitlements */,
@@ -1001,10 +995,8 @@
 				AC86F7B392CE20719A88F688 /* WidgetSnapshotStore.swift in Sources */,
 				E99000020000000000000001 /* FuelNowWidgetGlanceHelpers.swift in Sources */,
 				E99000020000000000000002 /* FuelNowStationWidget.swift in Sources */,
-				E99000020000000000000003 /* FuelNowCheapestNearbyWidget.swift in Sources */,
 				E99000020000000000000004 /* FuelNowDrivingToStationLiveActivity.swift in Sources */,
 				AD7773331292C5888A27AA36 /* FuelNowWidgets.swift in Sources */,
-				E99000020000000000000005 /* FuelNowControls.swift in Sources */,
 				4CACC92E0C79C5D2A1F63AB4 /* DrivingToStationActivityAttributes.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

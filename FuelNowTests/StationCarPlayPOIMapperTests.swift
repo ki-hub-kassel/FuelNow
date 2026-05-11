@@ -4,7 +4,7 @@ import Testing
 @testable import FuelNow
 
 struct StationCarPlayPOIMapperTests {
-    @Test("Maximal 12 Zeilen für CPPointOfInterestTemplate")
+    @Test("Maximal 12 Zeilen für die CarPlay-Plus-Liste")
     func capsAtTwelveRows() throws {
         let stations = try decodeManyStationLines(count: 20)
         let rows = StationCarPlayPOIMapper.buildRows(stations: stations, preferredFuel: .e10)

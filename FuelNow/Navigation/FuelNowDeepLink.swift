@@ -4,14 +4,10 @@ import Foundation
 enum FuelNowDeepLink: Equatable, Sendable {
     /// Nur Karte öffnen; ausstehende Fokus-ID wird verworfen.
     case map
-    /// Karte öffnen und günstigste Tankstelle für die eingestellte Sorte fokussieren (`?action=cheapest`).
-    case mapFocusCheapest
-    /// Sichtbare Region neu laden wie „In diesem Gebiet suchen“ (`?action=refresh`).
-    case mapRefreshVisibleRegion
     /// Konkrete Tankstelle auswählen, sobald sie im `StationStore` liegt.
     case station(UUID)
 
-    /// Unterstützte Formen u. a. `fuelnow://map`, `fuelnow://map?action=cheapest`, `fuelnow://station/<uuid>`.
+    /// Unterstützte Formen u. a. `fuelnow://map`, `fuelnow:///station/<uuid>`.
     static func parse(_ url: URL) -> FuelNowDeepLink? {
         guard url.scheme?.caseInsensitiveCompare("fuelnow") == .orderedSame else { return nil }
 
@@ -19,11 +15,11 @@ enum FuelNowDeepLink: Equatable, Sendable {
         let pathParts = url.path.split(separator: "/").map(String.init).filter { !$0.isEmpty }
 
         if host == "map", pathParts.isEmpty {
-            return mapVariant(from: url)
+            return .map
         }
 
         if host.isEmpty, pathParts.count == 1, pathParts[0].lowercased() == "map" {
-            return mapVariant(from: url)
+            return .map
         }
 
         if host == "station", let raw = pathParts.first, let uuid = UUID(uuidString: raw) {
@@ -37,18 +33,5 @@ enum FuelNowDeepLink: Equatable, Sendable {
         }
 
         return nil
-    }
-
-    private static func mapVariant(from url: URL) -> FuelNowDeepLink {
-        let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems
-        let action = items?.first { $0.name.caseInsensitiveCompare("action") == .orderedSame }?.value?.lowercased()
-        switch action {
-        case "cheapest":
-            return .mapFocusCheapest
-        case "refresh":
-            return .mapRefreshVisibleRegion
-        default:
-            return .map
-        }
     }
 }

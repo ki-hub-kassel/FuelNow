@@ -147,7 +147,7 @@ StandBy-gleiche `systemSmall`-Darstellung). Zuweisung auf dem iPhone unter
 iOS-Oberfläche).
 
 **Code:** Widget-Extension `FuelNowWidgets/` — v. a. `FuelNowStationWidget.swift`
-(konfigurierbar nächste/günstigste Station) und `FuelNowCheapestNearbyWidget.swift`.
+(konfigurierbar nächste/günstigste Station).
 Die Views nutzen `containerBackground(for: .widget)` und größere Typografie, wenn
 `showsWidgetContainerBackground` falsch ist (Hintergrund von StandBy/CarPlay
 entfernt — Apple-Empfehlung „larger typography“).

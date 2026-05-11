@@ -30,8 +30,8 @@ struct WidgetDataSnapshot: Codable, Sendable, Equatable {
     let stationCount: Int
     let nearest: WidgetStationSnapshot?
     let cheapest: WidgetStationSnapshot?
-    /// Top-N (Default: 2) guenstigste Tankstellen im engen Radius (Default: 5 km) fuer das
-    /// `FuelNowCheapestNearbyWidget` (Roadmap Phase 4). Als optional kodiert, damit alte
+    /// Top-N guenstigste Tankstellen im engen Radius (Default: 5 km), u. a. fuer die
+    /// Watch-Companion-UI. Als optional kodiert, damit alte
     /// Snapshots (vor diesem Feld) weiter dekodiert werden koennen — JSONDecoder springt
     /// auf `nil`, ohne den `WidgetDataSnapshot`-Decode zu brechen.
     let cheapestNearby: [WidgetStationSnapshot]?
@@ -55,16 +55,9 @@ struct WidgetDataSnapshot: Codable, Sendable, Equatable {
     }
 }
 
-/// Steuerzentrum-Controls schreiben eine Pending-Aktion in die App-Group; die Haupt-App liest sie bei `scenePhase == .active`.
-enum FuelNowPendingMapControlAction: String, Sendable {
-    case focusCheapest
-    case refreshVisibleRegion
-}
-
 struct WidgetSnapshotStore {
     static let fileName = "widget-snapshot-v1.json"
     static let appGroupIdentifier = "group.com.vibecoding.fuelnow"
-    static let pendingControlMapActionKey = "tr.pendingControlMapAction"
 
     private let fileManager: FileManager
     private let encoder: JSONEncoder
