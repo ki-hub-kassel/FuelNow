@@ -80,6 +80,12 @@ if [[ "${FUELNOW_USE_MOCK_STATIONS:-0}" == "1" ]]; then
   echo "FuelNow: QA-Mock erzwungen (FUELNOW_USE_MOCK_STATIONS=1)."
 fi
 
+# Optional: Proxy-Override (überschreibt Info.plist), z. B. toter Host für Offline-Splash-Tests.
+if [[ -n "${TANKERKOENIG_PROXY_BASE_URL:-}" ]]; then
+  export SIMCTL_CHILD_TANKERKOENIG_PROXY_BASE_URL="${TANKERKOENIG_PROXY_BASE_URL}"
+  echo "FuelNow: TANKERKOENIG_PROXY_BASE_URL an Simulator-App durchgereicht."
+fi
+
 xcrun simctl launch "${UDID}" "${BUNDLE_ID}"
 
 echo "FuelNow: Installiert und gestartet."

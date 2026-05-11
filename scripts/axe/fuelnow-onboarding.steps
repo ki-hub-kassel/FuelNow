@@ -1,0 +1,9 @@
+# Onboarding (DE-Strings aus Localizable). Voraussetzung: frische App-Installation oder gelöschte Preferences.
+# Standort: Skript soll vorher `simctl privacy … grant location` ausführen, damit kein System-Alert blockiert.
+
+sleep 5
+
+tap --label "Weiter" --wait-timeout 30
+sleep 1
+tap --label "Standortzugriff erlauben" --wait-timeout 25
+sleep 4
