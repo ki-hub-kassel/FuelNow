@@ -51,6 +51,8 @@ jobs:
           DEVICE="iPhone 16"
           echo "device=$DEVICE" >> "$GITHUB_OUTPUT"
 
+      # EntitlementManagerStoreKitTests: SKTestSession läuft auf iOS/iPadOS 26.5+ automatisch;
+      # 26.0–26.4 überspringt die Suite (Apple-Regression). Rest von FuelNowTests bleibt aktiv.
       - name: Run unit tests
         env:
           DERIVED_DATA: .derived-data-ios-ci

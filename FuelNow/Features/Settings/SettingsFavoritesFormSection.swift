@@ -60,7 +60,7 @@ struct SettingsFavoritesFormSection: View {
             Text("plus.gated.favorites.title")
         } footer: {
             if entitlementManager.hasPlusBenefits {
-                Text("Lokale Liste — wird mit Widget und Watch geteilt, sobald Sync aktiviert ist.")
+                Text("settings.favorites.widgetWatchFootnote")
                     .font(TRTypography.caption())
                     .foregroundStyle(TRColors.labelSecondary)
             }

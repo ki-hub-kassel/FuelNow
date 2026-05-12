@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Tankstellen-Pin mit TR-Glas-Pille, Preis für die gewählte Sorte und Öffnungsstatus (grüner bzw. roter Punkt).
+/// Tankstellen-Pin mit Material-Pille auf der Karte (kein Liquid Glass auf Kartendaten), Preis und Statuspunkt.
 struct StationAnnotationView: View {
     let station: Station
     let preferredFuel: FuelType
@@ -41,14 +41,14 @@ struct StationAnnotationView: View {
         .padding(.horizontal, TRSpacing.s)
         .padding(.vertical, TRSpacing.xxs)
         .frame(minHeight: 44)
-        .trGlassPill(interactive: true)
+        .trMapDataPill()
         .accessibilityElement(children: .combine)
         .accessibilityLabel(accessibilitySummary)
         .accessibilityHint("Tippen für Details.")
     }
 
     /// Status-Punkt: Farbe **only** auf bewusste Designentscheidung (TAN-80 Folge).
-    /// Die Farbe ist hochkontrastreich (`success` / `danger` jeweils ≥ 4:1 vs. weißes Glas
+    /// Die Farbe ist hochkontrastreich (`success` / `danger` jeweils ≥ 4:1 vs. hellem Material
     /// der Pille); SC 1.4.1 für sehende Nutzer mit Rot-Grün-Schwäche wird in Kauf genommen,
     /// VoiceOver-Label am `accessibilitySummary` bleibt als zweite Info erhalten.
     private var statusBadge: some View {

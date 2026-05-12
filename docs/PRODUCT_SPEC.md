@@ -7,8 +7,15 @@ Diese Datei ist die **zentrale Einstiegs-Spezifikation** im Repo: Kurzfassung vo
 - **FuelNow** ist eine native iOS-App: Tankstellen in der Nähe auf der Karte, Öffnungsstatus und Preise; Kraftstoffsorte (z. B. Super, Super95, Diesel) in den Einstellungen.
 - **Vertrieb:** Die App ist für den **deutschen App Store** vorgesehen (**Verfügbarkeit nur Deutschland**). Technische Umsetzung: App Store Connect (nicht im Binary); Schritte: [`docs/AppStoreConnectUpload.md`](AppStoreConnectUpload.md) → Abschnitt *Nur Deutschland*. In-App-Daten (Tankerkönig) sind ohnehin auf Deutschland bezogen.
 - **Daten:** Tankerkönig (Deutschland); API-Details und Decoding-Fallen: [`.cursor/skills/tankerkoenig-api/SKILL.md`](../.cursor/skills/tankerkoenig-api/SKILL.md). **Caching-Strategie (kein eigener DB-Mirror, On-Demand bleibt Default):** [`docs/TANKERKOENIG_CACHING.md`](TANKERKOENIG_CACHING.md) ([TAN-82](https://linear.app/tankradar-app/issue/TAN-82)). **Anschluss an Tankerkönig (TAN-92):** Vercel-Edge-Function-Proxy [`tankerkoenig-proxy/`](../tankerkoenig-proxy/README.md) hängt `apikey` serverseitig dran — der Key landet nicht in der App-Binary. App-seitige URL: `FuelNow/Info.plist` → `TankerkoenigProxyBaseURL`; Direct-Modus mit lokalem Key bleibt als Notnagel.
-- **Geplant / Roadmap:** Siri (nächste/günstigste Station), CarPlay-kartenlastig, Abo-Gate (CarPlay u. a. für Abonnenten; Preisrichtung z. B. ~6 €/Jahr — finale Preise über StoreKit, nicht hardcodieren).
+- **Geplant / Roadmap:** siehe Abschnitt **Roadmap (priorisiert)** unten; CarPlay-Beschreibung in Text/Marketing an **`docs/CARPLAY.md`** (listenbasierte UI) ausrichten, nicht an einen impliziten Karten-Hauptscreen.
 - **Backend-Richtung:** Appwrite (Swift SDK) — siehe Architektur-/Ticket-Kontext in Linear.
+
+## Roadmap (priorisiert)
+
+1. **Tankerkönig-Caching / schwaches Netz** — [`docs/TANKERKOENIG_CACHING.md`](TANKERKOENIG_CACHING.md), Linear [TAN-82](https://linear.app/tankradar-app/issue/TAN-82): weniger „leere Karte“ bei flaky connectivity, ohne eigenen DB-Mirror als Default zu brechen.
+2. **Listenansicht bzw. sortierte Liste** (Preis/Entfernung) als Ergänzung zur Karte — hoher Nutzen für „günstigste in der Nähe“ ohne Zoom-Spiel.
+3. **Live Activity (`DrivingToStationActivityController`)** — klarere Zustände (Start/ Fehler / angekommen), QA Lock Screen & Dynamic Island.
+4. **Widget-Konfiguration** — z. B. Kraftstoffsorte / Favorit aus [`docs/WIDGETS.md`](WIDGETS.md)-Stack, innerhalb WidgetKit-Budgets.
 
 ## Naming / Repo
 

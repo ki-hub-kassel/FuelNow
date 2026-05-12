@@ -21,6 +21,7 @@
 		800000000000000000000001 /* FuelNowApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 300000000000000000000001 /* FuelNowApp.swift */; };
 		800000000000000000000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 300000000000000000000002 /* ContentView.swift */; };
 		800000000000000000000003 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 300000000000000000000003 /* Assets.xcassets */; };
+		F70010000000000000000006 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = F70000000000000000000007 /* PrivacyInfo.xcprivacy */; };
 		800000000000000000000005 /* FuelNowUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500000000000000000000001 /* FuelNowUITests.swift */; };
 		8C34A26389F0B76469EDB8FD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB6916EECB4E1B3C2ABFB3AE /* Foundation.framework */; };
 		8E933569020BC2307B9218DC /* FuelNowWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30853CD67C4E339AF5E8D7BD /* FuelNowWatchApp.swift */; };
@@ -396,6 +397,7 @@
 		F70000000000000000000004 /* FuelNowCarPlaySceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelNowCarPlaySceneDelegate.swift; sourceTree = "<group>"; };
 		F70000000000000000000005 /* CarPlayRoutingPolicyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlayRoutingPolicyTests.swift; sourceTree = "<group>"; };
 		F70000000000000000000006 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F70000000000000000000007 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.json; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		F70100000000000000000001 /* StationDisplayFormatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationDisplayFormatting.swift; sourceTree = "<group>"; };
 		F70100000000000000000002 /* FuelNowRuntimeRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelNowRuntimeRegistry.swift; sourceTree = "<group>"; };
 		F70100000000000000000003 /* AppSettings+PreferredFuel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppSettings+PreferredFuel.swift"; sourceTree = "<group>"; };
@@ -501,6 +503,7 @@
 				300000000000000000000001 /* FuelNowApp.swift */,
 				F70000000000000000000001 /* FuelNow.entitlements */,
 				F70000000000000000000006 /* Info.plist */,
+				F70000000000000000000007 /* PrivacyInfo.xcprivacy */,
 				300000000000000000000002 /* ContentView.swift */,
 				300000000000000000000003 /* Assets.xcassets */,
 				F65700000000000000000003 /* Localizable.xcstrings */,
@@ -1006,6 +1009,7 @@
 				F65710000000000000000003 /* Localizable.xcstrings in Resources */,
 				F37300000000000000000001 /* TRDesignAssets.xcassets in Resources */,
 				F62A10000000000000000001 /* mock-stations.json in Resources */,
+				F70010000000000000000006 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

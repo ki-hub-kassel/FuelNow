@@ -198,7 +198,7 @@ enum StationMapClustering {
     }
 }
 
-/// Cluster-Pille (Anzahl) — gleiches Glasmaterial wie Einzel-Pins.
+/// Cluster-Pille (Anzahl) — gleiche Material-Pille wie Einzel-Pins (kein Liquid Glass auf Kartendaten).
 struct StationClusterAnnotationView: View {
     let count: Int
 
@@ -208,7 +208,7 @@ struct StationClusterAnnotationView: View {
             .foregroundStyle(TRColors.labelPrimary)
             .frame(minWidth: 44, minHeight: 44)
             .padding(.horizontal, TRSpacing.s)
-            .trGlassPill(interactive: true)
+            .trMapDataPill()
             .accessibilityElement(children: .combine)
             .accessibilityLabel("\(count) Tankstellen")
             .accessibilityHint("Tippen, um näher heranzuzoomen und die Stationen einzeln zu sehen.")

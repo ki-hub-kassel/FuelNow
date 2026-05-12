@@ -66,6 +66,12 @@ Notes:
 - A simulator run can be configured with this `.storekit` file via the
   scheme's *Run → Options → StoreKit Configuration*.
 
+## SKTestSession unit tests (`EntitlementManagerStoreKitTests`)
+
+- The **`EntitlementManager / StoreKit`** Swift Testing suite uses **`SKTestSession`** with `FuelNowPlus.storekit` and is **`.serialized`** so parallel tests do not fight the patched storefront.
+- **iOS/iPadOS 26.0–26.4.x:** Apple shipped a regression where `SKTestSession` ignored the configuration in unit tests (`Product.products(for:)` could return empty). The suite is **`.disabled(if: …)`** on those OS versions (see `hasAppleSKTestSessionRegressionOnCurrentOS` in `FuelNowTests/EntitlementManagerStoreKitTests.swift`).
+- **iOS/iPadOS 26.5+ (and later major versions):** the suite **runs automatically**. CI should use an Xcode / simulator runtime that reports **26.5+** when you need this suite to execute on GitHub Actions; older 26.x simulators still run the rest of `FuelNowTests` and skip only this `@Suite`.
+
 ## App Store Connect (Production)
 
 Apple's **minimum free-trial duration is 3 days** — 48 h is not selectable

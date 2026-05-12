@@ -40,7 +40,7 @@ struct SettingsPriceAlertsFormSection: View {
                         openNotificationSystemSettings()
                     } label: {
                         Label("Mitteilungen in Systemeinstellungen erlauben", systemImage: "gear")
-                            .foregroundStyle(TRColors.accent)
+                            .foregroundStyle(TRColors.accentText)
                     }
                     .accessibilityHint("Öffnet die FuelNow-Seite in den iOS-Einstellungen.")
                 }
@@ -71,7 +71,7 @@ struct SettingsPriceAlertsFormSection: View {
     }
 
     private var priceAlertsFooterText: String {
-        let baseHint = "Beta — läuft lokal im Hintergrund. iOS bestimmt, wie oft die App nachsehen darf."
+        let baseHint = String(localized: "settings.priceAlerts.backgroundHint")
         guard entitlementManager.hasPlusBenefits else {
             return String(localized: "plus.gated.priceAlerts.footer")
         }

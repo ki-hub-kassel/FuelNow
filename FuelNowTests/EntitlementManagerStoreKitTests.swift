@@ -129,9 +129,10 @@ struct EntitlementManagerErrorTests {
 private final class BundleToken: NSObject {}
 
 /// Erkennt, ob der aktuelle Simulator/Geräte-OS-Stand vom bekannten SKTestSession-Bug betroffen ist.
-/// True für iOS/iPadOS 26.0–26.4.x — Apple-Release-Note iOS 26.5 RC bestätigt den Fix in 26.5.
+/// `true` nur für **iOS/iPadOS 26.0–26.4.x** — ab **26.5** (und Major > 26) läuft die Suite wieder.
 private var hasAppleSKTestSessionRegressionOnCurrentOS: Bool {
     let version = ProcessInfo.processInfo.operatingSystemVersion
+    if version.majorVersion > 26 { return false }
     guard version.majorVersion == 26 else { return false }
     return version.minorVersion < 5
 }
