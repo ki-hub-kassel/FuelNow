@@ -1,19 +1,20 @@
 #if canImport(CarPlay)
-import CoreLocation
-import MapKit
+import UIKit
 
-/// Startet die Apple-Maps-**Autoroute** zur Tankstelle — gleiches Verhalten wie ``StationDetailView``.
+/// Startet die Apple-Maps-**Autoroute** zur Tankstelle auf dem CarPlay-Display (`from: CPTemplateApplicationScene`).
 enum CarPlayDrivingNavigation {
     @MainActor
-    static func openDrivingDirections(to station: Station) {
-        let destinationLocation = CLLocation(latitude: station.latitude, longitude: station.longitude)
-        let destination = MKMapItem(location: destinationLocation, address: nil)
-        destination.name = station.name
-
-        let current = MKMapItem.forCurrentLocation()
-        MKMapItem.openMaps(
-            with: [current, destination],
-            launchOptions: [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving]
+    static func openDrivingDirections(
+        to station: Station,
+        from scene: UIScene,
+        completionHandler: ((Bool) -> Void)? = nil
+    ) {
+        AppleMapsDrivingNavigation.openDrivingDirections(
+            toLatitude: station.latitude,
+            longitude: station.longitude,
+            placeName: station.name,
+            from: scene,
+            completionHandler: completionHandler
         )
     }
 }

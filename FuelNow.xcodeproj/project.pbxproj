@@ -160,6 +160,7 @@
 		F70010000000000000000003 /* CarPlayEntitlementProviding.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70000000000000000000003 /* CarPlayEntitlementProviding.swift */; };
 		F70010000000000000000004 /* FuelNowCarPlaySceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70000000000000000000004 /* FuelNowCarPlaySceneDelegate.swift */; };
 		F70010000000000000000005 /* CarPlayRoutingPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70000000000000000000005 /* CarPlayRoutingPolicyTests.swift */; };
+		F70210000000000000000001 /* AppleMapsDrivingNavigationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70200000000000000000001 /* AppleMapsDrivingNavigationTests.swift */; };
 		F70110000000000000000001 /* StationDisplayFormatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70100000000000000000001 /* StationDisplayFormatting.swift */; };
 		F70110000000000000000002 /* FuelNowRuntimeRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70100000000000000000002 /* FuelNowRuntimeRegistry.swift */; };
 		F70110000000000000000003 /* AppSettings+PreferredFuel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F70100000000000000000003 /* AppSettings+PreferredFuel.swift */; };
@@ -395,6 +396,7 @@
 		F70000000000000000000003 /* CarPlayEntitlementProviding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlayEntitlementProviding.swift; sourceTree = "<group>"; };
 		F70000000000000000000004 /* FuelNowCarPlaySceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelNowCarPlaySceneDelegate.swift; sourceTree = "<group>"; };
 		F70000000000000000000005 /* CarPlayRoutingPolicyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlayRoutingPolicyTests.swift; sourceTree = "<group>"; };
+		F70200000000000000000001 /* AppleMapsDrivingNavigationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleMapsDrivingNavigationTests.swift; sourceTree = "<group>"; };
 		F70000000000000000000006 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F70100000000000000000001 /* StationDisplayFormatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationDisplayFormatting.swift; sourceTree = "<group>"; };
 		F70100000000000000000002 /* FuelNowRuntimeRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuelNowRuntimeRegistry.swift; sourceTree = "<group>"; };
@@ -547,6 +549,7 @@
 				F60800000000000000000009 /* FuelTypePresentationTests.swift */,
 				F66200000000000000000010 /* EntitlementManagerStoreKitTests.swift */,
 				F70000000000000000000005 /* CarPlayRoutingPolicyTests.swift */,
+				F70200000000000000000001 /* AppleMapsDrivingNavigationTests.swift */,
 				F70600000000000000000001 /* StationCarPlayPOIMapperTests.swift */,
 				F51300000000000000000001 /* Fixtures */,
 				269EA733547319C628DE1B80 /* WidgetSnapshotBuilderTests.swift */,
@@ -1197,6 +1200,7 @@
 				F60810000000000000000009 /* FuelTypePresentationTests.swift in Sources */,
 				F66200000000000000000001 /* EntitlementManagerStoreKitTests.swift in Sources */,
 				F70010000000000000000005 /* CarPlayRoutingPolicyTests.swift in Sources */,
+				F70210000000000000000001 /* AppleMapsDrivingNavigationTests.swift in Sources */,
 				F70610000000000000000001 /* StationCarPlayPOIMapperTests.swift in Sources */,
 				B7F408A7BC145A5CB3CC63DA /* WidgetSnapshotBuilderTests.swift in Sources */,
 				B3814888CFA594192E88DACA /* PriceAlertCoordinatorTests.swift in Sources */,

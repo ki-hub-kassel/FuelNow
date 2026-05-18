@@ -139,7 +139,10 @@ Tankstellen. Ein **Zeilentap** pusht ein **`CPInformationTemplate`** auf den Sta
 (`pushTemplate` — Apple erlaubt **`presentTemplate`** nur für Alert/ActionSheet/VoiceControl,
 nicht für Information). Zuerst **alle Preise**, dann **Live-Status** (geöffnet/geschlossen, Entfernung) — **keine Adresse**;
 **Navigation** startet über den primären Button (Apple Maps Autoroute, wie im
-Tankstellendetail auf dem iPhone), danach **`popTemplate`** zurück zur Liste.
+Tankstellendetail auf dem iPhone). MapKit-Handoff **muss** die verbundene
+`CPTemplateApplicationScene` an `MKMapItem.openMaps(…, from:completionHandler:)`
+übergeben — sonst öffnet Maps nur auf dem iPhone und wirkt auf dem Head-Unit wie
+„ohne Funktion“. Nach erfolgreichem Handoff **`popTemplate`** zurück zur Liste.
 
 **Hierarchie vs. Modal:** Detail mit `CPInformationTemplate` gehört auf den Stack
 via **`pushTemplate` / `popTemplate`** (systemseitige Zurück-Navigation).
