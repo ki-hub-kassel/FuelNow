@@ -13,7 +13,7 @@ concurrency:
 jobs:
   lint:
     name: SwiftLint + SwiftFormat
-    runs-on: macos-15
+    runs-on: macos-26
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -36,7 +36,7 @@ jobs:
 
   test:
     name: xcodebuild test (iOS Simulator)
-    runs-on: macos-15
+    runs-on: macos-26
     needs: lint
     steps:
       - name: Checkout
@@ -48,7 +48,7 @@ jobs:
       - name: Resolve simulator runtime
         id: simulator
         run: |
-          DEVICE="iPhone 16"
+          DEVICE="iPhone 17"
           echo "device=$DEVICE" >> "$GITHUB_OUTPUT"
 
       - name: Run unit tests
