@@ -11,6 +11,7 @@ final class FuelNowCarPlaySceneDelegate: UIResponder, CPTemplateApplicationScene
     }
 
     private var interfaceController: CPInterfaceController?
+    private var carPlayScene: CPTemplateApplicationScene?
     private var entitlementProvider: (any CarPlayEntitlementProviding)?
     /// Letzte Routing-Pfadentscheidung (Plus vs. Limited — nur bei Wechsel wird Limited neu gesetzt).
     private var lastRoutingPath: CarPlayRoute?
@@ -25,6 +26,7 @@ final class FuelNowCarPlaySceneDelegate: UIResponder, CPTemplateApplicationScene
         didConnect interfaceController: CPInterfaceController
     ) {
         self.interfaceController = interfaceController
+        carPlayScene = templateApplicationScene
         let provider = Self.entitlementProviderFactory()
         entitlementProvider = provider
         Task { @MainActor in
@@ -217,7 +219,8 @@ final class FuelNowCarPlaySceneDelegate: UIResponder, CPTemplateApplicationScene
             guard let self, let interfaceController = self.interfaceController else { return }
             let detail = CarPlayStationDetailInformationTemplate.make(
                 station: station,
-                interfaceController: interfaceController
+                interfaceController: interfaceController,
+                carPlayScene: carPlayScene
             )
             // `presentTemplate` erlaubt laut Apple nur Alert/ActionSheet/VoiceControl — kein CPInformationTemplate.
             interfaceController.pushTemplate(detail, animated: true, completion: nil)
@@ -392,6 +395,7 @@ extension FuelNowCarPlaySceneDelegate {
         runtimeBootstrapTask?.cancel()
         runtimeBootstrapTask = nil
         self.interfaceController = nil
+        carPlayScene = nil
         entitlementProvider = nil
         lastRoutingPath = nil
         lastPlusUISnapshot = nil

@@ -1,13 +1,15 @@
 #if canImport(CarPlay)
 import CarPlay
 import Foundation
+import UIKit
 
 /// Ge-pushtes Tankstellen-Detail für CarPlay Plus (`pushTemplate` — `presentTemplate` unterstützt kein CPInformationTemplate).
 enum CarPlayStationDetailInformationTemplate {
     @MainActor
     static func make(
         station: Station,
-        interfaceController: CPInterfaceController?
+        interfaceController: CPInterfaceController?,
+        carPlayScene: CPTemplateApplicationScene?
     ) -> CPInformationTemplate {
         let openClosed = station.isOpen
             ? String(localized: "station.status.open")
@@ -30,8 +32,11 @@ enum CarPlayStationDetailInformationTemplate {
             title: String(localized: "intent.snippet.mapsNavigationButton"),
             textStyle: .confirm
         ) { [weak interfaceController] _ in
-            CarPlayDrivingNavigation.openDrivingDirections(to: station)
-            interfaceController?.popTemplate(animated: true, completion: nil)
+            guard let carPlayScene else { return }
+            CarPlayDrivingNavigation.openDrivingDirections(to: station, from: carPlayScene) { success in
+                guard success else { return }
+                interfaceController?.popTemplate(animated: true, completion: nil)
+            }
         }
 
         return CPInformationTemplate(
