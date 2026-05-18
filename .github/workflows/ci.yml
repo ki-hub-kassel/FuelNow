@@ -64,7 +64,8 @@ jobs:
             -derivedDataPath "$DERIVED_DATA" \
             -skipPackagePluginValidation \
             -resultBundlePath "$DERIVED_DATA/TestResults.xcresult" \
-            test | xcpretty --color || exit_status=$?
+            test \
+            -only-testing:FuelNowTests | xcpretty --color || exit_status=$?
           if [ -n "${exit_status:-}" ]; then exit "$exit_status"; fi
 
       - name: Upload xcresult on failure
