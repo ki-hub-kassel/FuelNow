@@ -57,6 +57,52 @@ struct QueryServiceTests {
         #expect(best?.dieselPrice == 1.4)
     }
 
+    @Test func sortByPriceOrdersAscendingWithDistanceTieBreak() throws {
+        let data = Data(
+            """
+            {"ok":true,"stations":[
+              {"id":"00000000-0000-0000-0000-000000000010","name":"FarCheap","brand":"X",
+               "street":"S","place":"P","lat":52.6,"lng":13.5,"dist":2.0,"diesel":1.30,
+               "e5":1.6,"e10":1.55,"isOpen":true,"houseNumber":"1","postCode":10115},
+              {"id":"00000000-0000-0000-0000-000000000011","name":"NearExpensive","brand":"Y",
+               "street":"T","place":"Q","lat":52.51,"lng":13.4,"dist":0.5,"diesel":1.50,
+               "e5":1.6,"e10":1.55,"isOpen":true,"houseNumber":"2","postCode":10115}
+            ]}
+            """.utf8
+        )
+        let stations = try JSONDecoder().decode(ListEnvelope.self, from: data).stations
+        let sorted = QueryService.sortByPrice(
+            stations: stations,
+            fuel: .diesel,
+            originLatitude: 52.5,
+            originLongitude: 13.4
+        )
+        #expect(sorted.map(\.name) == ["FarCheap", "NearExpensive"])
+    }
+
+    @Test func sortByPricePlacesStationsWithoutFuelPriceAtEnd() throws {
+        let data = Data(
+            """
+            {"ok":true,"stations":[
+              {"id":"00000000-0000-0000-0000-000000000012","name":"NoDiesel","brand":"X",
+               "street":"S","place":"P","lat":52.51,"lng":13.4,"dist":0.2,"diesel":null,
+               "e5":1.6,"e10":1.55,"isOpen":true,"houseNumber":"1","postCode":10115},
+              {"id":"00000000-0000-0000-0000-000000000013","name":"CheapDiesel","brand":"Y",
+               "street":"T","place":"Q","lat":52.6,"lng":13.5,"dist":2.0,"diesel":1.20,
+               "e5":1.6,"e10":1.55,"isOpen":true,"houseNumber":"2","postCode":10115}
+            ]}
+            """.utf8
+        )
+        let stations = try JSONDecoder().decode(ListEnvelope.self, from: data).stations
+        let sorted = QueryService.sortByPrice(
+            stations: stations,
+            fuel: .diesel,
+            originLatitude: 52.5,
+            originLongitude: 13.4
+        )
+        #expect(sorted.map(\.name) == ["CheapDiesel", "NoDiesel"])
+    }
+
     @Test func cheapestTieBreaksByDistance() throws {
         let data = Data(
             """

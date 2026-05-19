@@ -85,6 +85,8 @@ enum StationCarPlayPOIMapper {
     static func makeNearbyListTemplate(
         rows: [StationCarPlayPOIRow],
         stationsByID: [UUID: Station],
+        sortMode: CarPlayStationSortMode,
+        onToggleSort: @MainActor @escaping () -> Void,
         onSelectStation: @MainActor @escaping (Station) -> Void
     ) -> CPListTemplate {
         let items: [CPListItem] = rows.map { row in
@@ -99,7 +101,28 @@ enum StationCarPlayPOIMapper {
             return item
         }
         let section = CPListSection(items: items)
-        return CPListTemplate(title: String(localized: "carplay.plus.list.title"), sections: [section])
+        let template = CPListTemplate(title: String(localized: "carplay.plus.list.title"), sections: [section])
+        template.trailingNavigationBarButtons = [makeSortBarButton(sortMode: sortMode, onToggleSort: onToggleSort)]
+        return template
+    }
+
+    @MainActor
+    private static func makeSortBarButton(
+        sortMode: CarPlayStationSortMode,
+        onToggleSort: @MainActor @escaping () -> Void
+    ) -> CPBarButton {
+        CPBarButton(title: sortBarButtonTitle(for: sortMode)) { _ in
+            onToggleSort()
+        }
+    }
+
+    private static func sortBarButtonTitle(for sortMode: CarPlayStationSortMode) -> String {
+        switch sortMode {
+        case .distance:
+            String(localized: "carplay.sort.mode.distance")
+        case .price:
+            String(localized: "carplay.sort.mode.price")
+        }
     }
     #endif
 }

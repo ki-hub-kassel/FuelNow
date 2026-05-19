@@ -13,10 +13,9 @@ final class FuelNowCarPlaySceneDelegate: UIResponder, CPTemplateApplicationScene
     private var interfaceController: CPInterfaceController?
     private var carPlayScene: CPTemplateApplicationScene?
     private var entitlementProvider: (any CarPlayEntitlementProviding)?
-    /// Letzte Routing-Pfadentscheidung (Plus vs. Limited — nur bei Wechsel wird Limited neu gesetzt).
     private var lastRoutingPath: CarPlayRoute?
-    /// Verhindert unnötige `setRootTemplate`-Aufrufe im Plus-Pfad bei gleicher Datenlage.
-    private var lastPlusUISnapshot: PlusUISnapshot?
+    private var lastPlusUISnapshot: CarPlayPlusUISnapshot?
+    private var stationSortMode: CarPlayStationSortMode = .distance
     private var didStartEntitlementObservation = false
     private var didStartStationObservation = false
     private var runtimeBootstrapTask: Task<Void, Never>?
@@ -34,6 +33,7 @@ final class FuelNowCarPlaySceneDelegate: UIResponder, CPTemplateApplicationScene
             primeStationFetchForCarPlay()
             lastRoutingPath = nil
             lastPlusUISnapshot = nil
+            stationSortMode = .distance
             reconcileCarPlayUI(animated: false)
             armEntitlementObservation()
             armStationObservationIfPossible()
@@ -46,11 +46,7 @@ final class FuelNowCarPlaySceneDelegate: UIResponder, CPTemplateApplicationScene
     @MainActor
     private func armEntitlementObservation() {
         didStartEntitlementObservation = true
-        guard let manager = entitlementProvider as? EntitlementManager else {
-            // Existenzials/protocol-property Tracking unter `@Observable` ist unzuverlässig — ohne konkretes
-            // EntitlementManager-Objekt (Tests mit Stub) reicht eine einmalige Aktualisierung nach Start.
-            return
-        }
+        guard let manager = entitlementProvider as? EntitlementManager else { return }
         withObservationTracking {
             _ = manager.isPlusSubscriber
             _ = manager.isCarPlayUnlocked
@@ -107,18 +103,22 @@ final class FuelNowCarPlaySceneDelegate: UIResponder, CPTemplateApplicationScene
     @MainActor
     private func updatePlusRootIfNeeded(interfaceController: CPInterfaceController, animated: Bool) {
         guard let store = FuelNowRuntimeRegistry.stationStore else {
-            let snapshot = PlusUISnapshot(kind: .waitingForStore)
-            guard snapshot != lastPlusUISnapshot else { return }
-            lastPlusUISnapshot = snapshot
-            interfaceController.setRootTemplate(
-                makePlusRootTemplate(store: nil, snapshot: snapshot),
-                animated: animated,
-                completion: nil
-            )
+            let snapshot = CarPlayPlusUISnapshot(kind: .waitingForStore, sortMode: stationSortMode)
+            applyPlusSnapshot(snapshot, store: nil, interfaceController: interfaceController, animated: animated)
             return
         }
 
-        let snapshot = PlusUISnapshot(store: store)
+        let snapshot = CarPlayPlusUISnapshot(store: store, sortMode: stationSortMode)
+        applyPlusSnapshot(snapshot, store: store, interfaceController: interfaceController, animated: animated)
+    }
+
+    @MainActor
+    private func applyPlusSnapshot(
+        _ snapshot: CarPlayPlusUISnapshot,
+        store: StationStore?,
+        interfaceController: CPInterfaceController,
+        animated: Bool
+    ) {
         guard snapshot != lastPlusUISnapshot else { return }
         lastPlusUISnapshot = snapshot
         interfaceController.setRootTemplate(
@@ -126,6 +126,13 @@ final class FuelNowCarPlaySceneDelegate: UIResponder, CPTemplateApplicationScene
             animated: animated,
             completion: nil
         )
+    }
+
+    @MainActor
+    private func toggleStationSortMode() {
+        stationSortMode.toggle()
+        lastPlusUISnapshot = nil
+        reconcileCarPlayUI(animated: true)
     }
 
     @MainActor
@@ -148,7 +155,7 @@ final class FuelNowCarPlaySceneDelegate: UIResponder, CPTemplateApplicationScene
     }
 
     @MainActor
-    private func makePlusRootTemplate(store: StationStore?, snapshot: PlusUISnapshot) -> CPTemplate {
+    private func makePlusRootTemplate(store: StationStore?, snapshot: CarPlayPlusUISnapshot) -> CPTemplate {
         switch snapshot.kind {
         case .waitingForStore, .loadingWithoutStations:
             return makeSimpleInfoTemplate(
@@ -168,22 +175,28 @@ final class FuelNowCarPlaySceneDelegate: UIResponder, CPTemplateApplicationScene
         case let .failed(errorKind):
             return makeSimpleInfoTemplate(
                 title: String(localized: "carplay.plus.error.title"),
-                body: localizedCarPlayErrorBody(for: errorKind)
+                body: CarPlayPlusUISnapshot.localizedErrorBody(for: errorKind)
             )
         case .stations:
-            guard let store else {
+            guard let store, !store.stations.isEmpty else {
                 return makeSimpleInfoTemplate(
                     title: String(localized: "carplay.plus.loading.title"),
                     body: String(localized: "carplay.plus.loading.body")
                 )
             }
-            guard !store.stations.isEmpty else {
-                return makeSimpleInfoTemplate(
-                    title: String(localized: "carplay.plus.loading.title"),
-                    body: String(localized: "carplay.plus.loading.body")
+            return CarPlayStationListBuilder.makeStationsListRoot(
+                store: store,
+                sortMode: stationSortMode,
+                environment: CarPlayStationListEnvironment(
+                    carPlayScene: carPlayScene,
+                    interfaceController: interfaceController,
+                    onToggleSort: { [weak self] in self?.toggleStationSortMode() },
+                    makeSimpleInfoTemplate: { [weak self] title, body in
+                        self?.makeSimpleInfoTemplate(title: title, body: body)
+                            ?? CPInformationTemplate(title: title, layout: .leading, items: [], actions: [])
+                    }
                 )
-            }
-            return makeStationsListRoot(store: store)
+            )
         }
     }
 
@@ -195,36 +208,6 @@ final class FuelNowCarPlaySceneDelegate: UIResponder, CPTemplateApplicationScene
             items: [CPInformationItem(title: body, detail: nil)],
             actions: makeInfoActions()
         )
-    }
-
-    @MainActor
-    private func makeStationsListRoot(store: StationStore) -> CPTemplate {
-        let fuel = AppSettings.preferredFuelFromStorage()
-        let stations = store.stations.filter { StationCarPlayPOIMapper.isRenderableStationCoordinate($0) }
-        guard !stations.isEmpty else {
-            return makeSimpleInfoTemplate(
-                title: String(localized: "carplay.plus.empty.title"),
-                body: String(localized: "carplay.plus.empty.body")
-            )
-        }
-        let rows = StationCarPlayPOIMapper.buildRows(stations: stations, preferredFuel: fuel)
-        let byID = StationCarPlayPOIMapper.stationsByIDReplacingDuplicates(stations)
-        guard !rows.isEmpty else {
-            return makeSimpleInfoTemplate(
-                title: String(localized: "carplay.plus.error.title"),
-                body: String(localized: "carplay.plus.error.generic")
-            )
-        }
-        return StationCarPlayPOIMapper.makeNearbyListTemplate(rows: rows, stationsByID: byID) { [weak self] station in
-            guard let self, let interfaceController = self.interfaceController else { return }
-            let detail = CarPlayStationDetailInformationTemplate.make(
-                station: station,
-                interfaceController: interfaceController,
-                carPlayScene: carPlayScene
-            )
-            // `presentTemplate` erlaubt laut Apple nur Alert/ActionSheet/VoiceControl — kein CPInformationTemplate.
-            interfaceController.pushTemplate(detail, animated: true, completion: nil)
-        }
     }
 
     @MainActor
@@ -259,22 +242,7 @@ final class FuelNowCarPlaySceneDelegate: UIResponder, CPTemplateApplicationScene
 
     @MainActor
     private func openOnIPhoneAction() -> CPTextButton {
-        CPTextButton(title: String(localized: "carplay.openOnIPhone"), textStyle: .normal) { _ in
-            // Hinweis-Aktion für den sicheren Handoff: Start/Unlock erfolgen bewusst auf dem iPhone.
-        }
-    }
-
-    private func localizedCarPlayErrorBody(for errorKind: PlusUISnapshot.CarPlayErrorKind) -> String {
-        switch errorKind {
-        case .connectivity:
-            String(localized: "carplay.plus.error.connectivity")
-        case .rateLimited:
-            String(localized: "carplay.plus.error.rateLimited")
-        case .serviceUnavailable:
-            String(localized: "error.tankerkoenig.http503.beta")
-        case .generic:
-            String(localized: "carplay.plus.error.generic")
-        }
+        CPTextButton(title: String(localized: "carplay.openOnIPhone"), textStyle: .normal) { _ in }
     }
 
     @MainActor
@@ -283,8 +251,6 @@ final class FuelNowCarPlaySceneDelegate: UIResponder, CPTemplateApplicationScene
         runtimeBootstrapTask = Task { @MainActor [weak self] in
             guard let self else { return }
 
-            // CarPlay kann vor dem iPhone-Window connecten. Wir geben der Runtime kurz Zeit,
-            // StationStore/LocationService im Registry zu setzen, bevor wir den Plus-Pfad festlegen.
             for _ in 0..<20 {
                 try? await Task.sleep(for: .milliseconds(250))
                 guard self.interfaceController != nil else { return }
@@ -302,89 +268,6 @@ final class FuelNowCarPlaySceneDelegate: UIResponder, CPTemplateApplicationScene
     }
 }
 
-// MARK: - Plus UI Snapshot
-
-private struct PlusUISnapshot: Equatable {
-    enum CarPlayErrorKind: Equatable {
-        case connectivity
-        case rateLimited
-        case serviceUnavailable
-        case generic
-    }
-
-    enum Kind: Equatable {
-        case waitingForStore
-        case loadingWithoutStations
-        case idleWithoutStations
-        case loadedEmpty
-        case failed(CarPlayErrorKind)
-        case stations([UUID])
-    }
-
-    let kind: Kind
-
-    init(kind: Kind) {
-        self.kind = kind
-    }
-
-    @MainActor
-    init(store: StationStore) {
-        switch store.loadState {
-        case .failed:
-            if store.stations.isEmpty {
-                kind = .failed(Self.mapErrorKind(from: store.lastError))
-            } else {
-                kind = .stations(store.stations.map(\.id))
-            }
-        case .loading where store.stations.isEmpty:
-            kind = .loadingWithoutStations
-        case .loading:
-            kind = .stations(store.stations.map(\.id))
-        case .idle where store.stations.isEmpty:
-            kind = .idleWithoutStations
-        case .idle:
-            kind = .stations(store.stations.map(\.id))
-        case .loaded where store.stations.isEmpty:
-            kind = .loadedEmpty
-        case .loaded:
-            kind = .stations(store.stations.map(\.id))
-        }
-    }
-
-    private static func mapErrorKind(from error: Error?) -> CarPlayErrorKind {
-        if let urlError = error as? URLError {
-            switch urlError.code {
-            case .notConnectedToInternet,
-                 .timedOut,
-                 .networkConnectionLost,
-                 .cannotFindHost,
-                 .cannotConnectToHost,
-                 .dnsLookupFailed:
-                return .connectivity
-            default:
-                break
-            }
-        }
-
-        if let tankerkoenigFailure = error as? TankerkoenigClient.Failure {
-            switch tankerkoenigFailure {
-            case .rateLimited:
-                return .rateLimited
-            case let .http(statusCode) where statusCode == 429:
-                return .rateLimited
-            case let .http(statusCode) where statusCode == 503 && FuelNowFeatureFlags.showsTankerkoenig503BetaUserMessage:
-                return .serviceUnavailable
-            case let .network(urlError):
-                return mapErrorKind(from: urlError)
-            default:
-                break
-            }
-        }
-
-        return .generic
-    }
-}
-
 // MARK: - Disconnect
 
 extension FuelNowCarPlaySceneDelegate {
@@ -399,6 +282,7 @@ extension FuelNowCarPlaySceneDelegate {
         entitlementProvider = nil
         lastRoutingPath = nil
         lastPlusUISnapshot = nil
+        stationSortMode = .distance
         didStartEntitlementObservation = false
         didStartStationObservation = false
     }

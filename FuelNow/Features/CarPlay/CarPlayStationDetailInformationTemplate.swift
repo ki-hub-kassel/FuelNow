@@ -11,22 +11,35 @@ enum CarPlayStationDetailInformationTemplate {
         interfaceController: CPInterfaceController?,
         carPlayScene: CPTemplateApplicationScene?
     ) -> CPInformationTemplate {
-        let openClosed = station.isOpen
-            ? String(localized: "station.status.open")
-            : String(localized: "station.status.closed")
-        let distance = StationDisplayFormatting.distanceString(kilometers: station.distanceKilometers)
-        let liveStatusDetail = "\(openClosed)\n\(distance)"
-
-        let items: [CPInformationItem] = [
+        var items: [CPInformationItem] = [
             CPInformationItem(
                 title: String(localized: "carplay.stationDetail.section.prices"),
                 detail: StationCarPlayPOIMapper.compactFuelLine(station: station)
             ),
-            CPInformationItem(
-                title: String(localized: "carplay.stationDetail.section.liveStatus"),
-                detail: liveStatusDetail
-            ),
         ]
+
+        if let location = CarPlayStationDetailFormatting.locationDetail(station: station) {
+            items.append(
+                CPInformationItem(
+                    title: String(localized: "carplay.stationDetail.section.location"),
+                    detail: location
+                )
+            )
+        }
+
+        items.append(
+            CPInformationItem(
+                title: String(localized: "carplay.stationDetail.section.openingHours"),
+                detail: CarPlayStationDetailFormatting.openingHoursDetailLines(station: station)
+            )
+        )
+
+        items.append(
+            CPInformationItem(
+                title: String(localized: "carplay.stationDetail.section.distance"),
+                detail: CarPlayStationDetailFormatting.distanceDetail(station: station)
+            )
+        )
 
         let navigation = CPTextButton(
             title: String(localized: "intent.snippet.mapsNavigationButton"),
