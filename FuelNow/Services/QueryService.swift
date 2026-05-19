@@ -45,6 +45,41 @@ actor QueryService {
         }
     }
 
+    /// Aufsteigend nach Preis für die Sorte; bei Gleichstand Entfernung. Stationen ohne Preis ans Ende (dort nach Entfernung).
+    nonisolated static func sortByPrice(
+        stations: [Station],
+        fuel: FuelType,
+        originLatitude: Double,
+        originLongitude: Double
+    ) -> [Station] {
+        var priced: [Station] = []
+        var unpriced: [Station] = []
+        priced.reserveCapacity(stations.count)
+        unpriced.reserveCapacity(stations.count)
+        for station in stations {
+            if station.price(for: fuel) != nil {
+                priced.append(station)
+            } else {
+                unpriced.append(station)
+            }
+        }
+        let sortedPriced = priced.sorted { lhs, rhs in
+            compareByPriceThenDistance(
+                lhs,
+                rhs,
+                fuel: fuel,
+                originLatitude: originLatitude,
+                originLongitude: originLongitude
+            )
+        }
+        let sortedUnpriced = sortByDistance(
+            stations: unpriced,
+            originLatitude: originLatitude,
+            originLongitude: originLongitude
+        )
+        return sortedPriced + sortedUnpriced
+    }
+
     /// Günstigste Tankstelle für die Sorte; bei gleichem Preis gewinnt die geringere Entfernung.
     nonisolated static func cheapest(in stations: [Station], fuel: FuelType, originLatitude: Double, originLongitude: Double) -> Station? {
         let priced: [(station: Station, price: Double)] = stations.compactMap { s in
@@ -57,5 +92,28 @@ actor QueryService {
             let db = distanceKilometers(fromOriginLatitude: originLatitude, originLng: originLongitude, to: b.station)
             return da < db
         }?.station
+    }
+
+    nonisolated private static func compareByPriceThenDistance(
+        _ lhs: Station,
+        _ rhs: Station,
+        fuel: FuelType,
+        originLatitude: Double,
+        originLongitude: Double
+    ) -> Bool {
+        let left = lhs.price(for: fuel)!
+        let right = rhs.price(for: fuel)!
+        if left != right { return left < right }
+        let leftDistance = distanceKilometers(
+            fromOriginLatitude: originLatitude,
+            originLng: originLongitude,
+            to: lhs
+        )
+        let rightDistance = distanceKilometers(
+            fromOriginLatitude: originLatitude,
+            originLng: originLongitude,
+            to: rhs
+        )
+        return leftDistance < rightDistance
     }
 }

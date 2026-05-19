@@ -137,8 +137,7 @@ die einzige Stelle, die `CPInterfaceController.setRootTemplate` aufruft.
 Bei Plus zeigt die Haupt-CarPlay-Scene ein **`CPListTemplate`** mit den nächsten
 Tankstellen. Ein **Zeilentap** pusht ein **`CPInformationTemplate`** auf den Stack
 (`pushTemplate` — Apple erlaubt **`presentTemplate`** nur für Alert/ActionSheet/VoiceControl,
-nicht für Information). Zuerst **alle Preise**, dann **Live-Status** (geöffnet/geschlossen, Entfernung) — **keine Adresse**;
-**Navigation** startet über den primären Button (Apple Maps Autoroute, wie im
+nicht für Information). Die Plus-Liste hat einen **Navigations-Button** (Entfernung ↔ Preis) für die Sortierung nach bevorzugter Kraftstoffsorte. Im Detail: **Preise** → **Standort** (Adresse) → **Öffnungszeiten** (Geöffnet/Geschlossen, ggf. Schließhinweis) → **Entfernung**; **Navigation** startet über den primären Button (Apple Maps Autoroute, wie im
 Tankstellendetail auf dem iPhone). MapKit-Handoff **muss** die verbundene
 `CPTemplateApplicationScene` an `MKMapItem.openMaps(…, from:completionHandler:)`
 übergeben — sonst öffnet Maps nur auf dem iPhone und wirkt auf dem Head-Unit wie

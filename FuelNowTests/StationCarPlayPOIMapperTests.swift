@@ -68,6 +68,32 @@ struct StationCarPlayPOIMapperTests {
         #expect(!StationCarPlayPOIMapper.isRenderableStationCoordinate(invalidLat))
     }
 
+    @Test("buildRows behält Preis-Sortierung der Eingabeliste bei")
+    func buildRowsPreservesPriceSortOrder() throws {
+        let cheap = try decodeStation(
+            """
+            {"id":"aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa","name":"Cheap","brand":"A",
+            "street":"S","place":"P","lat":52.6,"lng":13.5,"dist":2,"diesel":1.20,
+            "e5":1.6,"e10":1.55,"isOpen":true,"houseNumber":"1","postCode":10407}
+            """
+        )
+        let expensive = try decodeStation(
+            """
+            {"id":"bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb","name":"Expensive","brand":"B",
+            "street":"T","place":"Q","lat":52.51,"lng":13.4,"dist":0.5,"diesel":1.80,
+            "e5":1.6,"e10":1.55,"isOpen":true,"houseNumber":"2","postCode":10407}
+            """
+        )
+        let sorted = QueryService.sortByPrice(
+            stations: [expensive, cheap],
+            fuel: .diesel,
+            originLatitude: 52.5,
+            originLongitude: 13.4
+        )
+        let rows = StationCarPlayPOIMapper.buildRows(stations: sorted, preferredFuel: .diesel)
+        #expect(rows.map(\.pickerTitle) == ["A", "B"])
+    }
+
     @Test("Detail-Zusammenfassung enthält Adresse und Kraftstoffzeile")
     func detailSummaryIncludesAddressAndFuels() throws {
         let station = try decodeStation(

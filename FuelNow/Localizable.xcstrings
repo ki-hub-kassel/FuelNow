@@ -356,19 +356,87 @@
         }
       }
     },
-    "carplay.stationDetail.section.liveStatus" : {
-      "comment" : "CarPlay station detail — CPInformationItem title for open/closed + distance (live).",
+    "carplay.sort.mode.distance" : {
+      "comment" : "CarPlay list nav bar — active sort mode: distance.",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Live-Status"
+            "value" : "Entfernung"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Live status"
+            "value" : "Distance"
+          }
+        }
+      }
+    },
+    "carplay.sort.mode.price" : {
+      "comment" : "CarPlay list nav bar — active sort mode: price.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preis"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Price"
+          }
+        }
+      }
+    },
+    "carplay.stationDetail.section.distance" : {
+      "comment" : "CarPlay station detail — distance to search origin.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entfernung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Distance"
+          }
+        }
+      }
+    },
+    "carplay.stationDetail.section.location" : {
+      "comment" : "CarPlay station detail — street address.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standort"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Location"
+          }
+        }
+      }
+    },
+    "carplay.stationDetail.section.openingHours" : {
+      "comment" : "CarPlay station detail — open/closed and optional closing hint.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öffnungszeiten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opening hours"
           }
         }
       }
