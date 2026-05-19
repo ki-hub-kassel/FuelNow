@@ -61,6 +61,15 @@ final class CountingLocationStreamProvider: LocationStreamProviding, @unchecked 
 
 @Suite(.serialized)
 struct LocationServiceTests {
+    @MainActor
+    private func waitForCurrentLocation(_ service: LocationService, timeoutMs: Int = 1_000) async throws {
+        let steps = max(1, timeoutMs / 20)
+        for _ in 0..<steps {
+            if service.currentLocation != nil { return }
+            try await Task.sleep(for: .milliseconds(20))
+        }
+    }
+
     @Test @MainActor
     func deliversMockedLocations() async throws {
         let mock = MockLocationStreamProvider(events: [
@@ -71,7 +80,7 @@ struct LocationServiceTests {
             authorizationProvider: { .authorizedWhenInUse }
         )
         service.start()
-        try await Task.sleep(for: .milliseconds(150))
+        try await waitForCurrentLocation(service)
         #expect(service.currentLocation?.coordinate.latitude == 52.5)
         #expect(service.currentLocation?.coordinate.longitude == 13.4)
         #expect(service.authorizationStatus == .authorizedWhenInUse)
@@ -93,7 +102,7 @@ struct LocationServiceTests {
             snapshotStore: store
         )
         service.start()
-        try await Task.sleep(for: .milliseconds(150))
+        try await waitForCurrentLocation(service)
         let cached = store.loadValid(referenceDate: Date(), ttl: LocationProvider.defaultTTL)
         #expect(cached?.latitude == 52.52)
         #expect(cached?.longitude == 13.405)
